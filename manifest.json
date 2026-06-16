@@ -1,0 +1,19 @@
+{
+  "name": "T-Skyler 航空",
+  "short_name": "T-Skyler",
+  "description": "T-Skyler 航空訂票 — 搜尋航班、選擇艙等與行李、生成登機證。",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#001B38",
+  "theme_color": "#2e256b",
+  "categories": ["travel"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

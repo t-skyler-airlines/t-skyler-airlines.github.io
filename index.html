@@ -1,8 +1,17 @@
 <!DOCTYPE html>
 <html class="dark" lang="zh-Hant"><head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>T-Skyler 航空首頁</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#2e256b"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="T-Skyler"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="icon" type="image/png" href="icon-192.png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -84,7 +93,7 @@
 </button>
 </div>
 </aside>
-<div class="flex min-h-screen flex-col lg:pl-64 transition-all duration-300">
+<div class="flex min-h-screen flex-col lg:pl-64 transition-all duration-300 pb-16 lg:pb-0">
 <header class="sticky top-0 z-40 w-full bg-primary shadow-lg border-b border-white/10 lg:hidden">
 <div class="px-4 sm:px-6">
 <div class="flex items-center justify-between h-16 sm:h-20">
@@ -389,6 +398,29 @@
 </footer>
 </div>
 
+<!-- ====== 手機底部導覽列 (App 風格) ====== -->
+<nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10" style="padding-bottom:env(safe-area-inset-bottom)">
+<div class="grid grid-cols-4 h-16">
+<button data-tab="home" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium">首頁</span>
+</button>
+<button data-tab="flights" data-goto="flights" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">flight</span><span class="text-[10px] font-medium">航班</span>
+</button>
+<button data-tab="member" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium">會員</span>
+</button>
+<button data-tab="account" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-medium">我的</span>
+</button>
+</div>
+</nav>
+
+<!-- ====== 安裝 App 按鈕（可安裝時顯示） ====== -->
+<button id="installBtn" class="hidden fixed z-40 right-4 bottom-20 lg:bottom-6 h-12 px-5 bg-primary hover:bg-primary-hover text-white font-bold rounded-full shadow-2xl shadow-primary/40 items-center gap-2">
+<span class="material-symbols-outlined">install_mobile</span> 安裝 App
+</button>
+
 <!-- ====== 機票 Modal ====== -->
 <div id="ticketModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
 <div class="relative w-full max-w-[760px] my-8">
@@ -581,11 +613,19 @@
     if(el) el.classList.remove('hidden');
     window.scrollTo(0,0);
   }
+  function highlightTab(view){
+    var tab = view==='view-flights' ? 'flights' : 'home';
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'), function(t){
+      var on = t.getAttribute('data-tab')===tab;
+      t.classList.toggle('text-white', on);
+      t.classList.toggle('text-white/60', !on);
+    });
+  }
   function route(){
     var h=(location.hash||'').replace('#','');
-    if(h==='flights') showView('view-flights');
-    else if(h==='booking') showView('view-booking');
-    else showView('view-home');
+    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : 'view-home');
+    showView(view);
+    highlightTab(view);
   }
   window.addEventListener('hashchange', route);
 
@@ -734,6 +774,36 @@
     b.addEventListener('click', function(){ location.hash=this.getAttribute('data-goto')||''; });
   });
 
+  // 底部導覽列
+  Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'), function(t){
+    t.addEventListener('click', function(){
+      var goto=this.getAttribute('data-goto')||'';
+      if(goto==='flights' && state.flights.length===0){ // 還沒搜尋過 → 回首頁搜尋
+        location.hash=''; window.scrollTo(0,0); return;
+      }
+      location.hash=goto;
+    });
+  });
+
+  // PWA 安裝提示
+  var deferredPrompt=null;
+  var installBtn=document.getElementById('installBtn');
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt=e;
+    installBtn.classList.remove('hidden'); installBtn.classList.add('flex');
+  });
+  installBtn.addEventListener('click', function(){
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function(){
+      deferredPrompt=null;
+      installBtn.classList.add('hidden'); installBtn.classList.remove('flex');
+    });
+  });
+  window.addEventListener('appinstalled', function(){
+    installBtn.classList.add('hidden'); installBtn.classList.remove('flex');
+  });
+
   document.getElementById("closeTicket").addEventListener("click", closeTicket);
   document.getElementById("regenTicket").addEventListener("click", fillBoardingPass);
   document.getElementById("ticketModal").addEventListener("click", function(e){ if(e.target===this) closeTicket(); });
@@ -750,5 +820,13 @@
 
   route();
 })();
+</script>
+<script>
+// 註冊 Service Worker（PWA 離線 + 可安裝）
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
 </script>
 </body></html>
