@@ -662,18 +662,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   var CABIN_OF={}; CABINS.forEach(function(c){ CABIN_OF[c.code]=c; });
   function cabinPriceFor(o,f){ return Math.round(f.price*o.mult/5)*5; }
 
-  // 四種艙等的座艙模擬圖（側視）
-  function seats(xs, build){ return xs.map(build).join(''); }
-  var CABIN_SVG={
-    ECONOMY:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
-      seats([22,56,90,124,158,192],function(x){return '<rect x="'+x+'" y="40" width="6" height="28" rx="2"/><rect x="'+x+'" y="62" width="20" height="6" rx="2"/>';})+'</g></svg>',
-    PREMIUM:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
-      seats([26,84,142,200],function(x){return '<rect x="'+x+'" y="34" width="8" height="34" rx="3"/><rect x="'+x+'" y="60" width="30" height="8" rx="3"/><rect x="'+(x-2)+'" y="32" width="12" height="7" rx="3"/>';})+'</g></svg>',
-    BUSINESS:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
-      seats([16,90,164],function(x){return '<rect x="'+x+'" y="56" width="62" height="10" rx="5"/><rect x="'+x+'" y="40" width="8" height="20" rx="3" transform="rotate(-22 '+x+' 60)"/>';})+'</g></svg>',
-    FIRST:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><g fill="none" stroke="#a99cff" stroke-width="2">'+
-      seats([18,124],function(x){return '<rect x="'+x+'" y="22" width="98" height="50" rx="8"/>';})+'</g><g fill="#8a7ff0">'+
-      seats([18,124],function(x){return '<rect x="'+(x+12)+'" y="54" width="66" height="10" rx="5"/><rect x="'+(x+12)+'" y="38" width="8" height="18" rx="3" transform="rotate(-14 '+(x+12)+' 56)"/>';})+'</g></svg>'
+  // 四種艙等的真實座艙照片（模擬圖，來源：Wikimedia Commons）
+  var CABIN_IMG={
+    ECONOMY:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Lufthansa_787_economy.jpg/960px-Lufthansa_787_economy.jpg",
+    PREMIUM:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/JAL_Premium_Economy.jpg/960px-JAL_Premium_Economy.jpg",
+    BUSINESS:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/United_Business_Class_%285619163281%29.jpg/960px-United_Business_Class_%285619163281%29.jpg",
+    FIRST:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Emirates_First_Class_Suite.jpg/960px-Emirates_First_Class_Suite.jpg"
   };
   var BAGGAGE=[
     {code:"light", name:"輕便", desc:"僅手提行李 7kg", add:0},
@@ -852,8 +846,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function cabinCard(o, on, price){
     return '<button data-code="'+o.code+'" class="cabin-opt text-left rounded-xl border overflow-hidden transition-all '+
       (on?'border-primary ring-2 ring-primary/40':'border-white/10 hover:border-white/30')+'">'+
-      '<div class="p-2">'+CABIN_SVG[o.code]+'</div>'+
-      '<div class="px-3 pb-3 flex items-start justify-between gap-2">'+
+      '<div class="aspect-[16/9] w-full overflow-hidden bg-[#00224a]"><img src="'+CABIN_IMG[o.code]+'" alt="'+o.name+' 座艙" class="w-full h-full object-cover"/></div>'+
+      '<div class="p-3 flex items-start justify-between gap-2">'+
         '<div><p class="text-white font-bold text-sm">'+o.name+'</p><p class="text-white/50 text-[11px] mt-0.5">'+o.desc+'</p></div>'+
         '<span class="text-sm font-bold whitespace-nowrap '+(on?'text-primary-hover':'text-white/70')+'">$'+price+'</span>'+
       '</div></button>';

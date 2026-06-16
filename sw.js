@@ -1,5 +1,5 @@
 // T-Skyler 航空 — Service Worker（離線快取）
-const CACHE = 'tskyler-v2';
+const CACHE = 'tskyler-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -29,6 +29,10 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
+
+  // 跨網域資源（CDN、Wikimedia 座艙照片、QR 等）交給瀏覽器原生處理，
+  // 不經 SW 快取，避免 opaque 回應造成圖片載入問題。
+  if (new URL(req.url).origin !== self.location.origin) return;
 
   const isHTML = req.mode === 'navigate' ||
     (req.headers.get('accept') || '').includes('text/html');
