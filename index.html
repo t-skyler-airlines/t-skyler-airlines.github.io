@@ -84,6 +84,12 @@
 </a>
 </nav>
 <div class="p-4 border-t border-white/10 space-y-3">
+<div class="relative">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10"><span class="material-symbols-outlined text-white/70 text-[20px]">payments</span></div>
+<label class="sr-only" for="curSel">貨幣</label>
+<select id="curSel" class="cur-sel w-full h-11 pl-11 pr-9 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-white text-sm font-medium appearance-none cursor-pointer"></select>
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[20px]">expand_more</span></div>
+</div>
 <button class="w-full flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
 <span class="material-symbols-outlined">language</span>
 <span class="font-medium">語言 (Language)</span>
@@ -104,7 +110,12 @@
 </div>
 <h1 class="text-white text-xl font-bold tracking-tight"><img src="name.png" alt="T-Skyler" class="h-6 inline-block"/></h1>
 </div>
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+<div class="relative">
+<label class="sr-only" for="curSelM">貨幣</label>
+<select id="curSelM" class="cur-sel h-9 pl-2 pr-6 bg-white/10 border border-white/10 rounded-lg text-white text-xs font-bold appearance-none cursor-pointer"></select>
+<div class="absolute inset-y-0 right-1 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[16px]">expand_more</span></div>
+</div>
 <button class="flex items-center gap-1 text-white/90 hover:text-white text-sm font-medium">
 <span class="material-symbols-outlined text-[20px]">language</span>
 </button>
@@ -239,7 +250,7 @@
 <div class="flex justify-between items-start mb-2">
 <div>
 <h4 class="text-xl font-bold text-white">東京 (Tokyo)，日本</h4>
-<p class="text-white/50 text-sm">來回票價 $850 起</p>
+<p class="text-white/50 text-sm promo-price" data-usd="850">來回票價 $850 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
 <span class="material-symbols-outlined text-white">arrow_forward</span>
@@ -255,7 +266,7 @@
 <div class="flex justify-between items-start mb-2">
 <div>
 <h4 class="text-xl font-bold text-white">倫敦 (London)，英國</h4>
-<p class="text-white/50 text-sm">來回票價 $620 起</p>
+<p class="text-white/50 text-sm promo-price" data-usd="620">來回票價 $620 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
 <span class="material-symbols-outlined text-white">arrow_forward</span>
@@ -274,7 +285,7 @@
 <div class="flex justify-between items-start mb-2">
 <div>
 <h4 class="text-xl font-bold text-white">紐約 (New York)，美國</h4>
-<p class="text-white/50 text-sm">來回票價 $450 起</p>
+<p class="text-white/50 text-sm promo-price" data-usd="450">來回票價 $450 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
 <span class="material-symbols-outlined text-white">arrow_forward</span>
@@ -687,6 +698,68 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function rint(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
   function pick(arr){ return arr[rint(0,arr.length-1)]; }
   var MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+
+  // ====== 貨幣（依 IP 國家自動換算，亦可手動切換） ======
+  // 所有票價以 USD 為基準儲存，顯示時換算成使用者貨幣
+  var CURRENCIES=[
+    {code:"USD",symbol:"$"},   {code:"TWD",symbol:"NT$"}, {code:"JPY",symbol:"¥"},
+    {code:"KRW",symbol:"₩"},   {code:"HKD",symbol:"HK$"}, {code:"SGD",symbol:"S$"},
+    {code:"CNY",symbol:"CN¥"}, {code:"EUR",symbol:"€"},   {code:"GBP",symbol:"£"},
+    {code:"AUD",symbol:"A$"},  {code:"THB",symbol:"฿"},   {code:"MYR",symbol:"RM"},
+    {code:"AED",symbol:"AED "},{code:"CAD",symbol:"C$"}
+  ];
+  var SYMBOL_OF={}; CURRENCIES.forEach(function(c){ SYMBOL_OF[c.code]=c.symbol; });
+  var RATES={USD:1};
+  var CURRENCY={code:"USD", symbol:"$"};
+
+  function money(usd){
+    var rate=RATES[CURRENCY.code]||1;
+    var v=Math.round(usd*rate);
+    return CURRENCY.symbol + v.toLocaleString('en-US');
+  }
+  function setCurrency(code){
+    if(!RATES[code]) code='USD';
+    CURRENCY={code:code, symbol:SYMBOL_OF[code]||(code+' ')};
+    document.querySelectorAll('.cur-sel').forEach(function(s){ if(s.value!==code) s.value=code; });
+    refreshPrices();
+  }
+  // 依目前畫面重新渲染價格
+  function refreshPrices(){
+    var h=(location.hash||'').replace('#','');
+    if(h==='flights' && state.flights.length) renderFlights();
+    else if(h==='booking' && state.sel) renderBooking();
+    else if(h==='seats' && state.sel) renderSeats();
+    else if(h==='trips') renderTrips();
+    refreshPromo();
+    var modal=document.getElementById('ticketModal');
+    if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
+  }
+  function refreshPromo(){
+    Array.prototype.forEach.call(document.querySelectorAll('.promo-price'), function(el){
+      el.textContent='來回票價 '+money(+el.getAttribute('data-usd'))+' 起';
+    });
+  }
+  function populateCurrencySelectors(code){
+    var avail=CURRENCIES.filter(function(c){ return RATES[c.code]!=null; });
+    if(code && !avail.some(function(c){return c.code===code;})) avail.unshift({code:code,symbol:code+' '});
+    var html=avail.map(function(c){ return '<option value="'+c.code+'">'+c.code+'</option>'; }).join('');
+    document.querySelectorAll('.cur-sel').forEach(function(s){ s.innerHTML=html; s.value=code; });
+  }
+  // 取得匯率與 IP 國家貨幣
+  function initCurrency(){
+    fetch('https://open.er-api.com/v6/latest/USD').then(function(r){return r.json();}).then(function(er){
+      if(er&&er.rates){ RATES=er.rates; RATES.USD=1; }
+    }).catch(function(){}).then(function(){
+      return fetch('https://ipwho.is/').then(function(r){return r.json();}).catch(function(){ return null; });
+    }).then(function(ip){
+      var code=(ip&&ip.success&&ip.currency&&ip.currency.code)||'USD';
+      if(ip&&ip.success&&ip.currency&&ip.currency.symbol&&!SYMBOL_OF[code]) SYMBOL_OF[code]=ip.currency.symbol;
+      if(!RATES[code]) code='USD';
+      populateCurrencySelectors(code);
+      setCurrency(code);
+    });
+  }
+
   // 機隊（range=續航 km，seats=載客量，cabins=該機型提供的艙等）
   var FLEET={
     "A320neo":    {name:"空中巴士 A320neo",      range:6300,  seats:180, cabins:["ECONOMY","BUSINESS"]},
@@ -867,7 +940,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         '<div class="flex-1 text-white/60 text-sm border-t sm:border-t-0 sm:border-l border-white/10 sm:pl-4 pt-3 sm:pt-0">'+
           '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' 座</p></div>'+
         '<div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">'+
-          '<p class="text-primary-hover text-xl font-black">$'+f.price+'<span class="text-white/40 text-xs font-medium"> 起</span></p>'+
+          '<p class="text-primary-hover text-xl font-black">'+money(f.price)+'<span class="text-white/40 text-xs font-medium"> 起</span></p>'+
           '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">選擇</button>'+
         '</div>';
       wrap.appendChild(card);
@@ -955,7 +1028,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var ac=state.sel.aircraft, cfg=state.seatCfg.cfg, pat=state.seatCfg.pat, exitSet=state.seatCfg.exitSet;
     document.getElementById('seatInfo').textContent =
       FLEET[ac].name+' · '+state.cabin.name+' · 請選擇 '+(state.pax||1)+' 個座位';
-    var fl=document.getElementById('seatFeeLabel'); if(fl) fl.textContent = state.seatFee? ('+$'+state.seatFee) : '';
+    var fl=document.getElementById('seatFeeLabel'); if(fl) fl.textContent = state.seatFee? ('+'+money(state.seatFee)) : '';
     // 固定寬度，讓設施列與座位排對齊
     var nSeats=pat.reduce(function(a,g){return a+g.length;},0), nAisle=pat.length-1;
     var width=24 + nSeats*28 + nAisle*16 + (nSeats+nAisle)*4;
@@ -991,7 +1064,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function updateSeatBar(){
     var fee=seatFeesTotal();
     document.getElementById('seatSelected').textContent =
-      (state.selectedSeats.length ? state.selectedSeats.join('、') : '—') + (fee? '（含加價 $'+fee+'）' : '');
+      (state.selectedSeats.length ? state.selectedSeats.join('、') : '—') + (fee? '（含加價 '+money(fee)+'）' : '');
     var ok=state.selectedSeats.length===(state.pax||1);
     var btn=document.getElementById('confirmSeats');
     btn.disabled=!ok;
@@ -1042,7 +1115,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     set('bpDepTime',fmtTime(p.depMin)); set('bpArrTime',fmtTime(p.arrMin));
     set('bpDuration',fmtDur(p.durMin));
     set('bpGate',p.gate); set('bpSeat',p.seat); set('bpSeat2',p.seat);
-    set('bpClass',p.cabinCode); set('bpPrice',"$"+p.price); set('bpPnr',p.pnr);
+    set('bpClass',p.cabinCode); set('bpPrice',money(p.price)); set('bpPnr',p.pnr);
     makeQR(document.getElementById('bpBarcode'));
   }
   function showTicket(){
@@ -1077,7 +1150,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         '<div><p class="text-white/40 text-[11px]">可累積哩程</p><p class="text-white font-bold text-sm">'+t.miles+'</p></div>'+
       '</div>'+
       '<div class="flex items-center justify-between mt-4 pt-3 border-t border-white/10">'+
-        '<p class="text-primary-hover font-black">$'+(t.total!=null?t.total:t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
+        '<p class="text-primary-hover font-black">'+money(t.total!=null?t.total:t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
         '<div class="flex gap-2">'+
           '<button data-view-trip="'+t.id+'" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">查看登機證</button>'+
           '<button data-del-trip="'+t.id+'" class="h-9 px-3 bg-white/10 hover:bg-white/20 text-white/80 text-sm font-bold rounded-lg">刪除</button>'+
@@ -1112,7 +1185,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       '<div class="aspect-[16/9] w-full overflow-hidden bg-[#00224a]"><img src="'+CABIN_IMG[o.code]+'" alt="'+o.name+' 座艙" class="w-full h-full object-cover"/></div>'+
       '<div class="p-3 flex items-start justify-between gap-2">'+
         '<div><p class="text-white font-bold text-sm">'+o.name+'</p><p class="text-white/50 text-[11px] mt-0.5">'+o.desc+'</p></div>'+
-        '<span class="text-sm font-bold whitespace-nowrap '+(on?'text-primary-hover':'text-white/70')+'">$'+price+'</span>'+
+        '<span class="text-sm font-bold whitespace-nowrap '+(on?'text-primary-hover':'text-white/70')+'">'+money(price)+'</span>'+
       '</div></button>';
   }
   function renderBooking(){
@@ -1131,9 +1204,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function updateTotal(){
     var per=cabinPriceFor(state.cabin, state.sel) + ((state.baggage&&state.baggage.add)||0);
     var pax=state.pax||1;
-    document.getElementById('bkTotal').textContent="$"+(per*pax);
+    document.getElementById('bkTotal').textContent=money(per*pax);
     var note=document.getElementById('bkTotalNote');
-    if(note) note.textContent = pax>1 ? ('（$'+per+' × '+pax+' 位）') : '';
+    if(note) note.textContent = pax>1 ? ('（'+money(per)+' × '+pax+' 位）') : '';
   }
 
   Array.prototype.forEach.call(document.querySelectorAll('.sort-btn'), function(b){
@@ -1237,7 +1310,13 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
   });
 
+  // 貨幣選單
+  document.querySelectorAll('.cur-sel').forEach(function(s){
+    s.addEventListener('change', function(){ setCurrency(this.value); });
+  });
+
   route();
+  initCurrency();
 })();
 </script>
 <script>
