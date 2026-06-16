@@ -138,49 +138,47 @@
 <span class="font-medium">租車</span>
 </button>
 </div>
-<form class="flex flex-col lg:flex-row gap-4">
-<div class="flex flex-col sm:flex-row gap-4 flex-[2]">
-<div class="relative flex-1 group">
+<form id="searchForm" class="space-y-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="relative min-w-0 group">
 <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">flight_takeoff</span>
 </div>
 <label class="sr-only" for="from">出發地</label>
 <input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="from" placeholder="出發地 (城市或機場)" type="text"/>
 </div>
-<div class="relative flex-1 group">
+<div class="relative min-w-0 group">
 <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">flight_land</span>
 </div>
 <label class="sr-only" for="to">目的地</label>
 <input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="to" placeholder="目的地 (城市或機場)" type="text"/>
 </div>
-</div>
-<div class="flex flex-col sm:flex-row gap-4 flex-[1.5]">
-<div class="relative flex-1 group">
-<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<div class="relative min-w-0 group">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">calendar_month</span>
 </div>
 <label class="sr-only" for="depart">去程</label>
-<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="depart" onblur="(this.type='text')" onfocus="(this.type='date')" placeholder="去程日期" type="text"/>
+<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="depart" placeholder="去程日期" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
 </div>
-<div class="relative flex-1 group">
-<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+<div class="relative min-w-0 group">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">calendar_month</span>
 </div>
 <label class="sr-only" for="return">回程</label>
-<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="return" onblur="(this.type='text')" onfocus="(this.type='date')" placeholder="回程日期" type="text"/>
+<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="return" placeholder="回程日期 (選填)" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
 </div>
 </div>
-<div class="flex flex-col sm:flex-row gap-4 flex-[1.5]">
-<div class="relative flex-1 group">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="relative min-w-0 group sm:col-span-2">
 <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">group</span>
 </div>
-<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white font-medium cursor-pointer hover:bg-white/5 transition-all" readonly="" type="text" value="1 位乘客，經濟艙"/>
+<input id="pax" class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white font-medium cursor-pointer hover:bg-white/5 transition-all" readonly="" type="text" value="1 位乘客"/>
 </div>
 <button id="searchBtn" class="h-14 px-8 bg-primary hover:bg-primary-hover text-white text-base font-bold rounded-lg shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 whitespace-nowrap" type="button">
 <span class="material-symbols-outlined">search</span>
-                                    生成機票
+                                    搜尋航班
                                 </button>
 </div>
 </form>
