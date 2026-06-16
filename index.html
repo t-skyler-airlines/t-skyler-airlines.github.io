@@ -614,7 +614,39 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function rint(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
   function pick(arr){ return arr[rint(0,arr.length-1)]; }
   var MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
-  var AIRCRAFT=["波音 787-9","空中巴士 A350-900","波音 777-300ER","空中巴士 A330-300","波音 737 MAX"];
+  // 機隊（range=續航 km，seats=載客量，cabins=該機型提供的艙等）
+  var FLEET={
+    "A320neo":    {name:"空中巴士 A320neo",      range:6300,  seats:180, cabins:["ECONOMY","BUSINESS"]},
+    "A321":       {name:"空中巴士 A321neo",      range:7400,  seats:220, cabins:["ECONOMY","BUSINESS"]},
+    "A330-900neo":{name:"空中巴士 A330-900neo", range:13300, seats:287, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-900":   {name:"空中巴士 A350-900",     range:15000, seats:325, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-1000":  {name:"空中巴士 A350-1000",    range:16100, seats:410, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B777-9":     {name:"波音 777-9",            range:13500, seats:426, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B787-9":     {name:"波音 787-9",            range:14140, seats:296, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "B787-10":    {name:"波音 787-10",           range:11750, seats:336, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
+  };
+
+  // 兩機場間大圓距離(km)
+  function distKm(a,b){
+    var A=AIRPORT[a], B=AIRPORT[b]; if(!A||!B) return 3000;
+    var R=6371, rad=Math.PI/180;
+    var dLat=(B.lat-A.lat)*rad, dLon=(B.lon-A.lon)*rad;
+    var la1=A.lat*rad, la2=B.lat*rad;
+    var h=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLon/2)*Math.sin(dLon/2);
+    return Math.round(2*R*Math.asin(Math.min(1,Math.sqrt(h))));
+  }
+
+  // 依航程挑選合適機型：短程窄體、長程廣體，並確保航程在續航內
+  function aircraftFor(km){
+    var pool;
+    if(km<2500) pool=["A320neo","A321","B787-9"];
+    else if(km<6000) pool=["A321","B787-9","A330-900neo","B787-10"];
+    else if(km<11000) pool=["B787-9","B787-10","A330-900neo","A350-900"];
+    else pool=["A350-900","A350-1000","B777-9"];
+    pool=pool.filter(function(c){ return FLEET[c].range>=km*1.05; });
+    if(!pool.length) pool=["A350-1000"];
+    return pick(pool);
+  }
 
   // 艙等與行李選項（add = 加價）
   var CABINS=[
@@ -683,16 +715,20 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   // ====== 產生航班列表（不同出發時間） ======
   function genFlights(){
-    var n=rint(5,7), base=rint(95,760), list=[];
+    var km=distKm(state.fromCode, state.toCode);
+    state.km=km;
+    var baseDur=Math.round(km/840*60)+40;        // 巡航約 840km/h + 起降緩衝
+    var ecoBase=Math.round((55+0.062*km)/5)*5;   // 經濟艙基準票價（依距離）
+    var n=rint(5,7), list=[];
     for(var i=0;i<n;i++){
       var depMin=rint(5*60,22*60);
-      var durMin=base+rint(-25,45);
+      var durMin=baseDur+rint(-15,25);
       list.push({
         no:"TS "+rint(100,999),
         depMin:depMin, durMin:durMin, arrMin:depMin+durMin,
-        aircraft:pick(AIRCRAFT),
-        price:rint(180,1600),
-        stops: Math.random()<0.78?0:1
+        aircraft:aircraftFor(km), km:km,
+        price:Math.round(ecoBase*(0.96+Math.random()*0.1)/5)*5,  // 同航線票價相近
+        stops:0
       });
     }
     list.sort(function(a,b){ return a.depMin-b.depMin; });
@@ -719,7 +755,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
           '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.arrMin)+'</p><p class="text-white/50 text-xs">'+state.toCode+'</p></div>'+
         '</div>'+
         '<div class="flex-1 text-white/60 text-sm border-t sm:border-t-0 sm:border-l border-white/10 sm:pl-4 pt-3 sm:pt-0">'+
-          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+f.aircraft+'</p></div>'+
+          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' 座</p></div>'+
         '<div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">'+
           '<p class="text-primary-hover text-xl font-black">$'+f.price+'<span class="text-white/40 text-xs font-medium"> 起</span></p>'+
           '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">選擇</button>'+
