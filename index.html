@@ -511,6 +511,10 @@
 <style>
 .bp-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:2px}
 .bp-val{font-size:15px;color:#0f172a;font-weight:700;line-height:1.1}
+.view-in{animation:viewIn .28s ease both}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* 讓日期選擇器的原生圖示在深色底可見 */
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.6;cursor:pointer}
 </style>
 
 <script>
@@ -561,6 +565,14 @@
   fillSelect(document.getElementById("from"),"TPE");
   fillSelect(document.getElementById("to"),"NRT");
 
+  // 日期最早只能選今天
+  (function(){
+    var t=new Date(), today=t.getFullYear()+"-"+pad2(t.getMonth()+1)+"-"+pad2(t.getDate());
+    function pad2(n){ return n<10?"0"+n:""+n; }
+    var dp=document.getElementById("depart"), rt=document.getElementById("return");
+    if(dp) dp.min=today; if(rt) rt.min=today;
+  })();
+
   function pad(n){ return n<10? "0"+n : ""+n; }
   function rint(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
   function pick(arr){ return arr[rint(0,arr.length-1)]; }
@@ -610,7 +622,10 @@
     var vs=document.querySelectorAll('[data-view]');
     for(var i=0;i<vs.length;i++) vs[i].classList.add('hidden');
     var el=document.getElementById(id);
-    if(el) el.classList.remove('hidden');
+    if(el){
+      el.classList.remove('hidden');
+      el.classList.remove('view-in'); void el.offsetWidth; el.classList.add('view-in');
+    }
     window.scrollTo(0,0);
   }
   function highlightTab(view){
