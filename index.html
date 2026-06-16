@@ -535,6 +535,19 @@
   var MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
   var AIRCRAFT=["波音 787-9","空中巴士 A350-900","波音 777-300ER","空中巴士 A330-300","波音 737 MAX"];
 
+  // 艙等與行李選項（add = 加價）
+  var CABINS=[
+    {code:"ECONOMY", name:"經濟艙", desc:"標準座椅 · 含餐點", add:0},
+    {code:"PREMIUM", name:"豪華經濟艙", desc:"加寬座椅 · 優先選位", add:120},
+    {code:"BUSINESS", name:"商務艙", desc:"平躺座椅 · 貴賓室", add:480},
+    {code:"FIRST", name:"頭等艙", desc:"獨立套房 · 專屬管家", add:1200}
+  ];
+  var BAGGAGE=[
+    {code:"light", name:"輕便", desc:"僅手提行李 7kg", add:0},
+    {code:"standard", name:"標準", desc:"託運 23kg ×1", add:35},
+    {code:"heavy", name:"豪華", desc:"託運 23kg ×2", add:70}
+  ];
+
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
     return pad(Math.floor(mins/60))+":"+pad(mins%60);
@@ -672,11 +685,50 @@
   // ====== 事件綁定 ======
   document.getElementById("searchBtn").addEventListener("click", doSearch);
 
+  // ====== 訂票頁：艙等 / 行李 ======
+  function optCard(o, sel, cls){
+    var on=(o.code===sel);
+    return '<button data-code="'+o.code+'" class="'+cls+' text-left p-4 rounded-xl border transition-all '+
+      (on?'border-primary bg-primary/15 ring-2 ring-primary/40':'border-white/10 bg-card-dark hover:border-white/30')+'">'+
+      '<div class="flex items-start justify-between gap-2">'+
+        '<div><p class="text-white font-bold">'+o.name+'</p><p class="text-white/50 text-xs mt-0.5">'+o.desc+'</p></div>'+
+        '<span class="text-sm font-bold '+(on?'text-primary-hover':'text-white/60')+'">'+(o.add?'+$'+o.add:'已含')+'</span>'+
+      '</div></button>';
+  }
+  function renderBooking(){
+    var f=state.sel;
+    document.getElementById('bkFlightInfo').textContent =
+      f.no+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
+      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt;
+    document.getElementById('cabinOptions').innerHTML =
+      CABINS.map(function(o){ return optCard(o, state.cabin&&state.cabin.code, 'cabin-opt'); }).join('');
+    document.getElementById('baggageOptions').innerHTML =
+      BAGGAGE.map(function(o){ return optCard(o, state.baggage&&state.baggage.code, 'bag-opt'); }).join('');
+    updateTotal();
+  }
+  function updateTotal(){
+    var t=state.sel.price + ((state.cabin&&state.cabin.add)||0) + ((state.baggage&&state.baggage.add)||0);
+    document.getElementById('bkTotal').textContent="$"+t;
+  }
+
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
     state.sel=state.flights[+btn.getAttribute('data-idx')];
-    openTicket();
+    state.cabin=CABINS[0]; state.baggage=BAGGAGE[0];
+    renderBooking();
+    location.hash='booking';
   });
+  document.getElementById("cabinOptions").addEventListener("click", function(e){
+    var b=e.target.closest('.cabin-opt'); if(!b) return;
+    state.cabin=CABINS.filter(function(o){return o.code===b.getAttribute('data-code');})[0];
+    renderBooking();
+  });
+  document.getElementById("baggageOptions").addEventListener("click", function(e){
+    var b=e.target.closest('.bag-opt'); if(!b) return;
+    state.baggage=BAGGAGE.filter(function(o){return o.code===b.getAttribute('data-code');})[0];
+    renderBooking();
+  });
+  document.getElementById("confirmBooking").addEventListener("click", openTicket);
 
   Array.prototype.forEach.call(document.querySelectorAll('.back-btn'), function(b){
     b.addEventListener('click', function(){ location.hash=this.getAttribute('data-goto')||''; });
