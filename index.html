@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -177,9 +178,9 @@
 </div>
 <input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white font-medium cursor-pointer hover:bg-white/5 transition-all" readonly="" type="text" value="1 位乘客，經濟艙"/>
 </div>
-<button class="h-14 px-8 bg-primary hover:bg-primary-hover text-white text-base font-bold rounded-lg shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 whitespace-nowrap" type="button">
+<button id="searchBtn" class="h-14 px-8 bg-primary hover:bg-primary-hover text-white text-base font-bold rounded-lg shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 whitespace-nowrap" type="button">
 <span class="material-symbols-outlined">search</span>
-                                    搜尋
+                                    生成機票
                                 </button>
 </div>
 </form>
@@ -336,4 +337,252 @@
 </footer>
 </div>
 
+<!-- ====== 機票 Modal ====== -->
+<div id="ticketModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+<div class="relative w-full max-w-[760px] my-8">
+<!-- 關閉按鈕 -->
+<button id="closeTicket" class="absolute -top-2 -right-2 z-20 size-10 rounded-full bg-white text-primary shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">close</span>
+</button>
+
+<!-- 可被截圖的登機證 -->
+<div id="boardingPass" class="bg-white rounded-2xl overflow-hidden shadow-2xl font-display flex flex-col md:flex-row">
+<!-- 主票根 -->
+<div class="flex-1 p-6 sm:p-8 relative">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<img src="logo.png" alt="Logo" class="size-9 object-contain"/>
+<div>
+<p class="text-primary font-black text-lg leading-none">T-SKYLER</p>
+<p class="text-slate-400 text-[10px] tracking-[0.2em] font-semibold">AIRLINES · 登機證</p>
+</div>
+</div>
+<span id="bpClass" class="text-[11px] font-bold text-white bg-primary px-3 py-1 rounded-full">ECONOMY</span>
+</div>
+
+<div class="flex items-center justify-between mb-6">
+<div class="text-left">
+<p id="bpFromCode" class="text-4xl sm:text-5xl font-black text-slate-900 leading-none">TPE</p>
+<p id="bpFromCity" class="text-slate-500 text-sm mt-1 font-medium">台北</p>
+</div>
+<div class="flex-1 flex flex-col items-center px-2">
+<span class="material-symbols-outlined text-primary text-3xl">flight</span>
+<div class="w-full border-t-2 border-dashed border-slate-300 my-1"></div>
+<p id="bpDuration" class="text-slate-400 text-xs font-semibold">— 飛行時間 —</p>
+</div>
+<div class="text-right">
+<p id="bpToCode" class="text-4xl sm:text-5xl font-black text-slate-900 leading-none">NRT</p>
+<p id="bpToCity" class="text-slate-500 text-sm mt-1 font-medium">東京</p>
+</div>
+</div>
+
+<div class="grid grid-cols-3 sm:grid-cols-4 gap-y-4 gap-x-2 border-t border-slate-200 pt-5">
+<div><p class="bp-label">乘客</p><p id="bpName" class="bp-val">MASON ZENG</p></div>
+<div><p class="bp-label">航班</p><p id="bpFlight" class="bp-val">TS 388</p></div>
+<div><p class="bp-label">日期</p><p id="bpDate" class="bp-val">—</p></div>
+<div><p class="bp-label">登機時間</p><p id="bpBoard" class="bp-val">—</p></div>
+<div><p class="bp-label">起飛</p><p id="bpDepTime" class="bp-val">—</p></div>
+<div><p class="bp-label">抵達</p><p id="bpArrTime" class="bp-val">—</p></div>
+<div><p class="bp-label">登機門</p><p id="bpGate" class="bp-val">A12</p></div>
+<div><p class="bp-label">座位</p><p id="bpSeat" class="bp-val">14A</p></div>
+</div>
+</div>
+
+<!-- 撕票線 -->
+<div class="relative bg-primary md:w-[230px] p-6 sm:p-8 text-white flex flex-col justify-between">
+<div class="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2"></div>
+<div>
+<p class="text-white/60 text-[10px] tracking-widest font-semibold mb-1">BOARDING PASS</p>
+<div class="flex items-baseline gap-2">
+<p id="bpFromCode2" class="text-2xl font-black">TPE</p>
+<span class="material-symbols-outlined text-base">arrow_forward</span>
+<p id="bpToCode2" class="text-2xl font-black">NRT</p>
+</div>
+</div>
+<div class="space-y-2 my-4 text-sm">
+<div class="flex justify-between"><span class="text-white/60">航班</span><span id="bpFlight2" class="font-bold">TS 388</span></div>
+<div class="flex justify-between"><span class="text-white/60">座位</span><span id="bpSeat2" class="font-bold">14A</span></div>
+<div class="flex justify-between"><span class="text-white/60">票價</span><span id="bpPrice" class="font-bold">$—</span></div>
+</div>
+<!-- 條碼 -->
+<div class="bg-white rounded-md p-2 mt-2">
+<div id="bpBarcode" class="flex items-end gap-[2px] h-12 justify-center"></div>
+<p id="bpPnr" class="text-slate-800 text-center text-[10px] tracking-[0.3em] font-bold mt-1">XK4D9P</p>
+</div>
+</div>
+</div>
+
+<!-- 動作按鈕 -->
+<div class="flex flex-col sm:flex-row gap-3 mt-5">
+<button id="saveTicket" class="flex-1 h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">download</span> 儲存成圖檔
+</button>
+<button id="regenTicket" class="flex-1 h-12 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/20 flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">refresh</span> 重新生成
+</button>
+</div>
+</div>
+</div>
+
+<style>
+.bp-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:2px}
+.bp-val{font-size:15px;color:#0f172a;font-weight:700;line-height:1.1}
+</style>
+
+<script>
+(function(){
+  // 城市 → 機場代碼 對照（找不到就用名稱前三碼）
+  var AIRPORTS = {
+    "台北":"TPE","臺北":"TPE","桃園":"TPE","taipei":"TPE",
+    "東京":"NRT","tokyo":"NRT","成田":"NRT",
+    "大阪":"KIX","osaka":"KIX",
+    "首爾":"ICN","seoul":"ICN","首尔":"ICN",
+    "香港":"HKG","hongkong":"HKG","hong kong":"HKG",
+    "新加坡":"SIN","singapore":"SIN",
+    "曼谷":"BKK","bangkok":"BKK",
+    "倫敦":"LHR","london":"LHR","伦敦":"LHR",
+    "巴黎":"CDG","paris":"CDG",
+    "紐約":"JFK","new york":"JFK","纽约":"JFK","newyork":"JFK",
+    "洛杉磯":"LAX","los angeles":"LAX","la":"LAX",
+    "舊金山":"SFO","san francisco":"SFO",
+    "雪梨":"SYD","sydney":"SYD","悉尼":"SYD",
+    "上海":"PVG","shanghai":"PVG",
+    "北京":"PEK","beijing":"PEK",
+    "高雄":"KHH","kaohsiung":"KHH",
+    "杜拜":"DXB","dubai":"DXB","迪拜":"DXB",
+    "法蘭克福":"FRA","frankfurt":"FRA"
+  };
+
+  function codeFor(name){
+    if(!name) return "";
+    var k = name.trim().toLowerCase();
+    if(AIRPORTS[name.trim()]) return AIRPORTS[name.trim()];
+    if(AIRPORTS[k]) return AIRPORTS[k];
+    // 取英數前三碼，不足則補
+    var letters = name.trim().replace(/[^A-Za-z]/g,"").toUpperCase();
+    if(letters.length>=3) return letters.slice(0,3);
+    // 中文：用編碼產生穩定三碼
+    var s="", base="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for(var i=0;i<3;i++){ s += base[(name.charCodeAt(i%name.length)+i*7)%26]; }
+    return s;
+  }
+
+  function pad(n){ return n<10? "0"+n : ""+n; }
+  function rint(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function pick(arr){ return arr[rint(0,arr.length-1)]; }
+
+  function fmtTime(mins){
+    mins = ((mins%1440)+1440)%1440;
+    var h = Math.floor(mins/60), m = mins%60;
+    return pad(h)+":"+pad(m);
+  }
+
+  function makeBarcode(el){
+    el.innerHTML="";
+    for(var i=0;i<48;i++){
+      var bar=document.createElement("div");
+      bar.style.width = (Math.random()<0.5? "2px":"4px");
+      bar.style.height = "100%";
+      bar.style.background = (Math.random()<0.78? "#0f172a":"#ffffff");
+      el.appendChild(bar);
+    }
+  }
+
+  var lastData = null;
+
+  function generate(){
+    var fromIn = document.getElementById("from").value || "台北";
+    var toIn   = document.getElementById("to").value   || "東京";
+    var dateIn = document.getElementById("depart").value;
+    var paxStr = (document.querySelector('input[value^="1 位乘客"]')||{}).value || "經濟艙";
+
+    var fromCode = codeFor(fromIn);
+    var toCode   = codeFor(toIn);
+
+    // 航班資訊
+    var flightNo = "TS " + rint(100,999);
+    var durMin   = rint(95, 760);
+    var depMin   = rint(5*60, 22*60);
+    var arrMin   = depMin + durMin;
+    var boardMin = depMin - 40;
+    var seatRow  = rint(1,42);
+    var seatCol  = pick(["A","B","C","D","E","F"]);
+    var gate     = pick(["A","B","C","D"]) + rint(1,28);
+    var price    = (rint(180, 1900));
+
+    var cls = "ECONOMY";
+    if(/商務|business/i.test(paxStr)) cls="BUSINESS";
+    else if(/頭等|first/i.test(paxStr)) cls="FIRST";
+    else if(/豪華|premium/i.test(paxStr)) cls="PREMIUM";
+
+    var pnr=""; var chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    for(var i=0;i<6;i++) pnr += chars[rint(0,chars.length-1)];
+
+    var dateTxt;
+    if(dateIn){
+      var d=new Date(dateIn);
+      dateTxt = pad(d.getDate())+" "+["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getMonth()]+" "+d.getFullYear();
+    } else {
+      dateTxt = "16 JUN 2026";
+    }
+
+    lastData = {fromCode:fromCode,toCode:toCode};
+
+    // 寫入畫面
+    document.getElementById("bpFromCode").textContent=fromCode;
+    document.getElementById("bpToCode").textContent=toCode;
+    document.getElementById("bpFromCode2").textContent=fromCode;
+    document.getElementById("bpToCode2").textContent=toCode;
+    document.getElementById("bpFromCity").textContent=fromIn;
+    document.getElementById("bpToCity").textContent=toIn;
+    document.getElementById("bpFlight").textContent=flightNo;
+    document.getElementById("bpFlight2").textContent=flightNo;
+    document.getElementById("bpDate").textContent=dateTxt;
+    document.getElementById("bpBoard").textContent=fmtTime(boardMin);
+    document.getElementById("bpDepTime").textContent=fmtTime(depMin);
+    document.getElementById("bpArrTime").textContent=fmtTime(arrMin);
+    document.getElementById("bpDuration").textContent=Math.floor(durMin/60)+"h "+pad(durMin%60)+"m";
+    document.getElementById("bpGate").textContent=gate;
+    document.getElementById("bpSeat").textContent=seatRow+seatCol;
+    document.getElementById("bpSeat2").textContent=seatRow+seatCol;
+    document.getElementById("bpClass").textContent=cls;
+    document.getElementById("bpPrice").textContent="$"+price;
+    document.getElementById("bpPnr").textContent=pnr;
+    makeBarcode(document.getElementById("bpBarcode"));
+  }
+
+  function openModal(){
+    var m=document.getElementById("ticketModal");
+    m.classList.remove("hidden"); m.classList.add("flex");
+    document.body.style.overflow="hidden";
+  }
+  function closeModal(){
+    var m=document.getElementById("ticketModal");
+    m.classList.add("hidden"); m.classList.remove("flex");
+    document.body.style.overflow="";
+  }
+
+  document.getElementById("searchBtn").addEventListener("click", function(){
+    generate(); openModal();
+  });
+  document.getElementById("closeTicket").addEventListener("click", closeModal);
+  document.getElementById("regenTicket").addEventListener("click", generate);
+  document.getElementById("ticketModal").addEventListener("click", function(e){
+    if(e.target===this) closeModal();
+  });
+
+  document.getElementById("saveTicket").addEventListener("click", function(){
+    var node=document.getElementById("boardingPass");
+    var btn=this; btn.disabled=true;
+    html2canvas(node,{scale:2,backgroundColor:"#ffffff",useCORS:true}).then(function(canvas){
+      var link=document.createElement("a");
+      var name = lastData? (lastData.fromCode+"-"+lastData.toCode) : "ticket";
+      link.download="T-Skyler_"+name+".png";
+      link.href=canvas.toDataURL("image/png");
+      link.click();
+      btn.disabled=false;
+    }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
+  });
+})();
+</script>
 </body></html>
