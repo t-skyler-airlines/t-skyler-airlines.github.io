@@ -352,7 +352,36 @@
 <p id="bkTotal" class="text-white text-2xl font-black">$0</p>
 </div>
 <button id="confirmBooking" class="h-12 px-8 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center gap-2 transition-all">
-<span class="material-symbols-outlined">confirmation_number</span> 確認並生成機票
+<span class="material-symbols-outlined">airline_seat_recline_normal</span> 選擇座位
+</button>
+</div>
+</div>
+</section>
+
+<!-- ====== 選位 View ====== -->
+<section id="view-seats" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[680px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="booking">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回訂票
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">選擇座位</h3>
+<p id="seatInfo" class="text-white/50 text-sm mb-4">—</p>
+<div class="flex items-center gap-4 mb-5 text-xs text-white/60">
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-input-dark inline-block"></span>可選</span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-primary inline-block"></span>已選</span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-white/5 inline-block"></span>已售出</span>
+</div>
+<div class="bg-card-dark border border-white/10 rounded-2xl p-3 sm:p-4 overflow-x-auto">
+<div class="flex justify-center mb-3"><span class="text-white/30 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">flight</span> 機艙前方</span></div>
+<div id="seatMap" class="min-w-max mx-auto"></div>
+</div>
+<div class="sticky bottom-0 mt-5 bg-card-dark/95 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4 shadow-2xl">
+<div class="min-w-0">
+<p class="text-white/50 text-xs">已選座位</p>
+<p id="seatSelected" class="text-white text-lg font-black truncate">—</p>
+</div>
+<button id="confirmSeats" class="h-12 px-8 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center gap-2 transition-all whitespace-nowrap">
+<span class="material-symbols-outlined">confirmation_number</span> 生成機票
 </button>
 </div>
 </div>
@@ -689,6 +718,29 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return pick(pool);
   }
 
+  // 座位佈局：每組字母為一排座位，組與組之間為走道
+  var SEAT_PATTERNS={
+    "33":[["A","B","C"],["D","E","F"]],
+    "22":[["A","C"],["D","F"]],
+    "242":[["A","B"],["D","E","F","G"],["J","K"]],
+    "333":[["A","B","C"],["D","E","F"],["G","H","K"]],
+    "232":[["A","B"],["D","E","F"],["J","K"]],
+    "343":[["A","B","C"],["D","E","F","G"],["H","J","K"]],
+    "121":[["A"],["D","G"],["K"]],
+    "11":[["A"],["K"]]
+  };
+  // 各機型 × 艙等的座艙配置（p=佈局, rows=排數, start=起始排號）
+  var SEATMAP={
+    "A320neo":    {ECONOMY:{p:"33",rows:22,start:4},  BUSINESS:{p:"22",rows:3,start:1}},
+    "A321":       {ECONOMY:{p:"33",rows:30,start:5},  BUSINESS:{p:"22",rows:4,start:1}},
+    "A330-900neo":{ECONOMY:{p:"242",rows:28,start:15},PREMIUM:{p:"232",rows:4,start:10},BUSINESS:{p:"121",rows:6,start:1}},
+    "A350-900":   {ECONOMY:{p:"333",rows:32,start:20},PREMIUM:{p:"242",rows:5,start:12},BUSINESS:{p:"121",rows:9,start:1}},
+    "A350-1000":  {ECONOMY:{p:"333",rows:36,start:22},PREMIUM:{p:"242",rows:6,start:14},BUSINESS:{p:"121",rows:10,start:3},FIRST:{p:"11",rows:2,start:1}},
+    "B777-9":     {ECONOMY:{p:"343",rows:34,start:22},PREMIUM:{p:"242",rows:6,start:14},BUSINESS:{p:"121",rows:10,start:3},FIRST:{p:"11",rows:2,start:1}},
+    "B787-9":     {ECONOMY:{p:"333",rows:30,start:18},PREMIUM:{p:"232",rows:5,start:11},BUSINESS:{p:"121",rows:8,start:1}},
+    "B787-10":    {ECONOMY:{p:"333",rows:34,start:20},PREMIUM:{p:"232",rows:5,start:12},BUSINESS:{p:"121",rows:9,start:1}}
+  };
+
   // 艙等：mult = 相對經濟艙的票價倍率
   var CABINS=[
     {code:"ECONOMY",  name:"經濟艙",     desc:"標準座椅 · 含餐點",   mult:1},
@@ -738,7 +790,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
 
   // ====== 應用狀態 ======
-  var state={ fromCode:"TPE", toCode:"NRT", dateTxt:"", pax:1, sort:"dep", flights:[], sel:null, cabin:null, baggage:null };
+  var state={ fromCode:"TPE", toCode:"NRT", dateTxt:"", pax:1, sort:"dep", flights:[], sel:null, cabin:null, baggage:null, selectedSeats:[], occupied:{}, seatCfg:null };
 
   // ====== 路由 ======
   function showView(id){
@@ -761,7 +813,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
   function route(){
     var h=(location.hash||'').replace('#','');
-    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : (h==='trips' ? 'view-trips' : 'view-home'));
+    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : (h==='seats' ? 'view-seats' : (h==='trips' ? 'view-trips' : 'view-home')));
     showView(view);
     if(view==='view-trips') renderTrips();
     highlightTab(view);
@@ -852,6 +904,59 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     location.hash='flights';
   }
 
+  // ====== 選位 ======
+  // 依機型 + 艙等建立座位表，並隨機產生已售座位（保留足夠空位）
+  function initSeats(){
+    state.selectedSeats=[];
+    var cfg=SEATMAP[state.sel.aircraft][state.cabin.code];
+    var pat=SEAT_PATTERNS[cfg.p];
+    var letters=pat.reduce(function(a,g){ return a.concat(g); },[]);
+    var ids=[];
+    for(var r=cfg.start;r<cfg.start+cfg.rows;r++) letters.forEach(function(L){ ids.push(r+L); });
+    var occ={};
+    ids.forEach(function(id){ if(Math.random()<0.3) occ[id]=true; });
+    var need=(state.pax||1)+1;
+    var freeCount=function(){ return ids.filter(function(id){ return !occ[id]; }).length; };
+    while(freeCount()<need){
+      var occIds=ids.filter(function(id){ return occ[id]; });
+      if(!occIds.length) break;
+      delete occ[occIds[rint(0,occIds.length-1)]];
+    }
+    state.occupied=occ;
+    state.seatCfg={cfg:cfg, pat:pat};
+    return ids.length; // 此艙等總座位數
+  }
+  function renderSeats(){
+    var ac=state.sel.aircraft;
+    document.getElementById('seatInfo').textContent =
+      FLEET[ac].name+' · '+state.cabin.name+' · 請選擇 '+(state.pax||1)+' 個座位';
+    var cfg=state.seatCfg.cfg, pat=state.seatCfg.pat, html='';
+    for(var r=cfg.start;r<cfg.start+cfg.rows;r++){
+      html+='<div class="flex items-center gap-1 mb-1 justify-center">';
+      html+='<span class="w-5 text-right text-white/30 text-[10px] mr-1">'+r+'</span>';
+      pat.forEach(function(group, gi){
+        group.forEach(function(L){
+          var id=r+L, occ=state.occupied[id], sel=state.selectedSeats.indexOf(id)>=0;
+          var cls=occ?'bg-white/5 text-white/20 cursor-not-allowed'
+                  :(sel?'bg-primary text-white ring-2 ring-primary/50':'bg-input-dark text-white/70 hover:bg-white/20');
+          html+='<button '+(occ?'disabled':'data-seat="'+id+'"')+' class="seat-btn '+cls+' w-7 h-7 rounded-md text-[10px] font-bold transition-colors">'+L+'</button>';
+        });
+        if(gi<pat.length-1) html+='<span class="w-4 shrink-0"></span>';
+      });
+      html+='</div>';
+    }
+    document.getElementById('seatMap').innerHTML=html;
+    updateSeatBar();
+  }
+  function updateSeatBar(){
+    document.getElementById('seatSelected').textContent = state.selectedSeats.length ? state.selectedSeats.join('、') : '—';
+    var ok=state.selectedSeats.length===(state.pax||1);
+    var btn=document.getElementById('confirmSeats');
+    btn.disabled=!ok;
+    btn.classList.toggle('opacity-40', !ok);
+    btn.classList.toggle('cursor-not-allowed', !ok);
+  }
+
   // ====== 登機證 ======
   var currentPass=null;
   function newPNR(){ var s="", c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; for(var i=0;i<6;i++) s+=c[rint(0,c.length-1)]; return s; }
@@ -864,7 +969,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       fromCity:cityFor(state.fromCode), toCity:cityFor(state.toCode),
       no:f.no, aircraft:FLEET[f.aircraft].name, date:state.dateTxt,
       depMin:f.depMin, arrMin:f.arrMin, durMin:f.durMin, boardMin:f.depMin-40,
-      seat:rint(1,42)+pick(["A","B","C","D","E","F"]),
+      seat:(state.selectedSeats.length? state.selectedSeats.join(",") : rint(1,42)+pick(["A","B","C","D","E","F"])),
+      seats:state.selectedSeats.slice(),
       gate:pick(["A","B","C","D"])+rint(1,28),
       cabinCode:cabin.code, cabinName:cabin.name,
       price:cabinPriceFor(cabin,f) + ((state.baggage&&state.baggage.add)||0),
@@ -874,8 +980,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 重新發證：同航班，換座位/登機門/訂位代碼
   function reissuePass(p){
     var q={}; for(var k in p) q[k]=p[k];
-    q.seat=rint(1,42)+pick(["A","B","C","D","E","F"]);
-    q.gate=pick(["A","B","C","D"])+rint(1,28);
+    q.gate=pick(["A","B","C","D"])+rint(1,28);  // 保留已選座位，只換登機門/訂位代碼
     q.pnr=newPNR();
     return q;
   }
@@ -1010,6 +1115,22 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("confirmBooking").addEventListener("click", function(){
     var nm=(document.getElementById('paxName').value||'').trim();
     if(!nm){ alert('請輸入乘客姓名'); document.getElementById('paxName').focus(); return; }
+    var cap=initSeats();
+    if(cap < (state.pax||1)){ alert('此艙等座位不足，請減少乘客人數或改選其他艙等'); return; }
+    renderSeats();
+    location.hash='seats';
+  });
+
+  // 選位
+  document.getElementById("seatMap").addEventListener("click", function(e){
+    var b=e.target.closest('.seat-btn[data-seat]'); if(!b) return;
+    var id=b.getAttribute('data-seat'), i=state.selectedSeats.indexOf(id);
+    if(i>=0) state.selectedSeats.splice(i,1);
+    else { if(state.selectedSeats.length>=(state.pax||1)) return; state.selectedSeats.push(id); }
+    renderSeats();
+  });
+  document.getElementById("confirmSeats").addEventListener("click", function(){
+    if(state.selectedSeats.length!==(state.pax||1)) return;
     var p=buildPass();
     addTrip(p);      // 自動存到「我的行程」
     renderPass(p);
