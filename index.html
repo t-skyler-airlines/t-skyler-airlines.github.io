@@ -304,6 +304,12 @@
 </div>
 <div class="text-white/40 text-xs">共 <span id="flCount">0</span> 個航班</div>
 </div>
+<div class="flex items-center gap-2 mb-5 overflow-x-auto">
+<span class="text-white/40 text-xs whitespace-nowrap mr-1">排序</span>
+<button data-sort="dep" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">出發時間</button>
+<button data-sort="price" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">價格</button>
+<button data-sort="dur" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">航程</button>
+</div>
 <div id="flightList" class="space-y-4"></div>
 </div>
 </section>
@@ -779,6 +785,27 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         '</div>';
       wrap.appendChild(card);
     });
+    highlightSort();
+  }
+
+  // 航班排序
+  function sortFlights(key){
+    state.sort=key;
+    var cmp={ dep:function(a,b){return a.depMin-b.depMin;},
+              price:function(a,b){return a.price-b.price;},
+              dur:function(a,b){return a.durMin-b.durMin;} }[key];
+    state.flights.sort(cmp);
+    renderFlights();
+  }
+  function highlightSort(){
+    Array.prototype.forEach.call(document.querySelectorAll('.sort-btn'), function(b){
+      var on=b.getAttribute('data-sort')===state.sort;
+      b.classList.toggle('bg-primary', on);
+      b.classList.toggle('border-primary', on);
+      b.classList.toggle('text-white', on);
+      b.classList.toggle('border-white/15', !on);
+      b.classList.toggle('text-white/60', !on);
+    });
   }
 
   function doSearch(){
@@ -786,6 +813,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     state.toCode=document.getElementById('to').value||"NRT";
     if(state.fromCode===state.toCode){ alert('出發地與目的地不能相同'); return; }
     state.dateTxt=fmtDate(document.getElementById('depart').value);
+    state.sort='dep';
     state.flights=genFlights();
     renderFlights();
     location.hash='flights';
@@ -869,6 +897,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var t=cabinPriceFor(state.cabin, state.sel) + ((state.baggage&&state.baggage.add)||0);
     document.getElementById('bkTotal').textContent="$"+t;
   }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.sort-btn'), function(b){
+    b.addEventListener('click', function(){ sortFlights(this.getAttribute('data-sort')); });
+  });
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
