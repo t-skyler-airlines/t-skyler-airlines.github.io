@@ -109,6 +109,7 @@
 </div>
 </header>
 <main class="flex-grow flex flex-col">
+<div id="view-home" data-view>
 <section class="relative min-h-[600px] lg:min-h-[700px] flex flex-col items-center justify-start pt-20 pb-32 overflow-hidden group/hero">
 <div class="absolute inset-0 z-0">
 <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-background-dark"></div>
@@ -274,6 +275,53 @@
 <button class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex-shrink-0">
                         免費加入
                     </button>
+</div>
+</section>
+</div>
+
+<!-- ====== 航班列表 View ====== -->
+<section id="view-flights" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回搜尋
+</button>
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
+<div>
+<div id="flRoute" class="flex items-center gap-3 text-white text-2xl sm:text-3xl font-black">
+<span>TPE</span><span class="material-symbols-outlined text-primary-hover">flight</span><span>NRT</span>
+</div>
+<p id="flMeta" class="text-white/50 text-sm mt-1">選擇您的航班</p>
+</div>
+<div class="text-white/40 text-xs">共 <span id="flCount">0</span> 個航班</div>
+</div>
+<div id="flightList" class="space-y-4"></div>
+</div>
+</section>
+
+<!-- ====== 訂票 (艙等/行李) View ====== -->
+<section id="view-booking" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[820px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="flights">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回航班列表
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">選擇艙等與行李</h3>
+<p id="bkFlightInfo" class="text-white/50 text-sm mb-8">—</p>
+
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_extra</span> 艙等</h4>
+<div id="cabinOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"></div>
+
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">luggage</span> 行李額度</h4>
+<div id="baggageOptions" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8"></div>
+
+<div class="sticky bottom-0 bg-card-dark/95 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4 shadow-2xl">
+<div>
+<p class="text-white/50 text-xs">總計</p>
+<p id="bkTotal" class="text-white text-2xl font-black">$0</p>
+</div>
+<button id="confirmBooking" class="h-12 px-8 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined">confirmation_number</span> 確認並生成機票
+</button>
+</div>
 </div>
 </section>
 </main>
@@ -484,118 +532,171 @@
   function pad(n){ return n<10? "0"+n : ""+n; }
   function rint(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
   function pick(arr){ return arr[rint(0,arr.length-1)]; }
+  var MON=["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  var AIRCRAFT=["波音 787-9","空中巴士 A350-900","波音 777-300ER","空中巴士 A330-300","波音 737 MAX"];
 
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
-    var h = Math.floor(mins/60), m = mins%60;
-    return pad(h)+":"+pad(m);
+    return pad(Math.floor(mins/60))+":"+pad(mins%60);
   }
-
+  function fmtDur(mins){ return Math.floor(mins/60)+"h "+pad(mins%60)+"m"; }
+  function fmtDate(dateIn){
+    if(!dateIn) return "16 JUN 2026";
+    var d=new Date(dateIn);
+    if(isNaN(d)) return "16 JUN 2026";
+    return pad(d.getDate())+" "+MON[d.getMonth()]+" "+d.getFullYear();
+  }
   function makeBarcode(el){
     el.innerHTML="";
     for(var i=0;i<48;i++){
       var bar=document.createElement("div");
-      bar.style.width = (Math.random()<0.5? "2px":"4px");
-      bar.style.height = "100%";
-      bar.style.background = (Math.random()<0.78? "#0f172a":"#ffffff");
+      bar.style.width=(Math.random()<0.5?"2px":"4px");
+      bar.style.height="100%";
+      bar.style.background=(Math.random()<0.78?"#0f172a":"#ffffff");
       el.appendChild(bar);
     }
   }
 
-  var lastData = null;
+  // ====== 應用狀態 ======
+  var state={ fromCode:"TPE", toCode:"NRT", dateTxt:"", flights:[], sel:null, cabin:null, baggage:null };
 
-  function generate(){
-    var fromCode = document.getElementById("from").value || "TPE";
-    var toCode   = document.getElementById("to").value   || "NRT";
-    var fromIn = cityFor(fromCode);
-    var toIn   = cityFor(toCode);
-    var dateIn = document.getElementById("depart").value;
-    var paxStr = "經濟艙";
+  // ====== 路由 ======
+  function showView(id){
+    var vs=document.querySelectorAll('[data-view]');
+    for(var i=0;i<vs.length;i++) vs[i].classList.add('hidden');
+    var el=document.getElementById(id);
+    if(el) el.classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
+  function route(){
+    var h=(location.hash||'').replace('#','');
+    if(h==='flights') showView('view-flights');
+    else if(h==='booking') showView('view-booking');
+    else showView('view-home');
+  }
+  window.addEventListener('hashchange', route);
 
-    // 航班資訊
-    var flightNo = "TS " + rint(100,999);
-    var durMin   = rint(95, 760);
-    var depMin   = rint(5*60, 22*60);
-    var arrMin   = depMin + durMin;
-    var boardMin = depMin - 40;
-    var seatRow  = rint(1,42);
-    var seatCol  = pick(["A","B","C","D","E","F"]);
-    var gate     = pick(["A","B","C","D"]) + rint(1,28);
-    var price    = (rint(180, 1900));
-
-    var cls = "ECONOMY";
-    if(/商務|business/i.test(paxStr)) cls="BUSINESS";
-    else if(/頭等|first/i.test(paxStr)) cls="FIRST";
-    else if(/豪華|premium/i.test(paxStr)) cls="PREMIUM";
-
-    var pnr=""; var chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    for(var i=0;i<6;i++) pnr += chars[rint(0,chars.length-1)];
-
-    var dateTxt;
-    if(dateIn){
-      var d=new Date(dateIn);
-      dateTxt = pad(d.getDate())+" "+["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"][d.getMonth()]+" "+d.getFullYear();
-    } else {
-      dateTxt = "16 JUN 2026";
+  // ====== 產生航班列表（不同出發時間） ======
+  function genFlights(){
+    var n=rint(5,7), base=rint(95,760), list=[];
+    for(var i=0;i<n;i++){
+      var depMin=rint(5*60,22*60);
+      var durMin=base+rint(-25,45);
+      list.push({
+        no:"TS "+rint(100,999),
+        depMin:depMin, durMin:durMin, arrMin:depMin+durMin,
+        aircraft:pick(AIRCRAFT),
+        price:rint(180,1600),
+        stops: Math.random()<0.78?0:1
+      });
     }
-
-    lastData = {fromCode:fromCode,toCode:toCode};
-
-    // 寫入畫面
-    document.getElementById("bpFromCode").textContent=fromCode;
-    document.getElementById("bpToCode").textContent=toCode;
-    document.getElementById("bpFromCode2").textContent=fromCode;
-    document.getElementById("bpToCode2").textContent=toCode;
-    document.getElementById("bpFromCity").textContent=fromIn;
-    document.getElementById("bpToCity").textContent=toIn;
-    document.getElementById("bpFlight").textContent=flightNo;
-    document.getElementById("bpFlight2").textContent=flightNo;
-    document.getElementById("bpDate").textContent=dateTxt;
-    document.getElementById("bpBoard").textContent=fmtTime(boardMin);
-    document.getElementById("bpDepTime").textContent=fmtTime(depMin);
-    document.getElementById("bpArrTime").textContent=fmtTime(arrMin);
-    document.getElementById("bpDuration").textContent=Math.floor(durMin/60)+"h "+pad(durMin%60)+"m";
-    document.getElementById("bpGate").textContent=gate;
-    document.getElementById("bpSeat").textContent=seatRow+seatCol;
-    document.getElementById("bpSeat2").textContent=seatRow+seatCol;
-    document.getElementById("bpClass").textContent=cls;
-    document.getElementById("bpPrice").textContent="$"+price;
-    document.getElementById("bpPnr").textContent=pnr;
-    makeBarcode(document.getElementById("bpBarcode"));
+    list.sort(function(a,b){ return a.depMin-b.depMin; });
+    return list;
   }
 
-  function openModal(){
+  function renderFlights(){
+    document.getElementById('flRoute').innerHTML =
+      '<span>'+state.fromCode+'</span><span class="material-symbols-outlined text-primary-hover">flight</span><span>'+state.toCode+'</span>';
+    document.getElementById('flMeta').textContent =
+      cityFor(state.fromCode)+' → '+cityFor(state.toCode)+' · '+state.dateTxt;
+    document.getElementById('flCount').textContent = state.flights.length;
+    var wrap=document.getElementById('flightList');
+    wrap.innerHTML="";
+    state.flights.forEach(function(f,idx){
+      var card=document.createElement('div');
+      card.className="bg-card-dark border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-primary/60 transition-all";
+      card.innerHTML=
+        '<div class="flex items-center gap-4 flex-[2]">'+
+          '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.depMin)+'</p><p class="text-white/50 text-xs">'+state.fromCode+'</p></div>'+
+          '<div class="flex-1 flex flex-col items-center min-w-[80px]"><p class="text-white/40 text-[11px]">'+fmtDur(f.durMin)+'</p>'+
+            '<div class="w-full border-t border-white/20 my-1 relative"><span class="material-symbols-outlined text-primary-hover text-[16px] absolute -top-2 left-1/2 -translate-x-1/2 bg-card-dark px-1">flight</span></div>'+
+            '<p class="text-white/40 text-[11px]">'+(f.stops?'1 次轉機':'直飛')+'</p></div>'+
+          '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.arrMin)+'</p><p class="text-white/50 text-xs">'+state.toCode+'</p></div>'+
+        '</div>'+
+        '<div class="flex-1 text-white/60 text-sm border-t sm:border-t-0 sm:border-l border-white/10 sm:pl-4 pt-3 sm:pt-0">'+
+          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+f.aircraft+'</p></div>'+
+        '<div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">'+
+          '<p class="text-primary-hover text-xl font-black">$'+f.price+'<span class="text-white/40 text-xs font-medium"> 起</span></p>'+
+          '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">選擇</button>'+
+        '</div>';
+      wrap.appendChild(card);
+    });
+  }
+
+  function doSearch(){
+    state.fromCode=document.getElementById('from').value||"TPE";
+    state.toCode=document.getElementById('to').value||"NRT";
+    if(state.fromCode===state.toCode){ alert('出發地與目的地不能相同'); return; }
+    state.dateTxt=fmtDate(document.getElementById('depart').value);
+    state.flights=genFlights();
+    renderFlights();
+    location.hash='flights';
+  }
+
+  // ====== 生成登機證 ======
+  function fillBoardingPass(){
+    var f=state.sel, fromCode=state.fromCode, toCode=state.toCode;
+    var boardMin=f.depMin-40;
+    var seat=rint(1,42)+pick(["A","B","C","D","E","F"]);
+    var gate=pick(["A","B","C","D"])+rint(1,28);
+    var cls=(state.cabin&&state.cabin.code)||"ECONOMY";
+    var price=f.price + ((state.cabin&&state.cabin.add)||0) + ((state.baggage&&state.baggage.add)||0);
+    var pnr="", chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    for(var i=0;i<6;i++) pnr+=chars[rint(0,chars.length-1)];
+
+    function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    set('bpFromCode',fromCode); set('bpToCode',toCode);
+    set('bpFromCode2',fromCode); set('bpToCode2',toCode);
+    set('bpFromCity',cityFor(fromCode)); set('bpToCity',cityFor(toCode));
+    set('bpFlight',f.no); set('bpFlight2',f.no);
+    set('bpDate',state.dateTxt);
+    set('bpBoard',fmtTime(boardMin));
+    set('bpDepTime',fmtTime(f.depMin)); set('bpArrTime',fmtTime(f.arrMin));
+    set('bpDuration',fmtDur(f.durMin));
+    set('bpGate',gate); set('bpSeat',seat); set('bpSeat2',seat);
+    set('bpClass',cls); set('bpPrice',"$"+price); set('bpPnr',pnr);
+    makeBarcode(document.getElementById('bpBarcode'));
+  }
+  function openTicket(){
+    fillBoardingPass();
     var m=document.getElementById("ticketModal");
     m.classList.remove("hidden"); m.classList.add("flex");
     document.body.style.overflow="hidden";
   }
-  function closeModal(){
+  function closeTicket(){
     var m=document.getElementById("ticketModal");
     m.classList.add("hidden"); m.classList.remove("flex");
     document.body.style.overflow="";
   }
 
-  document.getElementById("searchBtn").addEventListener("click", function(){
-    generate(); openModal();
-  });
-  document.getElementById("closeTicket").addEventListener("click", closeModal);
-  document.getElementById("regenTicket").addEventListener("click", generate);
-  document.getElementById("ticketModal").addEventListener("click", function(e){
-    if(e.target===this) closeModal();
+  // ====== 事件綁定 ======
+  document.getElementById("searchBtn").addEventListener("click", doSearch);
+
+  document.getElementById("flightList").addEventListener("click", function(e){
+    var btn=e.target.closest('.select-flight'); if(!btn) return;
+    state.sel=state.flights[+btn.getAttribute('data-idx')];
+    openTicket();
   });
 
+  Array.prototype.forEach.call(document.querySelectorAll('.back-btn'), function(b){
+    b.addEventListener('click', function(){ location.hash=this.getAttribute('data-goto')||''; });
+  });
+
+  document.getElementById("closeTicket").addEventListener("click", closeTicket);
+  document.getElementById("regenTicket").addEventListener("click", fillBoardingPass);
+  document.getElementById("ticketModal").addEventListener("click", function(e){ if(e.target===this) closeTicket(); });
+
   document.getElementById("saveTicket").addEventListener("click", function(){
-    var node=document.getElementById("boardingPass");
-    var btn=this; btn.disabled=true;
+    var node=document.getElementById("boardingPass"), btn=this; btn.disabled=true;
     html2canvas(node,{scale:2,backgroundColor:"#ffffff",useCORS:true}).then(function(canvas){
       var link=document.createElement("a");
-      var name = lastData? (lastData.fromCode+"-"+lastData.toCode) : "ticket";
-      link.download="T-Skyler_"+name+".png";
-      link.href=canvas.toDataURL("image/png");
-      link.click();
+      link.download="T-Skyler_"+state.fromCode+"-"+state.toCode+".png";
+      link.href=canvas.toDataURL("image/png"); link.click();
       btn.disabled=false;
     }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
   });
+
+  route();
 })();
 </script>
 </body></html>
