@@ -648,13 +648,29 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return pick(pool);
   }
 
-  // 艙等與行李選項（add = 加價）
+  // 艙等：mult = 相對經濟艙的票價倍率
   var CABINS=[
-    {code:"ECONOMY", name:"經濟艙", desc:"標準座椅 · 含餐點", add:0},
-    {code:"PREMIUM", name:"豪華經濟艙", desc:"加寬座椅 · 優先選位", add:120},
-    {code:"BUSINESS", name:"商務艙", desc:"平躺座椅 · 貴賓室", add:480},
-    {code:"FIRST", name:"頭等艙", desc:"獨立套房 · 專屬管家", add:1200}
+    {code:"ECONOMY",  name:"經濟艙",     desc:"標準座椅 · 含餐點",   mult:1},
+    {code:"PREMIUM",  name:"豪華經濟艙", desc:"加寬座椅 · 更大間距", mult:1.65},
+    {code:"BUSINESS", name:"商務艙",     desc:"平躺座椅 · 貴賓室",   mult:3.3},
+    {code:"FIRST",    name:"頭等艙",     desc:"獨立套房 · 專屬管家", mult:5.8}
   ];
+  var CABIN_OF={}; CABINS.forEach(function(c){ CABIN_OF[c.code]=c; });
+  function cabinPriceFor(o,f){ return Math.round(f.price*o.mult/5)*5; }
+
+  // 四種艙等的座艙模擬圖（側視）
+  function seats(xs, build){ return xs.map(build).join(''); }
+  var CABIN_SVG={
+    ECONOMY:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
+      seats([22,56,90,124,158,192],function(x){return '<rect x="'+x+'" y="40" width="6" height="28" rx="2"/><rect x="'+x+'" y="62" width="20" height="6" rx="2"/>';})+'</g></svg>',
+    PREMIUM:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
+      seats([26,84,142,200],function(x){return '<rect x="'+x+'" y="34" width="8" height="34" rx="3"/><rect x="'+x+'" y="60" width="30" height="8" rx="3"/><rect x="'+(x-2)+'" y="32" width="12" height="7" rx="3"/>';})+'</g></svg>',
+    BUSINESS:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><rect x="14" y="69" width="212" height="3" rx="1.5" fill="#3d3285"/><g fill="#8a7ff0">'+
+      seats([16,90,164],function(x){return '<rect x="'+x+'" y="56" width="62" height="10" rx="5"/><rect x="'+x+'" y="40" width="8" height="20" rx="3" transform="rotate(-22 '+x+' 60)"/>';})+'</g></svg>',
+    FIRST:'<svg viewBox="0 0 240 84" class="w-full h-16"><rect width="240" height="84" rx="10" fill="#00224a"/><g fill="none" stroke="#a99cff" stroke-width="2">'+
+      seats([18,124],function(x){return '<rect x="'+x+'" y="22" width="98" height="50" rx="8"/>';})+'</g><g fill="#8a7ff0">'+
+      seats([18,124],function(x){return '<rect x="'+(x+12)+'" y="54" width="66" height="10" rx="5"/><rect x="'+(x+12)+'" y="38" width="8" height="18" rx="3" transform="rotate(-14 '+(x+12)+' 56)"/>';})+'</g></svg>'
+  };
   var BAGGAGE=[
     {code:"light", name:"輕便", desc:"僅手提行李 7kg", add:0},
     {code:"standard", name:"標準", desc:"託運 23kg ×1", add:35},
@@ -781,7 +797,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var seat=rint(1,42)+pick(["A","B","C","D","E","F"]);
     var gate=pick(["A","B","C","D"])+rint(1,28);
     var cls=(state.cabin&&state.cabin.code)||"ECONOMY";
-    var price=f.price + ((state.cabin&&state.cabin.add)||0) + ((state.baggage&&state.baggage.add)||0);
+    var price=cabinPriceFor(state.cabin||CABIN_OF.ECONOMY, f) + ((state.baggage&&state.baggage.add)||0);
     var pnr="", chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     for(var i=0;i<6;i++) pnr+=chars[rint(0,chars.length-1)];
 
@@ -823,32 +839,44 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         '<span class="text-sm font-bold '+(on?'text-primary-hover':'text-white/60')+'">'+(o.add?'+$'+o.add:'已含')+'</span>'+
       '</div></button>';
   }
+  // 艙等卡（含模擬圖）
+  function cabinCard(o, on, price){
+    return '<button data-code="'+o.code+'" class="cabin-opt text-left rounded-xl border overflow-hidden transition-all '+
+      (on?'border-primary ring-2 ring-primary/40':'border-white/10 hover:border-white/30')+'">'+
+      '<div class="p-2">'+CABIN_SVG[o.code]+'</div>'+
+      '<div class="px-3 pb-3 flex items-start justify-between gap-2">'+
+        '<div><p class="text-white font-bold text-sm">'+o.name+'</p><p class="text-white/50 text-[11px] mt-0.5">'+o.desc+'</p></div>'+
+        '<span class="text-sm font-bold whitespace-nowrap '+(on?'text-primary-hover':'text-white/70')+'">$'+price+'</span>'+
+      '</div></button>';
+  }
   function renderBooking(){
     var f=state.sel;
     document.getElementById('bkFlightInfo').textContent =
-      f.no+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
+      f.no+' · '+FLEET[f.aircraft].name+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
       cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt;
+    // 只顯示該機型提供的艙等（小機型沒有某些艙等）
+    var avail=FLEET[f.aircraft].cabins;
     document.getElementById('cabinOptions').innerHTML =
-      CABINS.map(function(o){ return optCard(o, state.cabin&&state.cabin.code, 'cabin-opt'); }).join('');
+      avail.map(function(code){ var o=CABIN_OF[code]; return cabinCard(o, state.cabin&&state.cabin.code===code, cabinPriceFor(o,f)); }).join('');
     document.getElementById('baggageOptions').innerHTML =
       BAGGAGE.map(function(o){ return optCard(o, state.baggage&&state.baggage.code, 'bag-opt'); }).join('');
     updateTotal();
   }
   function updateTotal(){
-    var t=state.sel.price + ((state.cabin&&state.cabin.add)||0) + ((state.baggage&&state.baggage.add)||0);
+    var t=cabinPriceFor(state.cabin, state.sel) + ((state.baggage&&state.baggage.add)||0);
     document.getElementById('bkTotal').textContent="$"+t;
   }
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
     state.sel=state.flights[+btn.getAttribute('data-idx')];
-    state.cabin=CABINS[0]; state.baggage=BAGGAGE[0];
+    state.cabin=CABIN_OF.ECONOMY; state.baggage=BAGGAGE[0];
     renderBooking();
     location.hash='booking';
   });
   document.getElementById("cabinOptions").addEventListener("click", function(e){
     var b=e.target.closest('.cabin-opt'); if(!b) return;
-    state.cabin=CABINS.filter(function(o){return o.code===b.getAttribute('data-code');})[0];
+    state.cabin=CABIN_OF[b.getAttribute('data-code')];
     renderBooking();
   });
   document.getElementById("baggageOptions").addEventListener("click", function(e){
