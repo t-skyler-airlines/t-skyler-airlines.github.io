@@ -70,7 +70,7 @@
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">flight_takeoff</span>
 <span class="font-semibold">預訂</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#trips">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">edit_calendar</span>
 <span class="font-semibold">管理行程</span>
 </a>
@@ -357,6 +357,23 @@
 </div>
 </div>
 </section>
+
+<!-- ====== 我的行程 View ====== -->
+<section id="view-trips" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">我的行程</h3>
+<p class="text-white/50 text-sm mb-8">您已生成的登機證會自動儲存在此裝置。</p>
+<div id="tripEmpty" class="hidden flex flex-col items-center justify-center py-20 text-center">
+<span class="material-symbols-outlined text-white/20 text-6xl mb-3">flight_takeoff</span>
+<p class="text-white/50">尚無行程，快去搜尋並預訂吧！</p>
+<button class="back-btn mt-4 h-11 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg" data-goto="">開始搜尋</button>
+</div>
+<div id="tripList" class="space-y-4"></div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -434,8 +451,8 @@
 <button data-tab="member" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium">會員</span>
 </button>
-<button data-tab="account" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">account_circle</span><span class="text-[10px] font-medium">我的</span>
+<button data-tab="account" data-goto="trips" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">confirmation_number</span><span class="text-[10px] font-medium">我的</span>
 </button>
 </div>
 </nav>
@@ -735,7 +752,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     window.scrollTo(0,0);
   }
   function highlightTab(view){
-    var tab = view==='view-flights' ? 'flights' : 'home';
+    var tab = view==='view-flights' ? 'flights' : (view==='view-trips' ? 'account' : 'home');
     Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'), function(t){
       var on = t.getAttribute('data-tab')===tab;
       t.classList.toggle('text-white', on);
@@ -744,8 +761,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
   function route(){
     var h=(location.hash||'').replace('#','');
-    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : 'view-home');
+    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : (h==='trips' ? 'view-trips' : 'view-home'));
     showView(view);
+    if(view==='view-trips') renderTrips();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -834,34 +852,50 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     location.hash='flights';
   }
 
-  // ====== 生成登機證 ======
-  function fillBoardingPass(){
-    var f=state.sel, fromCode=state.fromCode, toCode=state.toCode;
-    var boardMin=f.depMin-40;
-    var seat=rint(1,42)+pick(["A","B","C","D","E","F"]);
-    var gate=pick(["A","B","C","D"])+rint(1,28);
-    var cls=(state.cabin&&state.cabin.code)||"ECONOMY";
-    var price=cabinPriceFor(state.cabin||CABIN_OF.ECONOMY, f) + ((state.baggage&&state.baggage.add)||0);
-    var pnr="", chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    for(var i=0;i<6;i++) pnr+=chars[rint(0,chars.length-1)];
-
-    var nm=((document.getElementById('paxName')||{}).value||'').trim().toUpperCase();
+  // ====== 登機證 ======
+  var currentPass=null;
+  function newPNR(){ var s="", c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; for(var i=0;i<6;i++) s+=c[rint(0,c.length-1)]; return s; }
+  // 由目前選擇建立一張登機證資料物件
+  function buildPass(){
+    var f=state.sel, cabin=state.cabin||CABIN_OF.ECONOMY;
+    var nm=((document.getElementById('paxName')||{}).value||'').trim().toUpperCase()||'GUEST';
+    return {
+      name:nm, fromCode:state.fromCode, toCode:state.toCode,
+      fromCity:cityFor(state.fromCode), toCity:cityFor(state.toCode),
+      no:f.no, aircraft:FLEET[f.aircraft].name, date:state.dateTxt,
+      depMin:f.depMin, arrMin:f.arrMin, durMin:f.durMin, boardMin:f.depMin-40,
+      seat:rint(1,42)+pick(["A","B","C","D","E","F"]),
+      gate:pick(["A","B","C","D"])+rint(1,28),
+      cabinCode:cabin.code, cabinName:cabin.name,
+      price:cabinPriceFor(cabin,f) + ((state.baggage&&state.baggage.add)||0),
+      pax:state.pax||1, miles:f.km, pnr:newPNR(), savedAt:Date.now()
+    };
+  }
+  // 重新發證：同航班，換座位/登機門/訂位代碼
+  function reissuePass(p){
+    var q={}; for(var k in p) q[k]=p[k];
+    q.seat=rint(1,42)+pick(["A","B","C","D","E","F"]);
+    q.gate=pick(["A","B","C","D"])+rint(1,28);
+    q.pnr=newPNR();
+    return q;
+  }
+  // 把登機證資料畫到 modal
+  function renderPass(p){
+    currentPass=p;
     function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
-    set('bpName', nm||'GUEST');
-    set('bpFromCode',fromCode); set('bpToCode',toCode);
-    set('bpFromCode2',fromCode); set('bpToCode2',toCode);
-    set('bpFromCity',cityFor(fromCode)); set('bpToCity',cityFor(toCode));
-    set('bpFlight',f.no); set('bpFlight2',f.no);
-    set('bpDate',state.dateTxt);
-    set('bpBoard',fmtTime(boardMin));
-    set('bpDepTime',fmtTime(f.depMin)); set('bpArrTime',fmtTime(f.arrMin));
-    set('bpDuration',fmtDur(f.durMin));
-    set('bpGate',gate); set('bpSeat',seat); set('bpSeat2',seat);
-    set('bpClass',cls); set('bpPrice',"$"+price); set('bpPnr',pnr);
+    set('bpName',p.name);
+    set('bpFromCode',p.fromCode); set('bpToCode',p.toCode);
+    set('bpFromCode2',p.fromCode); set('bpToCode2',p.toCode);
+    set('bpFromCity',p.fromCity); set('bpToCity',p.toCity);
+    set('bpFlight',p.no); set('bpFlight2',p.no);
+    set('bpDate',p.date); set('bpBoard',fmtTime(p.boardMin));
+    set('bpDepTime',fmtTime(p.depMin)); set('bpArrTime',fmtTime(p.arrMin));
+    set('bpDuration',fmtDur(p.durMin));
+    set('bpGate',p.gate); set('bpSeat',p.seat); set('bpSeat2',p.seat);
+    set('bpClass',p.cabinCode); set('bpPrice',"$"+p.price); set('bpPnr',p.pnr);
     makeQR(document.getElementById('bpBarcode'));
   }
-  function openTicket(){
-    fillBoardingPass();
+  function showTicket(){
     var m=document.getElementById("ticketModal");
     m.classList.remove("hidden"); m.classList.add("flex");
     document.body.style.overflow="hidden";
@@ -870,6 +904,42 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var m=document.getElementById("ticketModal");
     m.classList.add("hidden"); m.classList.remove("flex");
     document.body.style.overflow="";
+  }
+
+  // ====== 我的行程（localStorage） ======
+  var TRIPS_KEY='tskyler_trips';
+  function loadTrips(){ try{ return JSON.parse(localStorage.getItem(TRIPS_KEY))||[]; }catch(e){ return []; } }
+  function saveTrips(a){ try{ localStorage.setItem(TRIPS_KEY, JSON.stringify(a)); }catch(e){} }
+  function addTrip(p){ p.id='t'+p.savedAt+rint(100,999); var a=loadTrips(); a.unshift(p); if(a.length>30) a=a.slice(0,30); saveTrips(a); }
+  function deleteTrip(id){ saveTrips(loadTrips().filter(function(t){ return t.id!==id; })); renderTrips(); }
+
+  function tripCard(t){
+    return '<div class="bg-card-dark border border-white/10 rounded-xl p-4 sm:p-5">'+
+      '<div class="flex items-center justify-between gap-3">'+
+        '<div class="flex items-center gap-3 text-white text-xl font-black"><span>'+t.fromCode+'</span><span class="material-symbols-outlined text-primary-hover text-[18px]">flight</span><span>'+t.toCode+'</span></div>'+
+        '<span class="text-[11px] font-bold text-white bg-primary/80 px-2.5 py-1 rounded-full">'+t.cabinName+'</span>'+
+      '</div>'+
+      '<p class="text-white/50 text-sm mt-1">'+t.fromCity+' → '+t.toCity+' · '+t.date+'</p>'+
+      '<div class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 gap-x-3 mt-4">'+
+        '<div><p class="text-white/40 text-[11px]">乘客</p><p class="text-white font-bold text-sm truncate">'+t.name+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">航班</p><p class="text-white font-bold text-sm">'+t.no+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">出發</p><p class="text-white font-bold text-sm">'+fmtTime(t.depMin)+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">可累積哩程</p><p class="text-white font-bold text-sm">'+t.miles+'</p></div>'+
+      '</div>'+
+      '<div class="flex items-center justify-between mt-4 pt-3 border-t border-white/10">'+
+        '<p class="text-primary-hover font-black">$'+(t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
+        '<div class="flex gap-2">'+
+          '<button data-view-trip="'+t.id+'" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">查看登機證</button>'+
+          '<button data-del-trip="'+t.id+'" class="h-9 px-3 bg-white/10 hover:bg-white/20 text-white/80 text-sm font-bold rounded-lg">刪除</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+  function renderTrips(){
+    var a=loadTrips(), wrap=document.getElementById('tripList'), empty=document.getElementById('tripEmpty');
+    if(!a.length){ wrap.innerHTML=''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    wrap.innerHTML=a.map(tripCard).join('');
   }
 
   // ====== 事件綁定 ======
@@ -899,7 +969,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var f=state.sel;
     document.getElementById('bkFlightInfo').textContent =
       f.no+' · '+FLEET[f.aircraft].name+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
-      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt;
+      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt+' · 可累積 '+f.km+' 哩';
     // 只顯示該機型提供的艙等（小機型沒有某些艙等）
     var avail=FLEET[f.aircraft].cabins;
     document.getElementById('cabinOptions').innerHTML =
@@ -940,7 +1010,17 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("confirmBooking").addEventListener("click", function(){
     var nm=(document.getElementById('paxName').value||'').trim();
     if(!nm){ alert('請輸入乘客姓名'); document.getElementById('paxName').focus(); return; }
-    openTicket();
+    var p=buildPass();
+    addTrip(p);      // 自動存到「我的行程」
+    renderPass(p);
+    showTicket();
+  });
+
+  // 我的行程：查看 / 刪除
+  document.getElementById("tripList").addEventListener("click", function(e){
+    var v=e.target.closest('[data-view-trip]'), d=e.target.closest('[data-del-trip]');
+    if(v){ var t=loadTrips().filter(function(x){return x.id===v.getAttribute('data-view-trip');})[0]; if(t){ renderPass(t); showTicket(); } }
+    else if(d){ if(confirm('確定刪除這筆行程？')) deleteTrip(d.getAttribute('data-del-trip')); }
   });
 
   Array.prototype.forEach.call(document.querySelectorAll('.back-btn'), function(b){
@@ -978,14 +1058,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   });
 
   document.getElementById("closeTicket").addEventListener("click", closeTicket);
-  document.getElementById("regenTicket").addEventListener("click", fillBoardingPass);
+  document.getElementById("regenTicket").addEventListener("click", function(){ if(currentPass) renderPass(reissuePass(currentPass)); });
   document.getElementById("ticketModal").addEventListener("click", function(e){ if(e.target===this) closeTicket(); });
 
   document.getElementById("saveTicket").addEventListener("click", function(){
     var node=document.getElementById("boardingPass"), btn=this; btn.disabled=true;
     html2canvas(node,{scale:2,backgroundColor:"#ffffff",useCORS:true}).then(function(canvas){
       var link=document.createElement("a");
-      link.download="T-Skyler_"+state.fromCode+"-"+state.toCode+".png";
+      link.download="T-Skyler_"+((currentPass&&currentPass.fromCode)||state.fromCode)+"-"+((currentPass&&currentPass.toCode)||state.toCode)+".png";
       link.href=canvas.toDataURL("image/png"); link.click();
       btn.disabled=false;
     }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
