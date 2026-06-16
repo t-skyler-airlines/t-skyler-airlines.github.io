@@ -84,12 +84,6 @@
 </a>
 </nav>
 <div class="p-4 border-t border-white/10 space-y-3">
-<div class="relative">
-<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10"><span class="material-symbols-outlined text-white/70 text-[20px]">payments</span></div>
-<label class="sr-only" for="curSel">貨幣</label>
-<select id="curSel" class="cur-sel w-full h-11 pl-11 pr-9 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-white text-sm font-medium appearance-none cursor-pointer"></select>
-<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[20px]">expand_more</span></div>
-</div>
 <button class="w-full flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
 <span class="material-symbols-outlined">language</span>
 <span class="font-medium">語言 (Language)</span>
@@ -110,12 +104,7 @@
 </div>
 <h1 class="text-white text-xl font-bold tracking-tight"><img src="name.png" alt="T-Skyler" class="h-6 inline-block"/></h1>
 </div>
-<div class="flex items-center gap-3">
-<div class="relative">
-<label class="sr-only" for="curSelM">貨幣</label>
-<select id="curSelM" class="cur-sel h-9 pl-2 pr-6 bg-white/10 border border-white/10 rounded-lg text-white text-xs font-bold appearance-none cursor-pointer"></select>
-<div class="absolute inset-y-0 right-1 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[16px]">expand_more</span></div>
-</div>
+<div class="flex items-center gap-4">
 <button class="flex items-center gap-1 text-white/90 hover:text-white text-sm font-medium">
 <span class="material-symbols-outlined text-[20px]">language</span>
 </button>
@@ -720,7 +709,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function setCurrency(code){
     if(!RATES[code]) code='USD';
     CURRENCY={code:code, symbol:SYMBOL_OF[code]||(code+' ')};
-    document.querySelectorAll('.cur-sel').forEach(function(s){ if(s.value!==code) s.value=code; });
     refreshPrices();
   }
   // 依目前畫面重新渲染價格
@@ -739,13 +727,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       el.textContent='來回票價 '+money(+el.getAttribute('data-usd'))+' 起';
     });
   }
-  function populateCurrencySelectors(code){
-    var avail=CURRENCIES.filter(function(c){ return RATES[c.code]!=null; });
-    if(code && !avail.some(function(c){return c.code===code;})) avail.unshift({code:code,symbol:code+' '});
-    var html=avail.map(function(c){ return '<option value="'+c.code+'">'+c.code+'</option>'; }).join('');
-    document.querySelectorAll('.cur-sel').forEach(function(s){ s.innerHTML=html; s.value=code; });
-  }
-  // 取得匯率與 IP 國家貨幣
+  // 取得匯率與 IP 國家貨幣（自動，使用者不需選擇）
   function initCurrency(){
     fetch('https://open.er-api.com/v6/latest/USD').then(function(r){return r.json();}).then(function(er){
       if(er&&er.rates){ RATES=er.rates; RATES.USD=1; }
@@ -755,7 +737,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       var code=(ip&&ip.success&&ip.currency&&ip.currency.code)||'USD';
       if(ip&&ip.success&&ip.currency&&ip.currency.symbol&&!SYMBOL_OF[code]) SYMBOL_OF[code]=ip.currency.symbol;
       if(!RATES[code]) code='USD';
-      populateCurrencySelectors(code);
       setCurrency(code);
     });
   }
@@ -1308,11 +1289,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       link.href=canvas.toDataURL("image/png"); link.click();
       btn.disabled=false;
     }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
-  });
-
-  // 貨幣選單
-  document.querySelectorAll('.cur-sel').forEach(function(s){
-    s.addEventListener('change', function(){ setCurrency(this.value); });
   });
 
   route();
