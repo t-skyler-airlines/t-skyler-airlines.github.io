@@ -366,8 +366,9 @@
 </button>
 <h3 class="text-white text-2xl sm:text-3xl font-black mb-1">選擇座位</h3>
 <p id="seatInfo" class="text-white/50 text-sm mb-4">—</p>
-<div class="flex items-center gap-4 mb-5 text-xs text-white/60">
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5 text-xs text-white/60">
 <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-input-dark inline-block"></span>可選</span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-emerald-500/20 ring-1 ring-emerald-400/50 inline-block"></span>加價座位 <span id="seatFeeLabel"></span></span>
 <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-primary inline-block"></span>已選</span>
 <span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-white/5 inline-block"></span>已售出</span>
 </div>
@@ -581,6 +582,8 @@
 <style>
 .bp-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:2px}
 .bp-val{font-size:15px;color:#0f172a;font-weight:700;line-height:1.1}
+.exit-tab{font-size:8px;font-weight:800;color:#34d399;border:1px solid #34d399;border-radius:3px;padding:3px 2px;letter-spacing:.05em;line-height:1}
+.facility{font-size:9px;font-weight:700;color:#cbd5e1;background:rgba(255,255,255,.06);border-radius:6px;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:3px}
 .view-in{animation:viewIn .28s ease both}
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* 讓日期選擇器的原生圖示在深色底可見 */
@@ -906,6 +909,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   // ====== 選位 ======
   // 依機型 + 艙等建立座位表，並隨機產生已售座位（保留足夠空位）
+  function isPremiumSeat(id){ return !!(state.premiumRows && state.premiumRows[parseInt(id,10)]); }
+
   function initSeats(){
     state.selectedSeats=[];
     var cfg=SEATMAP[state.sel.aircraft][state.cabin.code];
@@ -922,34 +927,71 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       if(!occIds.length) break;
       delete occ[occIds[rint(0,occIds.length-1)]];
     }
+    // 緊急出口（經濟艙機翼上方一對），與加價座位（腿部空間較大：出口排＋第一排）
+    var mid=cfg.start+Math.floor(cfg.rows/2);
+    var exits = state.cabin.code==='ECONOMY' ? [mid, mid+1] : [];
+    var exitSet={}; exits.forEach(function(r){ exitSet[r]=true; });
+    var premium={};
+    if(state.cabin.code==='ECONOMY'){ premium[cfg.start]=true; exits.forEach(function(r){ premium[r]=true; }); }
+    state.premiumRows=premium;
+    state.seatFee = state.cabin.code==='ECONOMY' ? Math.round((18+0.004*state.sel.km)/5)*5 : 0;
     state.occupied=occ;
-    state.seatCfg={cfg:cfg, pat:pat};
+    state.seatCfg={cfg:cfg, pat:pat, exitSet:exitSet};
     return ids.length; // 此艙等總座位數
   }
+
+  function facilityBand(){
+    return '<div class="flex items-center gap-1 my-2">'+
+      '<span class="exit-tab">EXIT</span>'+
+      '<div class="flex-1 flex gap-1">'+
+        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">restaurant</span>廚房</span>'+
+        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">wc</span>廁所</span>'+
+      '</div>'+
+      '<span class="exit-tab">EXIT</span>'+
+    '</div>';
+  }
+
   function renderSeats(){
-    var ac=state.sel.aircraft;
+    var ac=state.sel.aircraft, cfg=state.seatCfg.cfg, pat=state.seatCfg.pat, exitSet=state.seatCfg.exitSet;
     document.getElementById('seatInfo').textContent =
       FLEET[ac].name+' · '+state.cabin.name+' · 請選擇 '+(state.pax||1)+' 個座位';
-    var cfg=state.seatCfg.cfg, pat=state.seatCfg.pat, html='';
+    var fl=document.getElementById('seatFeeLabel'); if(fl) fl.textContent = state.seatFee? ('+$'+state.seatFee) : '';
+    // 固定寬度，讓設施列與座位排對齊
+    var nSeats=pat.reduce(function(a,g){return a+g.length;},0), nAisle=pat.length-1;
+    var width=24 + nSeats*28 + nAisle*16 + (nSeats+nAisle)*4;
+    var map=document.getElementById('seatMap');
+    map.style.width=width+'px';
+
+    var html=facilityBand();
     for(var r=cfg.start;r<cfg.start+cfg.rows;r++){
-      html+='<div class="flex items-center gap-1 mb-1 justify-center">';
+      var isExit=exitSet[r];
+      html+='<div class="relative flex items-center gap-1 mb-1 justify-center'+(isExit?' py-1 rounded bg-emerald-500/5':'')+'">';
+      if(isExit){ html+='<span class="exit-tab absolute left-0">EXIT</span><span class="exit-tab absolute right-0">EXIT</span>'; }
       html+='<span class="w-5 text-right text-white/30 text-[10px] mr-1">'+r+'</span>';
       pat.forEach(function(group, gi){
         group.forEach(function(L){
-          var id=r+L, occ=state.occupied[id], sel=state.selectedSeats.indexOf(id)>=0;
-          var cls=occ?'bg-white/5 text-white/20 cursor-not-allowed'
-                  :(sel?'bg-primary text-white ring-2 ring-primary/50':'bg-input-dark text-white/70 hover:bg-white/20');
+          var id=r+L, occ=state.occupied[id], sel=state.selectedSeats.indexOf(id)>=0, prem=state.premiumRows[r];
+          var cls = occ ? 'bg-white/5 text-white/20 cursor-not-allowed'
+                  : sel ? 'bg-primary text-white ring-2 ring-primary/50'
+                  : prem ? 'bg-emerald-500/20 text-emerald-200 ring-1 ring-emerald-400/40 hover:bg-emerald-500/30'
+                  : 'bg-input-dark text-white/70 hover:bg-white/20';
           html+='<button '+(occ?'disabled':'data-seat="'+id+'"')+' class="seat-btn '+cls+' w-7 h-7 rounded-md text-[10px] font-bold transition-colors">'+L+'</button>';
         });
         if(gi<pat.length-1) html+='<span class="w-4 shrink-0"></span>';
       });
       html+='</div>';
     }
-    document.getElementById('seatMap').innerHTML=html;
+    html+=facilityBand();
+    map.innerHTML=html;
     updateSeatBar();
   }
+  function seatFeesTotal(){
+    return state.selectedSeats.reduce(function(s,id){ return s + (isPremiumSeat(id)?state.seatFee:0); },0);
+  }
   function updateSeatBar(){
-    document.getElementById('seatSelected').textContent = state.selectedSeats.length ? state.selectedSeats.join('、') : '—';
+    var fee=seatFeesTotal();
+    document.getElementById('seatSelected').textContent =
+      (state.selectedSeats.length ? state.selectedSeats.join('、') : '—') + (fee? '（含加價 $'+fee+'）' : '');
     var ok=state.selectedSeats.length===(state.pax||1);
     var btn=document.getElementById('confirmSeats');
     btn.disabled=!ok;
@@ -964,6 +1006,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function buildPass(){
     var f=state.sel, cabin=state.cabin||CABIN_OF.ECONOMY;
     var nm=((document.getElementById('paxName')||{}).value||'').trim().toUpperCase()||'GUEST';
+    var base=cabinPriceFor(cabin,f) + ((state.baggage&&state.baggage.add)||0);
+    var leadFee=(state.selectedSeats[0] && isPremiumSeat(state.selectedSeats[0])) ? state.seatFee : 0;
+    var allFees=seatFeesTotal();
     return {
       name:nm, fromCode:state.fromCode, toCode:state.toCode,
       fromCity:cityFor(state.fromCode), toCity:cityFor(state.toCode),
@@ -973,7 +1018,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       seats:state.selectedSeats.slice(),
       gate:pick(["A","B","C","D"])+rint(1,28),
       cabinCode:cabin.code, cabinName:cabin.name,
-      price:cabinPriceFor(cabin,f) + ((state.baggage&&state.baggage.add)||0),
+      price:base+leadFee, total:base*(state.pax||1)+allFees,
       pax:state.pax||1, miles:f.km, pnr:newPNR(), savedAt:Date.now()
     };
   }
@@ -1032,7 +1077,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         '<div><p class="text-white/40 text-[11px]">可累積哩程</p><p class="text-white font-bold text-sm">'+t.miles+'</p></div>'+
       '</div>'+
       '<div class="flex items-center justify-between mt-4 pt-3 border-t border-white/10">'+
-        '<p class="text-primary-hover font-black">$'+(t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
+        '<p class="text-primary-hover font-black">$'+(t.total!=null?t.total:t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
         '<div class="flex gap-2">'+
           '<button data-view-trip="'+t.id+'" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">查看登機證</button>'+
           '<button data-del-trip="'+t.id+'" class="h-9 px-3 bg-white/10 hover:bg-white/20 text-white/80 text-sm font-bold rounded-lg">刪除</button>'+
