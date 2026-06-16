@@ -18,6 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -492,10 +493,10 @@
 <div class="flex justify-between"><span class="text-white/60">票價</span><span id="bpPrice" class="font-bold">$—</span></div>
 </div>
 <!-- 條碼 -->
-<div class="bg-white rounded-md p-2 mt-2">
-<div id="bpBarcode" class="flex items-end gap-[2px] h-12 justify-center"></div>
+<a href="https://reurl.cc/M2pZ5K" target="_blank" rel="noopener" class="block bg-white rounded-md p-2 mt-2" title="掃描或點擊查看">
+<div id="bpBarcode" class="flex items-center justify-center"></div>
 <p id="bpPnr" class="text-slate-800 text-center text-[10px] tracking-[0.3em] font-bold mt-1">XK4D9P</p>
-</div>
+</a>
 </div>
 </div>
 
@@ -691,14 +692,17 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     if(isNaN(d)) return "16 JUN 2026";
     return pad(d.getDate())+" "+MON[d.getMonth()]+" "+d.getFullYear();
   }
-  function makeBarcode(el){
+  // 登機證條碼：QR code，掃描後連到指定網址
+  var TICKET_URL="https://reurl.cc/M2pZ5K";
+  function makeQR(el){
     el.innerHTML="";
-    for(var i=0;i<48;i++){
-      var bar=document.createElement("div");
-      bar.style.width=(Math.random()<0.5?"2px":"4px");
-      bar.style.height="100%";
-      bar.style.background=(Math.random()<0.78?"#0f172a":"#ffffff");
-      el.appendChild(bar);
+    if(window.QRCode){
+      new QRCode(el, {text:TICKET_URL, width:112, height:112, colorDark:"#0f172a", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.M});
+    } else {
+      // 後備：用線上 API 產生 QR 圖
+      var img=new Image(); img.width=112; img.height=112; img.crossOrigin="anonymous";
+      img.src="https://api.qrserver.com/v1/create-qr-code/?size=112x112&data="+encodeURIComponent(TICKET_URL);
+      el.appendChild(img);
     }
   }
 
@@ -817,7 +821,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     set('bpDuration',fmtDur(f.durMin));
     set('bpGate',gate); set('bpSeat',seat); set('bpSeat2',seat);
     set('bpClass',cls); set('bpPrice',"$"+price); set('bpPnr',pnr);
-    makeBarcode(document.getElementById('bpBarcode'));
+    makeQR(document.getElementById('bpBarcode'));
   }
   function openTicket(){
     fillBoardingPass();
