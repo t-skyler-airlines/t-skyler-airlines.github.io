@@ -2,7 +2,52 @@
 <html class="dark" lang="zh-Hant"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>T-Skyler 航空首頁</title>
+<title>T-Skyler 航空  — 線上訂票、選位與電子登機證</title>
+<!-- SEO -->
+<meta name="description" content="T-Skyler 航空：台灣往返全球的線上訂票體驗。搜尋航班、依機型選位、選擇艙等與行李，立即生成可下載的電子登機證。支援中／英／日／韓與當地貨幣。"/>
+<meta name="keywords" content="T-Skyler,航空,訂機票,線上訂票,選位,登機證,boarding pass,flight booking,airline,台灣航空"/>
+<meta name="author" content="T-Skyler Airlines"/>
+<meta name="robots" content="index,follow"/>
+<meta name="application-name" content="T-Skyler"/>
+<link rel="canonical" href="https://t-skyler-airlines.github.io/"/>
+<!-- Open Graph -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="T-Skyler Airlines"/>
+<meta property="og:title" content="T-Skyler 航空 — 線上訂票、選位與電子登機證"/>
+<meta property="og:description" content="台灣往返全球的線上訂票體驗：搜尋航班、依機型選位、生成電子登機證。支援中／英／日／韓。"/>
+<meta property="og:url" content="https://t-skyler-airlines.github.io/"/>
+<meta property="og:image" content="https://t-skyler-airlines.github.io/icon-512.png"/>
+<meta property="og:locale" content="zh_Hant"/>
+<meta property="og:locale:alternate" content="en"/>
+<meta property="og:locale:alternate" content="ja"/>
+<meta property="og:locale:alternate" content="ko"/>
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="T-Skyler 航空 — 線上訂票、選位與電子登機證"/>
+<meta name="twitter:description" content="台灣往返全球的線上訂票體驗：搜尋航班、依機型選位、生成電子登機證。"/>
+<meta name="twitter:image" content="https://t-skyler-airlines.github.io/icon-512.png"/>
+<!-- 結構化資料 (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Airline",
+  "name": "T-Skyler Airlines",
+  "alternateName": "T-Skyler 航空",
+  "url": "https://t-skyler-airlines.github.io/",
+  "logo": "https://t-skyler-airlines.github.io/icon-512.png",
+  "iataCode": "TS",
+  "sameAs": ["https://www.instagram.com/tschool_aviation_research/"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "T-Skyler Airlines",
+  "url": "https://t-skyler-airlines.github.io/",
+  "inLanguage": ["zh-Hant","en","ja","ko"]
+}
+</script>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json"/>
 <meta name="theme-color" content="#2e256b"/>
@@ -1034,12 +1079,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   D['pax.short']=['位','pax','名','명'];
   D['incl']=['已含','Incl.','込み','포함'];
+  D['meta.title']=['T-Skyler 航空 — 線上訂票、選位與電子登機證','T-Skyler Airlines — Book Flights, Pick Seats & E-Boarding Pass','T-Skyler航空 — オンライン予約・座席指定・電子搭乗券','T-Skyler 항공 — 온라인 예약·좌석 선택·전자 탑승권'];
+  D['meta.desc']=['台灣往返全球的線上訂票體驗：搜尋航班、依機型選位、選擇艙等與行李，立即生成可下載的電子登機證。','Online booking between Taiwan and the world: search flights, pick seats by aircraft, choose cabin and baggage, and instantly generate a downloadable e-boarding pass.','台湾と世界を結ぶオンライン予約：フライト検索、機材ごとの座席指定、クラス・手荷物選択、電子搭乗券をその場で発行。','대만과 세계를 잇는 온라인 예약: 항공편 검색, 기종별 좌석 선택, 등급·수하물 선택, 전자 탑승권 즉시 발급.'];
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
 
   function applyI18n(){
     document.documentElement.lang = LANG_ORDER[LANG_IDX];
+    document.title = t('meta.title');
+    var md=document.querySelector('meta[name="description"]'); if(md) md.setAttribute('content', t('meta.desc'));
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-ph]'), function(el){ el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function(el){ el.innerHTML=t(el.getAttribute('data-i18n-html')); });
