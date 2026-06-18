@@ -525,6 +525,23 @@
 </div>
 </div>
 </section>
+
+<!-- ====== 人才招募 View ====== -->
+<section id="view-careers" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="careers.title">人才招募</h3>
+<p class="text-white/50 text-sm mb-6" data-i18n="careers.sub">與我們一起翱翔天際，打造非凡旅程。</p>
+<div class="aspect-[21/9] w-full rounded-2xl overflow-hidden mb-8 bg-card-dark">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0orxl8b0Bro_4FaKMDCzW5bYWmP-AQrJov4jZqAF95p8-5eXtCaLZqwedkW_02aiFTBtfrEY7SS99JKZBMRCXrxTAiuXfvUS--1kutHloYLeAzQlJeQzZM4JQLGgYjAzfxc81_CMg95dQq8hJ0gJjq3qndFhZ-4sTtKQdo3XfVV1C2czBHoQaNUkZmhoUa2Blpba3t5wqguAbmo803IYWc55-cvupTg3_9Tjy61-tYSUex8-5TyxU6cTthPS1uy7y_CR31bNNeRcM" alt="T-Skyler 招募" class="w-full h-full object-cover"/>
+</div>
+<p class="text-white/70 leading-relaxed mb-8" data-i18n="careers.intro">T-Skyler 持續尋找對航空充滿熱情的夥伴。</p>
+<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">work</span> <span data-i18n="careers.openings">開放職缺</span></h4>
+<div id="jobList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -556,7 +573,7 @@
 <h5 class="text-white font-bold mb-4" data-i18n="foot.about">關於我們</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
 <li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.brand">品牌故事</a></li>
-<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.careers">人才招募</a></li>
+<li><a class="hover:text-white transition-colors" href="#careers" data-i18n="foot.careers">人才招募</a></li>
 <li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.news">新聞中心</a></li>
 <li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.blog">部落格</a></li>
 </ul>
@@ -1074,6 +1091,32 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['incl']=['已含','Incl.','込み','포함'];
   D['meta.title']=['T-Skyler 航空 — 線上訂票、選位與電子登機證','T-Skyler Airlines — Book Flights, Pick Seats & E-Boarding Pass','T-Skyler航空 — オンライン予約・座席指定・電子搭乗券','T-Skyler 항공 — 온라인 예약·좌석 선택·전자 탑승권'];
   D['meta.desc']=['台灣往返全球的線上訂票體驗：搜尋航班、依機型選位、選擇艙等與行李，立即生成可下載的電子登機證。','Online booking between Taiwan and the world: search flights, pick seats by aircraft, choose cabin and baggage, and instantly generate a downloadable e-boarding pass.','台湾と世界を結ぶオンライン予約：フライト検索、機材ごとの座席指定、クラス・手荷物選択、電子搭乗券をその場で発行。','대만과 세계를 잇는 온라인 예약: 항공편 검색, 기종별 좌석 선택, 등급·수하물 선택, 전자 탑승권 즉시 발급.'];
+  // 人才招募
+  D['careers.title']=['人才招募','Careers','採用情報','채용'];
+  D['careers.sub']=['與我們一起翱翔天際，打造非凡旅程。','Soar with us and craft extraordinary journeys.','私たちと大空へ、特別な旅をつくろう。','함께 하늘을 날며 특별한 여정을 만들어요.'];
+  D['careers.intro']=['T-Skyler 持續尋找對航空充滿熱情的夥伴。無論你是剛起步的培訓生、經驗豐富的機師，或地面與營運專業人才，這裡都有屬於你的舞台。','T-Skyler is always looking for people passionate about aviation — from aspiring cadets to seasoned pilots and ground & operations professionals. There is a place for you here.','T-Skylerは航空に情熱を持つ仲間を求めています。訓練生からベテランパイロット、地上・運航のプロまで、活躍の場があります。','T-Skyler는 항공에 열정을 가진 동료를 찾습니다. 훈련생부터 베테랑 조종사, 지상·운영 전문가까지 무대가 준비되어 있습니다.'];
+  D['careers.openings']=['開放職缺','Open Positions','募集職種','채용 직무'];
+  D['careers.apply']=['應徵','Apply','応募','지원'];
+  D['careers.cat.pilot']=['飛行員','Flight Deck','運航乗務','운항승무'];
+  D['careers.cat.cabin']=['客艙','Cabin','客室','객실'];
+  D['careers.cat.ground']=['地面服務','Ground','地上','지상'];
+  D['careers.cat.ops']=['營運','Operations','オペレーション','운영'];
+  D['job.cadet']=['培訓機師','Cadet Pilot','訓練生パイロット','훈련 조종사'];
+  D['job.cadet.d']=['零經驗培訓計畫，從學員培養至副機師。','Ab-initio program from trainee to First Officer.','未経験から副操縦士まで育成する訓練生プログラム。','무경험부터 부기장까지 양성하는 프로그램.'];
+  D['job.cpl']=['CPL 機師','CPL Pilot','CPLパイロット','CPL 조종사'];
+  D['job.cpl.d']=['持商用駕駛執照（CPL），加入機隊接受機種轉訓。','Hold a Commercial Pilot Licence and join fleet type-rating.','商用操縦士免許（CPL）保有者、機種転換訓練へ。','상업용 조종사 면허(CPL) 보유자, 기종 전환 훈련.'];
+  D['job.military']=['軍退機師','Ex-Military Pilot','軍出身パイロット','군 출신 조종사'];
+  D['job.military.d']=['軍職退役飛行員轉民航的銜接養成計畫。','Transition program for ex-military aviators into commercial aviation.','軍経験者の民間航空への移行プログラム。','군 출신 조종사의 민간 항공 전환 프로그램.'];
+  D['job.cabin']=['空服員','Cabin Crew','客室乗務員','객실승무원'];
+  D['job.cabin.d']=['提供安全、專業且貼心的客艙服務。','Deliver safe, professional and caring cabin service.','安全でプロフェッショナル、心のこもった客室サービス。','안전하고 전문적이며 세심한 객실 서비스 제공.'];
+  D['job.ground']=['地勤人員','Ground Staff','地上係員','지상직'];
+  D['job.ground.d']=['負責報到、登機與旅客服務第一線。','Front-line check-in, boarding and passenger service.','チェックイン・搭乗・旅客対応の最前線。','체크인·탑승·여객 서비스 최전선.'];
+  D['job.ramp']=['航勤員','Ramp Agent','ランプ係員','램프 요원'];
+  D['job.ramp.d']=['行李貨物裝卸與停機坪地面作業。','Baggage/cargo handling and ramp operations.','手荷物・貨物の搭降載とランプ作業。','수하물·화물 상하역 및 램프 작업.'];
+  D['job.maint']=['機務維修','Aircraft Maintenance','航空整備士','항공정비사'];
+  D['job.maint.d']=['確保機隊適航狀態與維修品質。','Ensure fleet airworthiness and maintenance quality.','機体の耐空性と整備品質を確保。','기재 감항성과 정비 품질 보장.'];
+  D['job.dispatch']=['簽派員','Flight Dispatcher','運航管理者','운항관리사'];
+  D['job.dispatch.d']=['規劃航路、油量並負責飛航放行。','Plan routes and fuel, and authorise flight release.','経路・燃料を計画し運航許可を担当。','항로·연료를 계획하고 운항 허가를 담당.'];
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1101,6 +1144,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='trips') renderTrips();
     else if(h==='member') renderMember();
     else if(h==='help') renderFaq();
+    else if(h==='careers') renderCareers();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1260,6 +1304,31 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     doSearch();
   }
 
+  // 人才招募職缺
+  var JOBS=[
+    {key:'cadet', cat:'pilot', icon:'school'},
+    {key:'cpl', cat:'pilot', icon:'flight'},
+    {key:'military', cat:'pilot', icon:'military_tech'},
+    {key:'cabin', cat:'cabin', icon:'airline_seat_recline_extra'},
+    {key:'ground', cat:'ground', icon:'support_agent'},
+    {key:'ramp', cat:'ground', icon:'luggage'},
+    {key:'maint', cat:'ops', icon:'build'},
+    {key:'dispatch', cat:'ops', icon:'route'}
+  ];
+  function renderCareers(){
+    var wrap=document.getElementById('jobList'); if(!wrap) return;
+    wrap.innerHTML=JOBS.map(function(j){
+      return '<div class="bg-card-dark border border-white/10 rounded-xl p-5 flex flex-col">'+
+        '<div class="flex items-center gap-3 mb-3">'+
+          '<div class="size-11 rounded-lg bg-primary/20 text-primary-hover flex items-center justify-center shrink-0"><span class="material-symbols-outlined">'+j.icon+'</span></div>'+
+          '<div><span class="text-[10px] font-bold text-primary-hover uppercase tracking-wider">'+t('careers.cat.'+j.cat)+'</span><p class="text-white font-bold leading-tight">'+t('job.'+j.key)+'</p></div>'+
+        '</div>'+
+        '<p class="text-white/55 text-sm flex-1">'+t('job.'+j.key+'.d')+'</p>'+
+        '<a href="mailto:careers@t-skyler.com?subject='+encodeURIComponent(t('job.'+j.key))+'" class="mt-4 inline-flex items-center justify-center gap-1 h-10 px-4 bg-white/10 hover:bg-primary text-white text-sm font-bold rounded-lg transition-colors">'+t('careers.apply')+' <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>'+
+      '</div>';
+    }).join('');
+  }
+
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
     return pad(Math.floor(mins/60))+":"+pad(mins%60);
@@ -1307,7 +1376,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1315,6 +1384,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     if(view==='view-trips') renderTrips();
     else if(view==='view-member') renderMember();
     else if(view==='view-help') renderFaq();
+    else if(view==='view-careers') renderCareers();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
