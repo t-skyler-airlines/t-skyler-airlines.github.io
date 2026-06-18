@@ -86,21 +86,34 @@
         }
     </script>
 <style>
-        /* ===== PWA 開啟動畫 ===== */
-        #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#3d3285,#001B38 72%);overflow:hidden}
+        /* ===== PWA 開啟動畫（重新設計） ===== */
+        #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
+          background:linear-gradient(165deg,#00132a 0%,#001B38 42%,#241b56 100%)}
+        #appSplash::before{content:"";position:absolute;width:540px;height:540px;border-radius:50%;
+          background:radial-gradient(circle,rgba(138,127,240,.28),transparent 62%);filter:blur(18px);animation:sGlow 2.6s ease-in-out infinite}
         #appSplash.show{display:flex}
-        #appSplash.hide{opacity:0;transition:opacity .55s ease;pointer-events:none}
-        #appSplash .s-logo{width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));animation:sPop .7s cubic-bezier(.2,.8,.2,1) both}
-        #appSplash .s-name{color:#fff;font-weight:800;letter-spacing:.34em;font-size:24px;margin-top:16px;opacity:0;animation:sUp .6s .25s both}
-        #appSplash .s-sub{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.42em;font-size:11px;margin-top:5px;opacity:0;animation:sUp .6s .42s both}
-        #appSplash .s-bar{width:150px;height:3px;border-radius:3px;background:rgba(255,255,255,.16);margin-top:28px;overflow:hidden}
-        #appSplash .s-bar i{display:block;height:100%;width:0;background:#fff;border-radius:3px;animation:sBar 1.4s .3s ease forwards}
-        #appSplash .s-plane{position:absolute;bottom:20%;left:-48px;color:rgba(255,255,255,.28);animation:sFly 1.8s .15s ease-in forwards}
-        @keyframes sPop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
-        @keyframes sUp{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
-        @keyframes sBar{to{width:100%}}
-        @keyframes sFly{to{left:112%;transform:translateY(-34px) rotate(-6deg)}}
-        @media (prefers-reduced-motion: reduce){#appSplash *{animation-duration:.01ms!important}}
+        #appSplash.hide{opacity:0;transform:scale(1.05);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
+        #appSplash .s-stage{position:relative;width:128px;height:128px;display:flex;align-items:center;justify-content:center;z-index:1}
+        #appSplash .s-ring{position:absolute;inset:0;border-radius:50%;
+          background:conic-gradient(from 0deg,transparent 0 60%,rgba(169,156,255,.85) 88%,#fff 100%);
+          -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
+          animation:sSpin 1.05s linear infinite}
+        #appSplash .s-logo{width:78px;height:78px;object-fit:contain;filter:drop-shadow(0 6px 22px rgba(0,0,0,.45));
+          animation:sIn .8s cubic-bezier(.2,.85,.25,1) both,sFloat 3s ease-in-out .8s infinite}
+        #appSplash .s-word{margin-top:30px;color:#fff;font-weight:800;font-size:26px;letter-spacing:.5em;padding-left:.5em;z-index:1;opacity:0;animation:sWord .7s .35s ease forwards}
+        #appSplash .s-tag{margin-top:7px;color:rgba(255,255,255,.5);font-weight:600;font-size:11px;letter-spacing:.55em;padding-left:.55em;z-index:1;opacity:0;animation:sWord .7s .5s ease forwards}
+        #appSplash .s-dots{display:flex;gap:7px;margin-top:34px;z-index:1}
+        #appSplash .s-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.85);animation:sDot 1.1s ease-in-out infinite}
+        #appSplash .s-dots span:nth-child(2){animation-delay:.18s}
+        #appSplash .s-dots span:nth-child(3){animation-delay:.36s}
+        @keyframes sSpin{to{transform:rotate(360deg)}}
+        @keyframes sIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+        @keyframes sFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        @keyframes sWord{from{opacity:0;transform:translateY(8px);letter-spacing:.85em}to{opacity:1;transform:none}}
+        @keyframes sDot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-5px)}}
+        @keyframes sGlow{0%,100%{opacity:.7;transform:scale(.95)}50%{opacity:1;transform:scale(1.06)}}
+        @media (prefers-reduced-motion: reduce){#appSplash *,#appSplash::before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
@@ -141,11 +154,10 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
-<img src="icon-512.png" alt="" class="s-logo"/>
-<div class="s-name">T-SKYLER</div>
-<div class="s-sub">AIRLINES</div>
-<div class="s-bar"><i></i></div>
-<div class="s-plane"><span class="material-symbols-outlined" style="font-size:34px">flight</span></div>
+<div class="s-stage"><span class="s-ring"></span><img src="icon-512.png" alt="" class="s-logo"/></div>
+<div class="s-word">T-SKYLER</div>
+<div class="s-tag">AIRLINES</div>
+<div class="s-dots"><span></span><span></span><span></span></div>
 </div>
 <script>
 (function(){
