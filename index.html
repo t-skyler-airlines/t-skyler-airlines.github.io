@@ -379,7 +379,10 @@
 <p id="bkFlightInfo" class="text-white/50 text-sm mb-8">—</p>
 
 <h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">person</span> <span data-i18n="bk.name">乘客姓名</span></h4>
-<input id="paxName" type="text" autocomplete="name" data-i18n-ph="bk.name.ph" placeholder="請輸入乘客英文姓名（例如 MASON ZENG）" class="w-full h-14 px-4 mb-8 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase"/>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+<input id="paxFirst" type="text" autocomplete="given-name" data-i18n-ph="bk.first.ph" placeholder="名字（例：MASON）" class="w-full h-14 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase"/>
+<input id="paxLast" type="text" autocomplete="family-name" data-i18n-ph="bk.last.ph" placeholder="姓氏（例：ZENG）" class="w-full h-14 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase"/>
+</div>
 
 <h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_extra</span> <span data-i18n="bk.cabin">艙等</span></h4>
 <div id="cabinOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"></div>
@@ -813,12 +816,22 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   refreshTo();
   fromSel.addEventListener("change", refreshTo);
 
-  // 日期最早只能選今天
+  // 去程最早今天；回程不得早於去程
   (function(){
-    var t=new Date(), today=t.getFullYear()+"-"+pad2(t.getMonth()+1)+"-"+pad2(t.getDate());
     function pad2(n){ return n<10?"0"+n:""+n; }
+    var t=new Date(), today=t.getFullYear()+"-"+pad2(t.getMonth()+1)+"-"+pad2(t.getDate());
     var dp=document.getElementById("depart"), rt=document.getElementById("return");
     if(dp) dp.min=today; if(rt) rt.min=today;
+    if(dp&&rt){
+      dp.addEventListener("change", function(){
+        if(dp.value){
+          rt.min=dp.value;                                  // 回程最早＝去程當天
+          if(rt.value && rt.value<dp.value) rt.value="";    // 已選的回程若早於去程則清除
+        } else {
+          rt.min=today;
+        }
+      });
+    }
   })();
 
   function pad(n){ return n<10? "0"+n : ""+n; }
@@ -951,7 +964,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     'bk.back':['返回航班列表','Back to flights','フライト一覧に戻る','항공편 목록으로'],
     'bk.title':['選擇艙等與行李','Select Cabin & Baggage','クラスと手荷物','좌석 등급과 수하물'],
     'bk.name':['乘客姓名','Passenger Name','搭乗者氏名','탑승자 이름'],
-    'bk.name.ph':['請輸入乘客英文姓名（例如 MASON ZENG）','Enter passenger name (e.g. MASON ZENG)','搭乗者氏名（例：MASON ZENG）','탑승자 이름 (예: MASON ZENG)'],
+    'bk.first.ph':['名字（例：MASON）','First name (e.g. MASON)','名（例：MASON）','이름 (예: MASON)'],
+    'bk.last.ph':['姓氏（例：ZENG）','Last name (e.g. ZENG)','姓（例：ZENG）','성 (예: ZENG)'],
     'bk.cabin':['艙等','Cabin Class','座席クラス','좌석 등급'],
     'bk.baggage':['行李額度','Baggage','手荷物','수하물'],
     'bk.total':['總計','Total','合計','합계'],
@@ -1634,7 +1648,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 由目前選擇建立一張登機證資料物件
   function buildPass(){
     var f=state.sel, cabin=state.cabin||CABIN_OF.ECONOMY;
-    var nm=((document.getElementById('paxName')||{}).value||'').trim().toUpperCase()||'GUEST';
+    var fn=((document.getElementById('paxFirst')||{}).value||'').trim();
+    var ln=((document.getElementById('paxLast')||{}).value||'').trim();
+    var nm=((fn+' '+ln).trim().toUpperCase())||'GUEST';
     var base=cabinPriceFor(cabin,f) + ((state.baggage&&state.baggage.add)||0);
     var leadFee=(state.selectedSeats[0] && isPremiumSeat(state.selectedSeats[0])) ? state.seatFee : 0;
     var allFees=seatFeesTotal();
@@ -1792,8 +1808,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     renderBooking();
   });
   document.getElementById("confirmBooking").addEventListener("click", function(){
-    var nm=(document.getElementById('paxName').value||'').trim();
-    if(!nm){ alert(t('alert.needname')); document.getElementById('paxName').focus(); return; }
+    var fn=(document.getElementById('paxFirst').value||'').trim();
+    var ln=(document.getElementById('paxLast').value||'').trim();
+    if(!fn||!ln){ alert(t('alert.needname')); document.getElementById(!fn?'paxFirst':'paxLast').focus(); return; }
     var cap=initSeats();
     if(cap < (state.pax||1)){ alert(t('seat.notenough')); return; }
     renderSeats();
