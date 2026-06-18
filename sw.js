@@ -1,5 +1,5 @@
 // T-Skyler 航空 — Service Worker（離線快取）
-const CACHE = 'tskyler-v3';
+const CACHE = 'tskyler-v4';
 const ASSETS = [
   './',
   './index.html',

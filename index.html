@@ -85,7 +85,23 @@
             },
         }
     </script>
-<style>::-webkit-scrollbar {
+<style>
+        /* ===== PWA 開啟動畫 ===== */
+        #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 35%,#3d3285,#001B38 72%);overflow:hidden}
+        #appSplash.show{display:flex}
+        #appSplash.hide{opacity:0;transition:opacity .55s ease;pointer-events:none}
+        #appSplash .s-logo{width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));animation:sPop .7s cubic-bezier(.2,.8,.2,1) both}
+        #appSplash .s-name{color:#fff;font-weight:800;letter-spacing:.34em;font-size:24px;margin-top:16px;opacity:0;animation:sUp .6s .25s both}
+        #appSplash .s-sub{color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.42em;font-size:11px;margin-top:5px;opacity:0;animation:sUp .6s .42s both}
+        #appSplash .s-bar{width:150px;height:3px;border-radius:3px;background:rgba(255,255,255,.16);margin-top:28px;overflow:hidden}
+        #appSplash .s-bar i{display:block;height:100%;width:0;background:#fff;border-radius:3px;animation:sBar 1.4s .3s ease forwards}
+        #appSplash .s-plane{position:absolute;bottom:20%;left:-48px;color:rgba(255,255,255,.28);animation:sFly 1.8s .15s ease-in forwards}
+        @keyframes sPop{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+        @keyframes sUp{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+        @keyframes sBar{to{width:100%}}
+        @keyframes sFly{to{left:112%;transform:translateY(-34px) rotate(-6deg)}}
+        @media (prefers-reduced-motion: reduce){#appSplash *{animation-duration:.01ms!important}}
+        ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
@@ -101,6 +117,24 @@
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
+<!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
+<div id="appSplash" aria-hidden="true">
+<img src="icon-512.png" alt="" class="s-logo"/>
+<div class="s-name">T-SKYLER</div>
+<div class="s-sub">AIRLINES</div>
+<div class="s-bar"><i></i></div>
+<div class="s-plane"><span class="material-symbols-outlined" style="font-size:34px">flight</span></div>
+</div>
+<script>
+(function(){
+  var sp=document.getElementById('appSplash');
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
+  if(sp&&standalone){
+    sp.classList.add('show');
+    setTimeout(function(){ sp.classList.add('hide'); setTimeout(function(){ sp.classList.remove('show'); }, 600); }, 1800);
+  }
+})();
+</script>
 <aside class="hidden lg:flex fixed top-0 left-0 z-50 h-screen w-64 flex-col bg-primary border-r border-white/10 shadow-2xl">
 <div class="h-20 flex items-center px-6 border-b border-white/10">
 <div class="flex items-center gap-3">
