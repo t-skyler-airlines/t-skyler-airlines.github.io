@@ -74,11 +74,11 @@
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">edit_calendar</span>
 <span class="font-semibold">管理行程</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#help">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">support_agent</span>
 <span class="font-semibold">協助</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#member">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">stars</span>
 <span class="font-semibold">會員計畫</span>
 </a>
@@ -404,6 +404,86 @@
 <div id="tripList" class="space-y-4"></div>
 </div>
 </section>
+
+<!-- ====== 會員計畫 View ====== -->
+<section id="view-member" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[920px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">Skyler 會員俱樂部</h3>
+<p class="text-white/50 text-sm mb-8">每一次飛行都讓你更靠近下一張頭等艙。</p>
+
+<!-- 會員卡 -->
+<div id="memberCard" class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl">
+<div class="absolute -right-16 -top-16 size-56 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-white">workspace_premium</span>
+<span class="text-white/80 text-sm font-bold tracking-widest">T-SKYLER CLUB</span>
+</div>
+<span id="memberTierBadge" class="text-xs font-black text-white/90 bg-black/20 px-3 py-1 rounded-full">—</span>
+</div>
+<p id="memberName" class="text-white text-xl font-bold mb-1">尊貴會員</p>
+<p class="text-white/70 text-sm mb-6">累積哩程</p>
+<p class="text-white text-4xl font-black mb-6"><span id="memberMiles">0</span> <span class="text-lg font-bold text-white/70">哩</span></p>
+<div>
+<div class="flex justify-between text-xs text-white/80 mb-1.5"><span id="memberProgressText">—</span><span id="memberNextTier"></span></div>
+<div class="h-2 bg-black/25 rounded-full overflow-hidden"><div id="memberProgressBar" class="h-full bg-white rounded-full transition-all" style="width:0%"></div></div>
+</div>
+</div>
+</div>
+
+<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">military_tech</span> 會員等級與權益</h4>
+<div id="tierGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+</div>
+</section>
+
+<!-- ====== 幫助中心 View ====== -->
+<section id="view-help" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">幫助中心</h3>
+<p class="text-white/50 text-sm mb-8">常見問題與聯絡方式。</p>
+<div id="faqList" class="space-y-3 mb-10"></div>
+<div class="bg-card-dark border border-white/10 rounded-2xl p-6">
+<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">support_agent</span> 聯絡我們</h4>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">call</span><div><p class="text-white/40 text-xs">客服專線</p><p class="text-white font-bold">0800-925-937</p></div></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">mail</span><div><p class="text-white/40 text-xs">電子郵件</p><p class="text-white font-bold">help@t-skyler.com</p></div></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">schedule</span><div><p class="text-white/40 text-xs">服務時間</p><p class="text-white font-bold">24 小時全年無休</p></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ====== 關於我們 View ====== -->
+<section id="view-about" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[860px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">關於 T-Skyler 航空</h3>
+<p class="text-white/50 text-sm mb-8">連結你的世界，盡享安全、舒適與風格。</p>
+<div class="aspect-[21/9] w-full rounded-2xl overflow-hidden mb-8 bg-card-dark">
+<img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0orxl8b0Bro_4FaKMDCzW5bYWmP-AQrJov4jZqAF95p8-5eXtCaLZqwedkW_02aiFTBtfrEY7SS99JKZBMRCXrxTAiuXfvUS--1kutHloYLeAzQlJeQzZM4JQLGgYjAzfxc81_CMg95dQq8hJ0gJjq3qndFhZ-4sTtKQdo3XfVV1C2czBHoQaNUkZmhoUa2Blpba3t5wqguAbmo803IYWc55-cvupTg3_9Tjy61-tYSUex8-5TyxU6cTthPS1uy7y_CR31bNNeRcM" alt="T-Skyler 客機" class="w-full h-full object-cover"/>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">8</p><p class="text-white/50 text-xs mt-1">機型</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p id="aboutDest" class="text-primary-hover text-3xl font-black">—</p><p class="text-white/50 text-xs mt-1">全球航點</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">5★</p><p class="text-white/50 text-xs mt-1">服務評等</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">2026</p><p class="text-white/50 text-xs mt-1">成立年份</p></div>
+</div>
+<div class="space-y-5 text-white/70 leading-relaxed">
+<p>T-Skyler 航空以台灣為樞紐，連結亞洲、歐洲、北美與大洋洲的主要城市。我們相信旅行不只是抵達，更是一段值得期待的旅程。</p>
+<p>從窄體的空中巴士 A320neo 到旗艦廣體波音 777-9，我們依航程與需求精心調度機隊，讓每一次飛行都兼顧效率與舒適。四種艙等、完善的選位與行李方案，只為打造屬於你的專屬高空體驗。</p>
+<p>三萬英呎之上，T-Skyler 與你同行。</p>
+</div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -434,19 +514,19 @@
 <div>
 <h5 class="text-white font-bold mb-4">關於我們</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#">品牌故事</a></li>
-<li><a class="hover:text-white transition-colors" href="#">人才招募</a></li>
-<li><a class="hover:text-white transition-colors" href="#">新聞中心</a></li>
-<li><a class="hover:text-white transition-colors" href="#">部落格</a></li>
+<li><a class="hover:text-white transition-colors" href="#about">品牌故事</a></li>
+<li><a class="hover:text-white transition-colors" href="#about">人才招募</a></li>
+<li><a class="hover:text-white transition-colors" href="#about">新聞中心</a></li>
+<li><a class="hover:text-white transition-colors" href="#about">部落格</a></li>
 </ul>
 </div>
 <div>
 <h5 class="text-white font-bold mb-4">支援服務</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#">幫助中心</a></li>
-<li><a class="hover:text-white transition-colors" href="#">聯絡我們</a></li>
-<li><a class="hover:text-white transition-colors" href="#">行李資訊</a></li>
-<li><a class="hover:text-white transition-colors" href="#">特殊協助</a></li>
+<li><a class="hover:text-white transition-colors" href="#help">幫助中心</a></li>
+<li><a class="hover:text-white transition-colors" href="#help">聯絡我們</a></li>
+<li><a class="hover:text-white transition-colors" href="#help">行李資訊</a></li>
+<li><a class="hover:text-white transition-colors" href="#help">特殊協助</a></li>
 </ul>
 </div>
 <div>
@@ -478,7 +558,7 @@
 <button data-tab="flights" data-goto="flights" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">flight</span><span class="text-[10px] font-medium">航班</span>
 </button>
-<button data-tab="member" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<button data-tab="member" data-goto="member" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium">會員</span>
 </button>
 <button data-tab="account" data-goto="trips" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
@@ -861,21 +941,87 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     window.scrollTo(0,0);
   }
   function highlightTab(view){
-    var tab = view==='view-flights' ? 'flights' : (view==='view-trips' ? 'account' : 'home');
+    var tab = view==='view-flights' ? 'flights' : (view==='view-trips' ? 'account' : (view==='view-member' ? 'member' : 'home'));
     Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'), function(t){
       var on = t.getAttribute('data-tab')===tab;
       t.classList.toggle('text-white', on);
       t.classList.toggle('text-white/60', !on);
     });
   }
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about' };
   function route(){
     var h=(location.hash||'').replace('#','');
-    var view = h==='flights' ? 'view-flights' : (h==='booking' ? 'view-booking' : (h==='seats' ? 'view-seats' : (h==='trips' ? 'view-trips' : 'view-home')));
+    var view = VIEW_OF[h] || 'view-home';
     showView(view);
     if(view==='view-trips') renderTrips();
+    else if(view==='view-member') renderMember();
+    else if(view==='view-help') renderFaq();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
+
+  // ====== 會員計畫 ======
+  var TIERS=[
+    {code:'EXPLORER', name:'探索卡', min:0,      color:'#64748b', perks:['線上選位','電子登機證','哩程累積']},
+    {code:'SILVER',   name:'銀卡',   min:25000,  color:'#94a3b8', perks:['優先報到','+10kg 行李額度','專屬客服']},
+    {code:'GOLD',     name:'金卡',   min:60000,  color:'#caa53d', perks:['貴賓室使用','優先登機','免費選位']},
+    {code:'PLATINUM', name:'白金卡', min:120000, color:'#8a7ff0', perks:['頭等貴賓室','保證訂位','艙等升等券']}
+  ];
+  function renderMember(){
+    var trips=loadTrips();
+    var miles=trips.reduce(function(s,t){ return s + (t.miles||0)*(t.pax||1); },0);
+    var tier=TIERS[0], next=null, i;
+    for(i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
+    for(i=0;i<TIERS.length;i++){ if(TIERS[i].min>miles){ next=TIERS[i]; break; } }
+    var card=document.getElementById('memberCard');
+    card.style.background='linear-gradient(135deg,'+tier.color+' 0%,#001B38 90%)';
+    document.getElementById('memberTierBadge').textContent=tier.name;
+    document.getElementById('memberMiles').textContent=miles.toLocaleString('en-US');
+    document.getElementById('memberName').textContent=(trips[0]&&trips[0].name)||'尊貴會員';
+    var bar=document.getElementById('memberProgressBar'), pt=document.getElementById('memberProgressText'), nt=document.getElementById('memberNextTier');
+    if(next){
+      var pct=Math.max(0,Math.min(100, Math.round((miles-tier.min)/(next.min-tier.min)*100)));
+      bar.style.width=pct+'%';
+      pt.textContent='距離 '+next.name+' 還差 '+(next.min-miles).toLocaleString('en-US')+' 哩';
+      nt.textContent=next.name;
+    } else { bar.style.width='100%'; pt.textContent='已達最高等級 🎉'; nt.textContent=''; }
+    document.getElementById('tierGrid').innerHTML=TIERS.map(function(t){
+      var cur=t.code===tier.code;
+      return '<div class="rounded-xl p-5 border bg-card-dark '+(cur?'border-primary ring-2 ring-primary/40':'border-white/10')+'">'+
+        '<div class="flex items-center justify-between mb-3">'+
+          '<div class="flex items-center gap-2"><span class="size-3 rounded-full inline-block" style="background:'+t.color+'"></span><p class="text-white font-bold">'+t.name+'</p></div>'+
+          (cur?'<span class="text-[10px] font-black text-primary-hover">目前等級</span>':'')+
+        '</div>'+
+        '<p class="text-white/50 text-xs mb-3">'+(t.min===0?'入會即享':t.min.toLocaleString('en-US')+' 哩起')+'</p>'+
+        '<ul class="space-y-1.5">'+t.perks.map(function(p){ return '<li class="flex items-center gap-2 text-white/70 text-sm"><span class="material-symbols-outlined text-primary-hover text-[16px]">check</span>'+p+'</li>'; }).join('')+'</ul>'+
+      '</div>';
+    }).join('');
+  }
+
+  // ====== 幫助中心 FAQ ======
+  var FAQ=[
+    {q:"如何搜尋與預訂航班？", a:"在首頁選擇出發地、目的地與日期後按「搜尋航班」，挑選班次、艙等、行李與座位，輸入乘客姓名即可生成電子登機證。"},
+    {q:"為什麼出發地選國外時，目的地只能選台灣？", a:"T-Skyler 為台灣籍航空，航線以台灣往返各國為主，因此國外出發的目的地僅限台灣（桃園、松山、台中、高雄）。"},
+    {q:"票價是用什麼貨幣顯示？", a:"系統會依你所在國家（IP）自動換算為當地貨幣，採即時匯率，金額僅供參考。"},
+    {q:"哪些座位需要加價？", a:"腿部空間較大的座位（緊急出口排與艙壁第一排）為加價座位，會以綠色標示，費用依航程長短計算。"},
+    {q:"為什麼有些機型沒有頭等艙或豪華經濟艙？", a:"窄體客機（A320neo / A321）僅提供經濟艙與商務艙；頭等艙僅在旗艦廣體機（A350-1000、B777-9）提供。"},
+    {q:"我生成的登機證會儲存在哪裡？", a:"登機證會自動存到此裝置的「我的行程」，可隨時重新查看或刪除；資料僅儲存在你的瀏覽器中。"},
+    {q:"如何累積與查詢哩程？", a:"每完成一次訂位即累積該航線哩程，於「會員計畫」頁可查看累積哩程、會員等級與升等進度。"}
+  ];
+  function renderFaq(){
+    var wrap=document.getElementById('faqList');
+    if(wrap.getAttribute('data-done')) return;
+    wrap.innerHTML=FAQ.map(function(f){
+      return '<details class="group bg-card-dark border border-white/10 rounded-xl overflow-hidden">'+
+        '<summary class="flex items-center justify-between gap-3 p-4 cursor-pointer list-none text-white font-bold">'+
+          '<span>'+f.q+'</span>'+
+          '<span class="material-symbols-outlined text-white/50 transition-transform group-open:rotate-180">expand_more</span>'+
+        '</summary>'+
+        '<div class="px-4 pb-4 text-white/60 text-sm leading-relaxed">'+f.a+'</div>'+
+      '</details>';
+    }).join('');
+    wrap.setAttribute('data-done','1');
+  }
 
   // ====== 產生航班列表（不同出發時間） ======
   function genFlights(){
@@ -1290,6 +1436,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       btn.disabled=false;
     }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
   });
+
+  var ad=document.getElementById('aboutDest'); if(ad) ad.textContent=Object.keys(AIRPORT).length;
 
   route();
   initCurrency();
