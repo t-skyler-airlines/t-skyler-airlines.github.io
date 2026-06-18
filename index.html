@@ -633,6 +633,21 @@
 <span class="material-symbols-outlined">install_mobile</span> <span data-i18n="install.app">安裝 App</span>
 </button>
 
+<!-- ====== 職缺詳細資訊 Modal ====== -->
+<div id="jobModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+<div class="relative w-full max-w-[560px] my-8 bg-card-dark border border-white/10 rounded-2xl shadow-2xl p-6 sm:p-8">
+<button id="closeJob" class="absolute top-4 right-4 size-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><span class="material-symbols-outlined">close</span></button>
+<div class="flex items-center gap-3 mb-4 pr-8">
+<div class="size-12 rounded-lg bg-primary/20 text-primary-hover flex items-center justify-center shrink-0"><span id="jmIcon" class="material-symbols-outlined text-2xl">work</span></div>
+<div><span id="jmCat" class="text-[10px] font-bold text-primary-hover uppercase tracking-wider"></span><h3 id="jmTitle" class="text-white text-xl font-black leading-tight"></h3></div>
+</div>
+<p id="jmDesc" class="text-white/60 text-sm mb-5"></p>
+<h4 id="jmReqTitle" class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-[18px]">checklist</span><span></span></h4>
+<ul id="jmReqList" class="space-y-2 text-white/75 text-sm mb-5"></ul>
+<p id="jmRef" class="text-white/40 text-xs border-t border-white/10 pt-4 leading-relaxed"></p>
+</div>
+</div>
+
 <!-- ====== 機票 Modal ====== -->
 <div id="ticketModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
 <div class="relative w-full max-w-[760px] my-8">
@@ -1131,6 +1146,58 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['job.maint.d']=['確保機隊適航狀態與維修品質。','Ensure fleet airworthiness and maintenance quality.','機体の耐空性と整備品質を確保。','기재 감항성과 정비 품질 보장.'];
   D['job.dispatch']=['簽派員','Flight Dispatcher','運航管理者','운항관리사'];
   D['job.dispatch.d']=['規劃航路、油量並負責飛航放行。','Plan routes and fuel, and authorise flight release.','経路・燃料を計画し運航許可を担当。','항로·연료를 계획하고 운항 허가를 담당.'];
+  D['careers.detail']=['詳細資訊','Details','詳細','상세 정보'];
+  D['careers.req']=['應徵條件（參考）','Requirements (reference)','応募条件（参考）','지원 조건 (참고)'];
+  D['careers.ref']=['以上條件參考台灣三大航空（中華航空、長榮航空、星宇航空）公開招募標準，僅供參考。','Based on the public recruitment criteria of Taiwan’s three major carriers (China Airlines, EVA Air, STARLUX). For reference only.','上記は台湾三大航空（チャイナエアライン・エバー航空・スターラックス）の公開募集基準を参考にした参考情報です。','위 조건은 대만 3대 항공사(중화항공·에바항공·스타럭스)의 공개 채용 기준을 참고한 참고용 정보입니다.'];
+  // 各職缺應徵條件（以 \n 分隔的條列）
+  D['job.cadet.req']=[
+    '大專以上學歷，不限科系；男性須役畢或免役\nTOEIC 650 分以上（口說、寫作各 140 分以上）\n須通過甲類航空人員體檢（含藥檢）\n受訓約 2 年（學科→基礎飛行→機型轉換）\n正式任用後須服務機師職至少 7 年',
+    'Associate degree or above, any major; military service completed/exempt (male)\nTOEIC 650+ (Speaking & Writing 140+ each)\nPass Class 1 aviation medical (incl. drug test)\n~2-year training (ground school → basic flying → type rating)\nMinimum ~7-year service commitment after appointment',
+    '短大卒以上・学部不問、兵役完了/免除（男性）\nTOEIC 650点以上（スピーキング・ライティング各140点以上）\n第1種航空身体検査合格（薬物検査含む）\n訓練期間約2年（座学→基礎飛行→型式転換）\n任用後パイロットとして約7年の勤務義務',
+    '전문대 이상·전공 무관, 병역 완료/면제(남성)\nTOEIC 650점 이상(말하기·쓰기 각 140점 이상)\n1종 항공 신체검사 합격(약물검사 포함)\n약 2년 훈련(학과→기본 비행→기종 전환)\n임용 후 조종사로 약 7년 의무 근무'
+  ];
+  D['job.cpl.req']=[
+    '大專以上學歷，不限科系\n持商用駕駛執照(CPL)＋儀器飛行(IR)、雙引擎\n實機總時數 250 小時以上（含雙引擎 30 小時）\n通過民航局 CPL 筆試、甲類體檢及格\nICAO 航空英語 Level 4 以上',
+    'Associate degree or above, any major\nHold CPL + Instrument Rating, multi-engine\n250+ total flight hours (incl. 30h multi-engine)\nPass CAA CPL written exam & Class 1 medical\nICAO English Level 4 or above',
+    '短大卒以上・学部不問\nCPL＋計器飛行証明（IR）・双発を保有\n総飛行時間250時間以上（双発30時間含む）\nCAA CPL筆記試験合格・第1種身体検査合格\nICAO航空英語レベル4以上',
+    '전문대 이상·전공 무관\nCPL+계기비행(IR)·다발 엔진 보유\n총 비행시간 250시간 이상(다발 30시간 포함)\nCAA CPL 필기 합격·1종 신체검사 합격\nICAO 항공영어 레벨 4 이상'
+  ];
+  D['job.military.req']=[
+    '軍方退役飛行員（以一般飛航員職別任用）\n具備軍機飛行時數與飛行資歷\n甲類航空人員體檢及格\nICAO 航空英語 Level 4 以上\n受訓約 10–12 個月（進階＋機型轉換）',
+    'Ex-military aviator (hired as general flight crew)\nMilitary flight hours and proven flying record\nPass Class 1 aviation medical\nICAO English Level 4 or above\n~10–12 months training (advanced + type rating)',
+    '軍出身パイロット（一般運航乗務員として採用）\n軍用機の飛行時間・飛行経歴を有する\n第1種航空身体検査合格\nICAO航空英語レベル4以上\n訓練期間約10〜12か月（上級＋型式転換）',
+    '군 출신 조종사(일반 운항승무원으로 채용)\n군용기 비행시간 및 비행 경력 보유\n1종 항공 신체검사 합격\nICAO 항공영어 레벨 4 이상\n약 10~12개월 훈련(상급+기종 전환)'
+  ];
+  D['job.cabin.req']=[
+    '大專以上學歷，不限科系\nTOEIC 600 分以上（或 IELTS 4.5–5 / TOEFL iBT 64）\n雙手摸高約 208–210 公分\n矯正視力 1.0 以上、需會游泳\n可配合輪班與外站過夜',
+    'Associate degree or above, any major\nTOEIC 600+ (or IELTS 4.5–5 / TOEFL iBT 64)\nOverhead reach ~208–210 cm\nCorrected vision 1.0+; able to swim\nWilling to work shifts and overnight layovers',
+    '短大卒以上・学部不問\nTOEIC 600点以上（またはIELTS 4.5〜5 / TOEFL iBT 64）\n上方リーチ約208〜210cm\n矯正視力1.0以上・水泳可\nシフト勤務・ステイ対応可',
+    '전문대 이상·전공 무관\nTOEIC 600점 이상(또는 IELTS 4.5~5 / TOEFL iBT 64)\n양손 터치 높이 약 208~210cm\n교정시력 1.0 이상·수영 가능\n교대 근무 및 해외 체류 가능'
+  ];
+  D['job.ground.req']=[
+    '大專以上學歷，不限科系\nTOEIC 600 分以上尤佳\n旅客報到/登機/行李/載重平衡等作業\n需配合輪班（含早晚班）\n親切、抗壓、具服務熱忱',
+    'Associate degree or above, any major\nTOEIC 600+ preferred\nCheck-in, boarding, baggage & load-control duties\nRotating shifts (incl. early/late)\nFriendly, resilient, service-minded',
+    '短大卒以上・学部不問\nTOEIC 600点以上が望ましい\nチェックイン・搭乗・手荷物・重量管理業務\nシフト勤務（早朝・深夜含む）\n親切・ストレス耐性・サービス精神',
+    '전문대 이상·전공 무관\nTOEIC 600점 이상 우대\n체크인·탑승·수하물·중량관리 업무\n교대 근무(조조·심야 포함)\n친절·스트레스 내성·서비스 마인드'
+  ];
+  D['job.ramp.req']=[
+    '高中職以上學歷\n體能良好，可於戶外機坪輪班作業\n行李貨物裝卸、航機拖曳、地面裝備操作\n具堆高機/拖車/職業駕照尤佳\n注重安全規範',
+    'High-school diploma or above\nGood fitness; outdoor ramp shift work\nBaggage/cargo loading, towing, GSE operation\nForklift/tug/commercial licence a plus\nStrong safety mindset',
+    '高校卒以上\n体力良好・屋外ランプでのシフト勤務可\n手荷物/貨物の搭降載・牽引・地上機材操作\nフォークリフト/トーイング/運転免許優遇\n安全規範重視',
+    '고졸 이상\n체력 양호·옥외 램프 교대 근무 가능\n수하물/화물 상하역·견인·지상장비 운용\n지게차/토잉/운전면허 우대\n안전 규범 중시'
+  ];
+  D['job.maint.req']=[
+    '大專以上，航空/機械/電子等理工科系\n具民航局/EASA/FAA 維修執照(AML)尤佳\n英文佳（可判讀維修手冊）\n需配合輪班，公司提供培訓\n正式任用後須服務至少 3 年',
+    'Associate degree or above in aviation/mechanical/electronic engineering\nCAA/EASA/FAA maintenance licence (AML) a plus\nGood English (read maintenance manuals)\nShift work; training provided\nMinimum ~3-year service commitment',
+    '短大卒以上・航空/機械/電子系\nCAA/EASA/FAA整備士免許（AML）優遇\n英語力（整備マニュアル読解）\nシフト勤務・社内訓練あり\n任用後3年以上の勤務義務',
+    '전문대 이상·항공/기계/전자 공학계열\nCAA/EASA/FAA 정비사 면허(AML) 우대\n영어 능력(정비 매뉴얼 독해)\n교대 근무·사내 교육 제공\n임용 후 3년 이상 의무 근무'
+  ];
+  D['job.dispatch.req']=[
+    '大專以上，航空/理工相關尤佳\n具航務簽派員執照(FAA/CAA Dispatcher)尤佳\n英文佳（ICAO 與航務文件）\n航路規劃、載重平衡、油量計算、飛航放行\n需配合輪班、細心抗壓',
+    'Associate degree or above, aviation/STEM preferred\nFAA/CAA Flight Dispatcher licence a plus\nGood English (ICAO & ops documents)\nRoute planning, load balance, fuel calc, flight release\nShift work; detail-oriented and resilient',
+    '短大卒以上・航空/理工系優遇\nFAA/CAA運航管理者ライセンス優遇\n英語力（ICAO・運航書類）\n経路計画・重量バランス・燃料計算・運航許可\nシフト勤務・几帳面でストレス耐性',
+    '전문대 이상·항공/이공계 우대\nFAA/CAA 운항관리사 면허 우대\n영어 능력(ICAO·운항 문서)\n항로 계획·중량 균형·연료 계산·운항 허가\n교대 근무·꼼꼼하고 스트레스 내성'
+  ];
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1338,10 +1405,24 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
           '<div><span class="text-[10px] font-bold text-primary-hover uppercase tracking-wider">'+t('careers.cat.'+j.cat)+'</span><p class="text-white font-bold leading-tight">'+t('job.'+j.key)+'</p></div>'+
         '</div>'+
         '<p class="text-white/55 text-sm flex-1">'+t('job.'+j.key+'.d')+'</p>'+
-        '<a href="mailto:careers@t-skyler.com?subject='+encodeURIComponent(t('job.'+j.key))+'" class="mt-4 inline-flex items-center justify-center gap-1 h-10 px-4 bg-white/10 hover:bg-primary text-white text-sm font-bold rounded-lg transition-colors">'+t('careers.apply')+' <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>'+
+        '<button data-job="'+j.key+'" data-icon="'+j.icon+'" data-cat="'+j.cat+'" class="mt-4 inline-flex items-center justify-center gap-1 h-10 px-4 bg-white/10 hover:bg-primary text-white text-sm font-bold rounded-lg transition-colors">'+t('careers.detail')+' <span class="material-symbols-outlined text-[18px]">info</span></button>'+
       '</div>';
     }).join('');
   }
+  function openJobModal(key, icon, cat){
+    document.getElementById('jmIcon').textContent=icon||'work';
+    document.getElementById('jmCat').textContent=t('careers.cat.'+cat);
+    document.getElementById('jmTitle').textContent=t('job.'+key);
+    document.getElementById('jmDesc').textContent=t('job.'+key+'.d');
+    document.querySelector('#jmReqTitle span:last-child').textContent=t('careers.req');
+    var reqs=(t('job.'+key+'.req')||'').split('\n');
+    document.getElementById('jmReqList').innerHTML=reqs.map(function(r){
+      return '<li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary-hover text-[16px] mt-0.5">check_circle</span><span>'+r+'</span></li>';
+    }).join('');
+    document.getElementById('jmRef').textContent=t('careers.ref');
+    var m=document.getElementById('jobModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
+  }
+  function closeJobModal(){ var m=document.getElementById('jobModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; }
 
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
@@ -1789,6 +1870,13 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var b=e.target.closest('[data-dest]'); if(!b) return;
     bookDestination(b.getAttribute('data-dest'));
   });
+
+  document.getElementById("jobList").addEventListener("click", function(e){
+    var b=e.target.closest('[data-job]'); if(!b) return;
+    openJobModal(b.getAttribute('data-job'), b.getAttribute('data-icon'), b.getAttribute('data-cat'));
+  });
+  document.getElementById("closeJob").addEventListener("click", closeJobModal);
+  document.getElementById("jobModal").addEventListener("click", function(e){ if(e.target===this) closeJobModal(); });
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
