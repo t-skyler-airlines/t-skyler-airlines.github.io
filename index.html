@@ -104,6 +104,9 @@
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+        /* 防止圖示字型載入前顯示英文字（FOUT）：載入完成前先隱藏圖示 */
+        .material-symbols-outlined{visibility:hidden}
+        html.icons-ready .material-symbols-outlined{visibility:visible}
         #destTrack{animation:destScroll 60s linear infinite;will-change:transform}
         #destViewport:hover #destTrack{animation-play-state:paused}
         @keyframes destScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
@@ -122,6 +125,18 @@
             background: #3d3285;
         }
     </style>
+<script>
+// 圖示字型載入完成後才顯示圖示，避免顯示英文 ligature 文字
+(function(){
+  var root=document.documentElement;
+  function reveal(){ root.classList.add('icons-ready'); }
+  if(document.fonts && document.fonts.load){
+    document.fonts.load("24px 'Material Symbols Outlined'").then(reveal, reveal);
+    document.fonts.ready.then(reveal);
+  }
+  setTimeout(reveal, 2500); // 後備：字型載入失敗也要顯示
+})();
+</script>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
