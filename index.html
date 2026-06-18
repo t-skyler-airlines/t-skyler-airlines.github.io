@@ -545,6 +545,34 @@
 <div id="jobList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 </div>
 </section>
+
+<!-- ====== Cookie 政策（葡萄燕麥餅乾） View ====== -->
+<section id="view-cookie" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">cookie</span> <span data-i18n="cookie.title">葡萄燕麥餅乾</span></h3>
+<p class="text-white/50 text-sm mb-6" data-i18n="cookie.sub">我們唯一認證的「Cookie 政策」。</p>
+<div class="aspect-[21/9] w-full rounded-2xl overflow-hidden mb-8 bg-card-dark">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Oatmeal_raisin_cookie_1.jpg/960px-Oatmeal_raisin_cookie_1.jpg" alt="Raisin oatmeal cookies" class="w-full h-full object-cover"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-5 gap-6">
+<div class="sm:col-span-2">
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">egg_alt</span> <span data-i18n="cookie.ing.h">材料</span></h4>
+<ul id="cookieIng" class="space-y-2 text-white/75 text-sm"></ul>
+</div>
+<div class="sm:col-span-3">
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">format_list_numbered</span> <span data-i18n="cookie.step.h">做法</span></h4>
+<ol id="cookieStep" class="space-y-3 text-white/75 text-sm"></ol>
+</div>
+</div>
+<div class="mt-8 bg-card-dark border border-white/10 rounded-xl p-5">
+<h4 class="text-white font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">lightbulb</span> <span data-i18n="cookie.tip.h">小撇步</span></h4>
+<p id="cookieTip" class="text-white/60 text-sm leading-relaxed"></p>
+</div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -599,7 +627,7 @@
 <ul class="flex flex-col gap-3 text-sm text-white/60">
 <li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.terms">服務條款</a></li>
 <li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.privacy">隱私政策</a></li>
-<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.cookie">Cookie 政策</a></li>
+<li><a class="hover:text-white transition-colors" href="#cookie" data-i18n="foot.cookie">Cookie 政策</a></li>
 </ul>
 </div>
 </div>
@@ -647,8 +675,7 @@
 </div>
 <p id="jmDesc" class="text-white/60 text-sm mb-5"></p>
 <h4 id="jmReqTitle" class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-[18px]">checklist</span><span></span></h4>
-<ul id="jmReqList" class="space-y-2 text-white/75 text-sm mb-5"></ul>
-<p id="jmRef" class="text-white/40 text-xs border-t border-white/10 pt-4 leading-relaxed"></p>
+<ul id="jmReqList" class="space-y-2 text-white/75 text-sm mb-1"></ul>
 </div>
 </div>
 
@@ -1202,6 +1229,30 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     '短大卒以上・航空/理工系優遇\nFAA/CAA運航管理者ライセンス優遇\n英語力（ICAO・運航書類）\n経路計画・重量バランス・燃料計算・運航許可\nシフト勤務・几帳面でストレス耐性',
     '전문대 이상·항공/이공계 우대\nFAA/CAA 운항관리사 면허 우대\n영어 능력(ICAO·운항 문서)\n항로 계획·중량 균형·연료 계산·운항 허가\n교대 근무·꼼꼼하고 스트레스 내성'
   ];
+  // 「Cookie 政策」彩蛋：葡萄燕麥餅乾製作教學
+  D['cookie.title']=['葡萄燕麥餅乾','Raisin Oatmeal Cookies','レーズンオートミールクッキー','건포도 오트밀 쿠키'];
+  D['cookie.sub']=['我們唯一認證的「Cookie 政策」——香酥有嚼勁，約 12–16 片。','Our only certified “Cookie Policy” — chewy and crisp, makes ~12–16.','当社唯一公認の「Cookieポリシー」——サクッともちっと、約12〜16枚。','우리가 인증하는 유일한 “쿠키 정책” — 바삭쫀득, 약 12~16개.'];
+  D['cookie.ing.h']=['材料','Ingredients','材料','재료'];
+  D['cookie.step.h']=['做法','Steps','作り方','만드는 법'];
+  D['cookie.tip.h']=['小撇步','Tips','コツ','팁'];
+  D['cookie.ing']=[
+    '無鹽奶油 115g（室溫軟化）\n紅糖 100g、細砂糖 50g\n雞蛋 1 顆、香草精 1 小匙\n中筋麵粉 130g、泡打粉 1/2 小匙\n肉桂粉 1 小匙、鹽 1/4 小匙\n傳統燕麥片 150g\n葡萄乾 100g',
+    '115g unsalted butter (softened)\n100g brown sugar, 50g white sugar\n1 egg, 1 tsp vanilla\n130g all-purpose flour, 1/2 tsp baking powder\n1 tsp cinnamon, 1/4 tsp salt\n150g rolled oats\n100g raisins',
+    '無塩バター115g（室温）\nブラウンシュガー100g、グラニュー糖50g\n卵1個、バニラ小さじ1\n薄力粉130g、ベーキングパウダー小さじ1/2\nシナモン小さじ1、塩小さじ1/4\nオートミール150g\nレーズン100g',
+    '무염버터 115g(실온)\n황설탕 100g, 백설탕 50g\n달걀 1개, 바닐라 1작은술\n중력분 130g, 베이킹파우더 1/2작은술\n계피 1작은술, 소금 1/4작은술\n롤드 오트 150g\n건포도 100g'
+  ];
+  D['cookie.step']=[
+    '烤箱預熱 175°C，烤盤鋪烘焙紙；葡萄乾用溫水泡 10 分鐘後瀝乾。\n奶油與兩種糖打發至蓬鬆泛白。\n加入蛋與香草精拌勻。\n篩入麵粉、泡打粉、肉桂粉與鹽，拌至無乾粉。\n加入燕麥片與葡萄乾拌成麵團（冷藏 30 分鐘更佳）。\n每球約一大匙排上烤盤，間距留大。\n烤 12–14 分鐘至邊緣金黃，出爐放涼即可。',
+    'Preheat oven to 175°C and line a tray. Soak raisins in warm water 10 min, then drain.\nCream the butter with both sugars until light and fluffy.\nBeat in the egg and vanilla.\nSift in flour, baking powder, cinnamon and salt; mix until no dry flour remains.\nFold in the oats and raisins to form a dough (chilling 30 min helps).\nScoop ~1 tbsp of dough per cookie, spacing them well apart.\nBake 12–14 min until the edges are golden; cool on the tray.',
+    'オーブンを175℃に予熱し天板に紙を敷く。レーズンはぬるま湯で10分戻し水気を切る。\nバターと2種の砂糖を白っぽくふんわりするまで混ぜる。\n卵とバニラを加えて混ぜる。\n薄力粉・ベーキングパウダー・シナモン・塩をふるい入れ、粉気がなくなるまで混ぜる。\nオートミールとレーズンを加えて生地にまとめる（30分冷やすと◎）。\n大さじ1ずつ間隔をあけて天板に並べる。\n12〜14分、縁が色づくまで焼き、冷ます。',
+    '오븐을 175℃로 예열하고 팬에 종이를 깐다. 건포도는 따뜻한 물에 10분 불려 물기를 뺀다.\n버터와 두 가지 설탕을 뽀얗고 폭신하게 크림화한다.\n달걀과 바닐라를 넣어 섞는다.\n밀가루·베이킹파우더·계피·소금을 체쳐 넣고 가루가 안 보일 때까지 섞는다.\n오트와 건포도를 넣어 반죽을 만든다(30분 냉장 추천).\n한 스푼씩 간격을 두고 팬에 올린다.\n12~14분, 가장자리가 노릇해질 때까지 구운 뒤 식힌다.'
+  ];
+  D['cookie.tip']=[
+    '喜歡軟一點就少烤 1–2 分鐘；密封室溫可放 3–4 天。本「政策」不含追蹤，只含葡萄乾。',
+    'For chewier cookies, bake 1–2 min less; keep airtight at room temp 3–4 days. This “policy” has no trackers — only raisins.',
+    '柔らかめは1〜2分短く。密閉で常温3〜4日。この「ポリシー」に追跡はなく、レーズンのみ。',
+    '더 쫀득하게는 1~2분 적게 굽기. 밀폐 후 실온 3~4일. 이 “정책”엔 추적이 없고 건포도만 있습니다.'
+  ];
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1230,6 +1281,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='member') renderMember();
     else if(h==='help') renderFaq();
     else if(h==='careers') renderCareers();
+    else if(h==='cookie') renderCookie();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1423,10 +1475,20 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     document.getElementById('jmReqList').innerHTML=reqs.map(function(r){
       return '<li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary-hover text-[16px] mt-0.5">check_circle</span><span>'+r+'</span></li>';
     }).join('');
-    document.getElementById('jmRef').textContent=t('careers.ref');
     var m=document.getElementById('jobModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
   }
   function closeJobModal(){ var m=document.getElementById('jobModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; }
+
+  function renderCookie(){
+    var ing=document.getElementById('cookieIng'); if(!ing) return;
+    ing.innerHTML=(t('cookie.ing')||'').split('\n').map(function(x){
+      return '<li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary-hover text-[16px] mt-0.5">check</span><span>'+x+'</span></li>';
+    }).join('');
+    document.getElementById('cookieStep').innerHTML=(t('cookie.step')||'').split('\n').map(function(x,i){
+      return '<li class="flex items-start gap-3"><span class="shrink-0 size-6 rounded-full bg-primary/25 text-primary-hover text-xs font-bold flex items-center justify-center">'+(i+1)+'</span><span class="pt-0.5">'+x+'</span></li>';
+    }).join('');
+    document.getElementById('cookieTip').textContent=t('cookie.tip');
+  }
 
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
@@ -1475,7 +1537,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1484,6 +1546,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-member') renderMember();
     else if(view==='view-help') renderFaq();
     else if(view==='view-careers') renderCareers();
+    else if(view==='view-cookie') renderCookie();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
