@@ -104,6 +104,10 @@
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+        #destTrack{animation:destScroll 60s linear infinite;will-change:transform}
+        #destViewport:hover #destTrack{animation-play-state:paused}
+        @keyframes destScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+        @media (prefers-reduced-motion: reduce){#destTrack{animation:none}#destViewport{overflow-x:auto}}
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -314,9 +318,11 @@
 </a>
 </div>
 <div class="relative -mx-4 sm:-mx-6 lg:-mx-8">
-<div id="destViewport" class="overflow-x-auto no-scrollbar px-4 sm:px-6 lg:px-8">
+<div id="destViewport" class="overflow-hidden px-4 sm:px-6 lg:px-8">
 <div id="destTrack" class="flex gap-6 w-max pb-2"></div>
 </div>
+<div class="pointer-events-none absolute inset-y-0 left-0 w-10 sm:w-16 bg-gradient-to-r from-background-dark to-transparent"></div>
+<div class="pointer-events-none absolute inset-y-0 right-0 w-10 sm:w-16 bg-gradient-to-l from-background-dark to-transparent"></div>
 </div>
 </div>
 </section>
@@ -1245,7 +1251,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
   function renderDest(){
     var track=document.getElementById('destTrack'); if(!track) return;
-    track.innerHTML=DESTINATIONS.map(destCard).join('');
+    var cards=DESTINATIONS.map(destCard).join('');
+    track.innerHTML=cards+cards; // 重複一份以達成無縫循環輪播
   }
   function bookDestination(code){
     fromSel.value="TPE"; refreshTo();
