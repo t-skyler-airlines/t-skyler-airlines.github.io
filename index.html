@@ -68,29 +68,31 @@
 <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">flight_takeoff</span>
-<span class="font-semibold">預訂</span>
+<span class="font-semibold" data-i18n="nav.book">預訂</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#trips">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">edit_calendar</span>
-<span class="font-semibold">管理行程</span>
+<span class="font-semibold" data-i18n="nav.trips">管理行程</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#help">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">support_agent</span>
-<span class="font-semibold">協助</span>
+<span class="font-semibold" data-i18n="nav.help">協助</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#member">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">stars</span>
-<span class="font-semibold">會員計畫</span>
+<span class="font-semibold" data-i18n="nav.member">會員計畫</span>
 </a>
 </nav>
 <div class="p-4 border-t border-white/10 space-y-3">
-<button class="w-full flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors">
-<span class="material-symbols-outlined">language</span>
-<span class="font-medium">語言 (Language)</span>
-</button>
+<div class="relative">
+<div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10"><span class="material-symbols-outlined text-white/70 text-[20px]">language</span></div>
+<label class="sr-only" for="langSel">Language</label>
+<select id="langSel" class="lang-sel w-full h-11 pl-11 pr-9 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-white text-sm font-medium appearance-none cursor-pointer"></select>
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[20px]">expand_more</span></div>
+</div>
 <button class="w-full flex items-center justify-center gap-2 h-10 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/10 transition-all">
 <span class="material-symbols-outlined text-[18px]">account_circle</span>
-<span>登入</span>
+<span data-i18n="nav.signin">登入</span>
 </button>
 </div>
 </aside>
@@ -104,10 +106,12 @@
 </div>
 <h1 class="text-white text-xl font-bold tracking-tight"><img src="name.png" alt="T-Skyler" class="h-6 inline-block"/></h1>
 </div>
-<div class="flex items-center gap-4">
-<button class="flex items-center gap-1 text-white/90 hover:text-white text-sm font-medium">
-<span class="material-symbols-outlined text-[20px]">language</span>
-</button>
+<div class="flex items-center gap-3">
+<div class="relative">
+<label class="sr-only" for="langSelM">Language</label>
+<select id="langSelM" class="lang-sel h-9 pl-2 pr-6 bg-white/10 border border-white/10 rounded-lg text-white text-xs font-bold appearance-none cursor-pointer"></select>
+<div class="absolute inset-y-0 right-1 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[16px]">expand_more</span></div>
+</div>
 <button class="flex items-center justify-center h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all border border-white/10">
 <span class="material-symbols-outlined text-[18px]">account_circle</span>
 </button>
@@ -126,10 +130,10 @@
 <img alt="Airplane flying above clouds during sunset" class="w-full h-full object-cover opacity-80" data-alt="Airplane flying above clouds during sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0orxl8b0Bro_4FaKMDCzW5bYWmP-AQrJov4jZqAF95p8-5eXtCaLZqwedkW_02aiFTBtfrEY7SS99JKZBMRCXrxTAiuXfvUS--1kutHloYLeAzQlJeQzZM4JQLGgYjAzfxc81_CMg95dQq8hJ0gJjq3qndFhZ-4sTtKQdo3XfVV1C2czBHoQaNUkZmhoUa2Blpba3t5wqguAbmo803IYWc55-cvupTg3_9Tjy61-tYSUex8-5TyxU6cTthPS1uy7y_CR31bNNeRcM"/>
 </div>
 <div class="relative z-10 w-full max-w-[1280px] px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center mt-10 mb-10">
-<h2 class="text-white text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-4 drop-shadow-lg leading-tight">
+<h2 data-i18n-html="hero.title" class="text-white text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-4 drop-shadow-lg leading-tight">
                         探索世界<br class="hidden sm:block"/> 與 T-Skyler 同行
                     </h2>
-<p class="text-white/90 text-lg sm:text-xl font-medium max-w-2xl drop-shadow-md">
+<p data-i18n="hero.sub" class="text-white/90 text-lg sm:text-xl font-medium max-w-2xl drop-shadow-md">
                         每一哩路都是頂級服務。在三萬英呎高空體驗舒適與奢華。
                     </p>
 </div>
@@ -138,15 +142,15 @@
 <div class="flex items-center gap-6 mb-6 border-b border-white/10 pb-4 overflow-x-auto">
 <button class="flex items-center gap-2 text-white border-b-2 border-primary pb-1 -mb-[17px] px-2 whitespace-nowrap">
 <span class="material-symbols-outlined">flight</span>
-<span class="font-bold">航班</span>
+<span class="font-bold" data-i18n="search.flight">航班</span>
 </button>
 <button class="flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap">
 <span class="material-symbols-outlined">hotel</span>
-<span class="font-medium">飯店</span>
+<span class="font-medium" data-i18n="search.hotel">飯店</span>
 </button>
 <button class="flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap">
 <span class="material-symbols-outlined">directions_car</span>
-<span class="font-medium">租車</span>
+<span class="font-medium" data-i18n="search.car">租車</span>
 </button>
 </div>
 <form id="searchForm" class="space-y-4">
@@ -176,14 +180,14 @@
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">calendar_month</span>
 </div>
 <label class="sr-only" for="depart">去程</label>
-<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="depart" placeholder="去程日期" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
+<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="depart" data-i18n-ph="search.depart" placeholder="去程日期" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
 </div>
 <div class="relative min-w-0 group">
 <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10">
 <span class="material-symbols-outlined text-white/50 group-focus-within:text-primary">calendar_month</span>
 </div>
 <label class="sr-only" for="return">回程</label>
-<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="return" placeholder="回程日期 (選填)" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
+<input class="w-full h-14 pl-12 pr-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium transition-all hover:bg-white/5" id="return" data-i18n-ph="search.return" placeholder="回程日期 (選填)" type="text" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
 </div>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -209,7 +213,7 @@
 </div>
 <button id="searchBtn" class="h-14 px-8 bg-primary hover:bg-primary-hover text-white text-base font-bold rounded-lg shadow-lg shadow-primary/30 transition-all flex items-center justify-center gap-2 whitespace-nowrap" type="button">
 <span class="material-symbols-outlined">search</span>
-                                    搜尋航班
+<span data-i18n="search.btn">搜尋航班</span>
                                 </button>
 </div>
 </form>
@@ -220,25 +224,25 @@
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
 <div class="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
 <div>
-<h3 class="text-3xl font-bold text-white mb-2">精選目的地</h3>
-<p class="text-white/60">探索本季最受歡迎的航線。</p>
+<h3 class="text-3xl font-bold text-white mb-2" data-i18n="sec.dest.title">精選目的地</h3>
+<p class="text-white/60" data-i18n="sec.dest.sub">探索本季最受歡迎的航線。</p>
 </div>
 <a class="text-primary-hover text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
-                            查看所有優惠 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+<span data-i18n="sec.dest.all">查看所有優惠</span> <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </a>
 </div>
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 <div class="group relative overflow-hidden rounded-xl bg-card-dark shadow-lg hover:shadow-primary/20 transition-all duration-300">
 <div class="aspect-[4/3] w-full overflow-hidden">
 <img alt="Tokyo city street with neon lights at night" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Tokyo city street with neon lights at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdb6dQ9vYTzNCEz16krB6m7SI-U-1mP9L501Tw2Y4Wxj4XnFz6hYd-I9ghuTjiJADKaMFymXR6mLZhPH8ZMcoK4BPYVzCYLeYn8ztePktqJz4sBfSjAz2aDVUOGmBA3iZavdJWeUNStEzYps6OkqUeczTKWJmTDhqXtPeYvrIgmYNqoGMhEVRHOQzH96r1b9AzZ2rGoMixT_15f54weQPpIVyS4WT8vWPBPp5Lg0esTcxgo2JxML1fQn0alDJf4p7-4UxT9xNQ69xG"/>
-<div class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+<div class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-md" data-i18n="badge.best">
                                     超值首選
                                 </div>
 </div>
 <div class="p-5">
 <div class="flex justify-between items-start mb-2">
 <div>
-<h4 class="text-xl font-bold text-white">東京 (Tokyo)，日本</h4>
+<h4 class="text-xl font-bold text-white" data-i18n="dest.tokyo">東京 (Tokyo)，日本</h4>
 <p class="text-white/50 text-sm promo-price" data-usd="850">來回票價 $850 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
@@ -254,7 +258,7 @@
 <div class="p-5">
 <div class="flex justify-between items-start mb-2">
 <div>
-<h4 class="text-xl font-bold text-white">倫敦 (London)，英國</h4>
+<h4 class="text-xl font-bold text-white" data-i18n="dest.london">倫敦 (London)，英國</h4>
 <p class="text-white/50 text-sm promo-price" data-usd="620">來回票價 $620 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
@@ -266,14 +270,14 @@
 <div class="group relative overflow-hidden rounded-xl bg-card-dark shadow-lg hover:shadow-primary/20 transition-all duration-300">
 <div class="aspect-[4/3] w-full overflow-hidden">
 <img alt="New York City skyline during the day" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="New York City skyline during the day" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBy8yIWi1m3pIX1CzmQWeWYPsei3YwyuYy_A8EO3kOOlN0Q1Eeuz2qcAiVVO0zyLpH5Et2rTgQdI156u4fIFaN-RV9OP_c1TVA3F94svctOb4cCx_XmkRvPh6bQFF-_pitZGjoRwPkTIKubgicbXs5XkfR0RD0rwHVjEL0jPjjPAvjzYKU-V_H8tH1quuE-z08gyeUdfh6T0jRmXOYzE2lWsl_YMBtAa6ePROsK7Q7BuJj7-gLZFYWRi_qPhNK77cdo0kHED27PVtzL"/>
-<div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+<div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md" data-i18n="badge.hot">
                                     熱門優惠
                                 </div>
 </div>
 <div class="p-5">
 <div class="flex justify-between items-start mb-2">
 <div>
-<h4 class="text-xl font-bold text-white">紐約 (New York)，美國</h4>
+<h4 class="text-xl font-bold text-white" data-i18n="dest.ny">紐約 (New York)，美國</h4>
 <p class="text-white/50 text-sm promo-price" data-usd="450">來回票價 $450 起</p>
 </div>
 <div class="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
@@ -292,11 +296,11 @@
 <div class="max-w-2xl">
 <div class="flex items-center gap-3 mb-4">
 <span class="material-symbols-outlined text-yellow-400 text-4xl">stars</span>
-<h2 class="text-2xl md:text-3xl font-bold text-white">加入 Skyler 會員俱樂部</h2>
+<h2 class="text-2xl md:text-3xl font-bold text-white" data-i18n="home.club.title">加入 Skyler 會員俱樂部</h2>
 </div>
-<p class="text-white/80 text-lg">每次飛行皆可累積哩程，解鎖貴賓室使用權、優先登機及額外行李額度。</p>
+<p class="text-white/80 text-lg" data-i18n="home.club.sub">每次飛行皆可累積哩程，解鎖貴賓室使用權、優先登機及額外行李額度。</p>
 </div>
-<button class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex-shrink-0">
+<button class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex-shrink-0" data-i18n="home.club.btn">
                         免費加入
                     </button>
 </div>
@@ -307,22 +311,22 @@
 <section id="view-flights" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回搜尋
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="fl.back">返回搜尋</span>
 </button>
 <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
 <div>
 <div id="flRoute" class="flex items-center gap-3 text-white text-2xl sm:text-3xl font-black">
 <span>TPE</span><span class="material-symbols-outlined text-primary-hover">flight</span><span>NRT</span>
 </div>
-<p id="flMeta" class="text-white/50 text-sm mt-1">選擇您的航班</p>
+<p id="flMeta" class="text-white/50 text-sm mt-1" data-i18n="fl.choose">選擇您的航班</p>
 </div>
-<div class="text-white/40 text-xs">共 <span id="flCount">0</span> 個航班</div>
+<div id="flCountWrap" class="text-white/40 text-xs"></div>
 </div>
 <div class="flex items-center gap-2 mb-5 overflow-x-auto">
-<span class="text-white/40 text-xs whitespace-nowrap mr-1">排序</span>
-<button data-sort="dep" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">出發時間</button>
-<button data-sort="price" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">價格</button>
-<button data-sort="dur" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">航程</button>
+<span class="text-white/40 text-xs whitespace-nowrap mr-1" data-i18n="sort.label">排序</span>
+<button data-sort="dep" data-i18n="sort.dep" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">出發時間</button>
+<button data-sort="price" data-i18n="sort.price" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">價格</button>
+<button data-sort="dur" data-i18n="sort.dur" class="sort-btn whitespace-nowrap h-9 px-4 rounded-full text-sm font-bold border transition-all">航程</button>
 </div>
 <div id="flightList" class="space-y-4"></div>
 </div>
@@ -332,27 +336,27 @@
 <section id="view-booking" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[820px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="flights">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回航班列表
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="bk.back">返回航班列表</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">選擇艙等與行李</h3>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="bk.title">選擇艙等與行李</h3>
 <p id="bkFlightInfo" class="text-white/50 text-sm mb-8">—</p>
 
-<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">person</span> 乘客姓名</h4>
-<input id="paxName" type="text" autocomplete="name" placeholder="請輸入乘客英文姓名（例如 MASON ZENG）" class="w-full h-14 px-4 mb-8 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase"/>
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">person</span> <span data-i18n="bk.name">乘客姓名</span></h4>
+<input id="paxName" type="text" autocomplete="name" data-i18n-ph="bk.name.ph" placeholder="請輸入乘客英文姓名（例如 MASON ZENG）" class="w-full h-14 px-4 mb-8 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase"/>
 
-<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_extra</span> 艙等</h4>
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_extra</span> <span data-i18n="bk.cabin">艙等</span></h4>
 <div id="cabinOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8"></div>
 
-<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">luggage</span> 行李額度</h4>
+<h4 class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">luggage</span> <span data-i18n="bk.baggage">行李額度</span></h4>
 <div id="baggageOptions" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8"></div>
 
 <div class="sticky bottom-0 bg-card-dark/95 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4 shadow-2xl">
 <div>
-<p class="text-white/50 text-xs">總計 <span id="bkTotalNote"></span></p>
+<p class="text-white/50 text-xs"><span data-i18n="bk.total">總計</span> <span id="bkTotalNote"></span></p>
 <p id="bkTotal" class="text-white text-2xl font-black">$0</p>
 </div>
 <button id="confirmBooking" class="h-12 px-8 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center gap-2 transition-all">
-<span class="material-symbols-outlined">airline_seat_recline_normal</span> 選擇座位
+<span class="material-symbols-outlined">airline_seat_recline_normal</span> <span data-i18n="bk.confirm">選擇座位</span>
 </button>
 </div>
 </div>
@@ -362,27 +366,27 @@
 <section id="view-seats" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[680px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="booking">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回訂票
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="seat.back">返回訂票</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">選擇座位</h3>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="seat.title">選擇座位</h3>
 <p id="seatInfo" class="text-white/50 text-sm mb-4">—</p>
 <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-5 text-xs text-white/60">
-<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-input-dark inline-block"></span>可選</span>
-<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-emerald-500/20 ring-1 ring-emerald-400/50 inline-block"></span>加價座位 <span id="seatFeeLabel"></span></span>
-<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-primary inline-block"></span>已選</span>
-<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-white/5 inline-block"></span>已售出</span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-input-dark inline-block"></span><span data-i18n="legend.avail">可選</span></span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-emerald-500/20 ring-1 ring-emerald-400/50 inline-block"></span><span data-i18n="legend.paid">加價座位</span> <span id="seatFeeLabel"></span></span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-primary inline-block"></span><span data-i18n="legend.sel">已選</span></span>
+<span class="flex items-center gap-1.5"><span class="w-4 h-4 rounded bg-white/5 inline-block"></span><span data-i18n="legend.sold">已售出</span></span>
 </div>
 <div class="bg-card-dark border border-white/10 rounded-2xl p-3 sm:p-4 overflow-x-auto">
-<div class="flex justify-center mb-3"><span class="text-white/30 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">flight</span> 機艙前方</span></div>
+<div class="flex justify-center mb-3"><span class="text-white/30 text-xs flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">flight</span> <span data-i18n="seat.front">機艙前方</span></span></div>
 <div id="seatMap" class="min-w-max mx-auto"></div>
 </div>
 <div class="sticky bottom-0 mt-5 bg-card-dark/95 backdrop-blur-md border border-white/10 rounded-xl p-4 flex items-center justify-between gap-4 shadow-2xl">
 <div class="min-w-0">
-<p class="text-white/50 text-xs">已選座位</p>
+<p class="text-white/50 text-xs" data-i18n="seat.selected">已選座位</p>
 <p id="seatSelected" class="text-white text-lg font-black truncate">—</p>
 </div>
 <button id="confirmSeats" class="h-12 px-8 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center gap-2 transition-all whitespace-nowrap">
-<span class="material-symbols-outlined">confirmation_number</span> 生成機票
+<span class="material-symbols-outlined">confirmation_number</span> <span data-i18n="seat.gen">生成機票</span>
 </button>
 </div>
 </div>
@@ -392,14 +396,14 @@
 <section id="view-trips" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">我的行程</h3>
-<p class="text-white/50 text-sm mb-8">您已生成的登機證會自動儲存在此裝置。</p>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="trips.title">我的行程</h3>
+<p class="text-white/50 text-sm mb-8" data-i18n="trips.sub">您已生成的登機證會自動儲存在此裝置。</p>
 <div id="tripEmpty" class="hidden flex flex-col items-center justify-center py-20 text-center">
 <span class="material-symbols-outlined text-white/20 text-6xl mb-3">flight_takeoff</span>
-<p class="text-white/50">尚無行程，快去搜尋並預訂吧！</p>
-<button class="back-btn mt-4 h-11 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg" data-goto="">開始搜尋</button>
+<p class="text-white/50" data-i18n="trips.empty">尚無行程，快去搜尋並預訂吧！</p>
+<button class="back-btn mt-4 h-11 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg" data-goto="" data-i18n="trips.start">開始搜尋</button>
 </div>
 <div id="tripList" class="space-y-4"></div>
 </div>
@@ -409,10 +413,10 @@
 <section id="view-member" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[920px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">Skyler 會員俱樂部</h3>
-<p class="text-white/50 text-sm mb-8">每一次飛行都讓你更靠近下一張頭等艙。</p>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="mem.title">Skyler 會員俱樂部</h3>
+<p class="text-white/50 text-sm mb-8" data-i18n="mem.sub">每一次飛行都讓你更靠近下一張頭等艙。</p>
 
 <!-- 會員卡 -->
 <div id="memberCard" class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl">
@@ -425,9 +429,9 @@
 </div>
 <span id="memberTierBadge" class="text-xs font-black text-white/90 bg-black/20 px-3 py-1 rounded-full">—</span>
 </div>
-<p id="memberName" class="text-white text-xl font-bold mb-1">尊貴會員</p>
-<p class="text-white/70 text-sm mb-6">累積哩程</p>
-<p class="text-white text-4xl font-black mb-6"><span id="memberMiles">0</span> <span class="text-lg font-bold text-white/70">哩</span></p>
+<p id="memberName" class="text-white text-xl font-bold mb-1" data-i18n="mem.member">尊貴會員</p>
+<p class="text-white/70 text-sm mb-6" data-i18n="mem.miles">累積哩程</p>
+<p class="text-white text-4xl font-black mb-6"><span id="memberMiles">0</span> <span class="text-lg font-bold text-white/70" data-i18n="mem.milesUnit">哩</span></p>
 <div>
 <div class="flex justify-between text-xs text-white/80 mb-1.5"><span id="memberProgressText">—</span><span id="memberNextTier"></span></div>
 <div class="h-2 bg-black/25 rounded-full overflow-hidden"><div id="memberProgressBar" class="h-full bg-white rounded-full transition-all" style="width:0%"></div></div>
@@ -435,7 +439,7 @@
 </div>
 </div>
 
-<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">military_tech</span> 會員等級與權益</h4>
+<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">military_tech</span> <span data-i18n="mem.tiers">會員等級與權益</span></h4>
 <div id="tierGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 </div>
 </section>
@@ -444,17 +448,17 @@
 <section id="view-help" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">幫助中心</h3>
-<p class="text-white/50 text-sm mb-8">常見問題與聯絡方式。</p>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="help.title">幫助中心</h3>
+<p class="text-white/50 text-sm mb-8" data-i18n="help.sub">常見問題與聯絡方式。</p>
 <div id="faqList" class="space-y-3 mb-10"></div>
 <div class="bg-card-dark border border-white/10 rounded-2xl p-6">
-<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">support_agent</span> 聯絡我們</h4>
+<h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">support_agent</span> <span data-i18n="contact.title">聯絡我們</span></h4>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">call</span><div><p class="text-white/40 text-xs">客服專線</p><p class="text-white font-bold">0800-925-937</p></div></div>
-<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">mail</span><div><p class="text-white/40 text-xs">電子郵件</p><p class="text-white font-bold">help@t-skyler.com</p></div></div>
-<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">schedule</span><div><p class="text-white/40 text-xs">服務時間</p><p class="text-white font-bold">24 小時全年無休</p></div></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">call</span><div><p class="text-white/40 text-xs" data-i18n="contact.phone">客服專線</p><p class="text-white font-bold">0800-925-937</p></div></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">mail</span><div><p class="text-white/40 text-xs" data-i18n="contact.email">電子郵件</p><p class="text-white font-bold">help@t-skyler.com</p></div></div>
+<div class="flex items-center gap-3"><span class="material-symbols-outlined text-white/50">schedule</span><div><p class="text-white/40 text-xs" data-i18n="contact.hours">服務時間</p><p class="text-white font-bold" data-i18n="contact.hours.v">24 小時全年無休</p></div></div>
 </div>
 </div>
 </div>
@@ -464,23 +468,23 @@
 <section id="view-about" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
 <div class="max-w-[860px] mx-auto px-4 sm:px-6 lg:px-8">
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
-<span class="material-symbols-outlined text-[20px]">arrow_back</span> 返回首頁
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-1">關於 T-Skyler 航空</h3>
-<p class="text-white/50 text-sm mb-8">連結你的世界，盡享安全、舒適與風格。</p>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="about.title">關於 T-Skyler 航空</h3>
+<p class="text-white/50 text-sm mb-8" data-i18n="about.sub">連結你的世界，盡享安全、舒適與風格。</p>
 <div class="aspect-[21/9] w-full rounded-2xl overflow-hidden mb-8 bg-card-dark">
 <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0orxl8b0Bro_4FaKMDCzW5bYWmP-AQrJov4jZqAF95p8-5eXtCaLZqwedkW_02aiFTBtfrEY7SS99JKZBMRCXrxTAiuXfvUS--1kutHloYLeAzQlJeQzZM4JQLGgYjAzfxc81_CMg95dQq8hJ0gJjq3qndFhZ-4sTtKQdo3XfVV1C2czBHoQaNUkZmhoUa2Blpba3t5wqguAbmo803IYWc55-cvupTg3_9Tjy61-tYSUex8-5TyxU6cTthPS1uy7y_CR31bNNeRcM" alt="T-Skyler 客機" class="w-full h-full object-cover"/>
 </div>
 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">8</p><p class="text-white/50 text-xs mt-1">機型</p></div>
-<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p id="aboutDest" class="text-primary-hover text-3xl font-black">—</p><p class="text-white/50 text-xs mt-1">全球航點</p></div>
-<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">5★</p><p class="text-white/50 text-xs mt-1">服務評等</p></div>
-<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">2026</p><p class="text-white/50 text-xs mt-1">成立年份</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">8</p><p class="text-white/50 text-xs mt-1" data-i18n="about.stat.types">機型</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p id="aboutDest" class="text-primary-hover text-3xl font-black">—</p><p class="text-white/50 text-xs mt-1" data-i18n="about.stat.dest">全球航點</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">5★</p><p class="text-white/50 text-xs mt-1" data-i18n="about.stat.rating">服務評等</p></div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 text-center"><p class="text-primary-hover text-3xl font-black">2026</p><p class="text-white/50 text-xs mt-1" data-i18n="about.stat.founded">成立年份</p></div>
 </div>
 <div class="space-y-5 text-white/70 leading-relaxed">
-<p>T-Skyler 航空以台灣為樞紐，連結亞洲、歐洲、北美與大洋洲的主要城市。我們相信旅行不只是抵達，更是一段值得期待的旅程。</p>
-<p>從窄體的空中巴士 A320neo 到旗艦廣體波音 777-9，我們依航程與需求精心調度機隊，讓每一次飛行都兼顧效率與舒適。四種艙等、完善的選位與行李方案，只為打造屬於你的專屬高空體驗。</p>
-<p>三萬英呎之上，T-Skyler 與你同行。</p>
+<p data-i18n="about.p1">T-Skyler 航空以台灣為樞紐，連結亞洲、歐洲、北美與大洋洲的主要城市。我們相信旅行不只是抵達，更是一段值得期待的旅程。</p>
+<p data-i18n="about.p2">從窄體的空中巴士 A320neo 到旗艦廣體波音 777-9，我們依航程與需求精心調度機隊，讓每一次飛行都兼顧效率與舒適。四種艙等、完善的選位與行李方案，只為打造屬於你的專屬高空體驗。</p>
+<p data-i18n="about.p3">三萬英呎之上，T-Skyler 與你同行。</p>
 </div>
 </div>
 </section>
@@ -495,7 +499,7 @@
 </div>
 <span class="text-xl font-bold">T-Skyler 航空</span>
 </div>
-<p class="text-white/60 mb-6 max-w-xs">連結您的世界，盡享安全、舒適與風格。您的非凡旅程由此開始。</p>
+<p class="text-white/60 mb-6 max-w-xs" data-i18n="foot.tagline">連結您的世界，盡享安全、舒適與風格。您的非凡旅程由此開始。</p>
 <div class="flex gap-4">
 <a class="size-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" href="#">
 <span class="sr-only">Facebook</span>
@@ -512,37 +516,37 @@
 </div>
 </div>
 <div>
-<h5 class="text-white font-bold mb-4">關於我們</h5>
+<h5 class="text-white font-bold mb-4" data-i18n="foot.about">關於我們</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#about">品牌故事</a></li>
-<li><a class="hover:text-white transition-colors" href="#about">人才招募</a></li>
-<li><a class="hover:text-white transition-colors" href="#about">新聞中心</a></li>
-<li><a class="hover:text-white transition-colors" href="#about">部落格</a></li>
+<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.brand">品牌故事</a></li>
+<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.careers">人才招募</a></li>
+<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.news">新聞中心</a></li>
+<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.blog">部落格</a></li>
 </ul>
 </div>
 <div>
-<h5 class="text-white font-bold mb-4">支援服務</h5>
+<h5 class="text-white font-bold mb-4" data-i18n="foot.support">支援服務</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#help">幫助中心</a></li>
-<li><a class="hover:text-white transition-colors" href="#help">聯絡我們</a></li>
-<li><a class="hover:text-white transition-colors" href="#help">行李資訊</a></li>
-<li><a class="hover:text-white transition-colors" href="#help">特殊協助</a></li>
+<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.helpc">幫助中心</a></li>
+<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.contact">聯絡我們</a></li>
+<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.baggage">行李資訊</a></li>
+<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.special">特殊協助</a></li>
 </ul>
 </div>
 <div>
-<h5 class="text-white font-bold mb-4">法律條款</h5>
+<h5 class="text-white font-bold mb-4" data-i18n="foot.legal">法律條款</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#">服務條款</a></li>
-<li><a class="hover:text-white transition-colors" href="#">隱私政策</a></li>
-<li><a class="hover:text-white transition-colors" href="#">Cookie 政策</a></li>
+<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.terms">服務條款</a></li>
+<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.privacy">隱私政策</a></li>
+<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.cookie">Cookie 政策</a></li>
 </ul>
 </div>
 </div>
 <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/40">
-<p>© 2024 T-Skyler 航空. 保留所有權利.</p>
+<p data-i18n="foot.copyright">© 2026 T-Skyler 航空. 保留所有權利.</p>
 <div class="flex gap-6">
-<span>網站地圖</span>
-<span>無障礙聲明</span>
+<span data-i18n="foot.sitemap">網站地圖</span>
+<span data-i18n="foot.access">無障礙聲明</span>
 </div>
 </div>
 </div>
@@ -553,23 +557,23 @@
 <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10" style="padding-bottom:env(safe-area-inset-bottom)">
 <div class="grid grid-cols-4 h-16">
 <button data-tab="home" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium">首頁</span>
+<span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium" data-i18n="tab.home">首頁</span>
 </button>
 <button data-tab="flights" data-goto="flights" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">flight</span><span class="text-[10px] font-medium">航班</span>
+<span class="material-symbols-outlined">flight</span><span class="text-[10px] font-medium" data-i18n="tab.flights">航班</span>
 </button>
 <button data-tab="member" data-goto="member" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium">會員</span>
+<span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium" data-i18n="tab.member">會員</span>
 </button>
 <button data-tab="account" data-goto="trips" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">confirmation_number</span><span class="text-[10px] font-medium">我的</span>
+<span class="material-symbols-outlined">confirmation_number</span><span class="text-[10px] font-medium" data-i18n="tab.mine">我的</span>
 </button>
 </div>
 </nav>
 
 <!-- ====== 安裝 App 按鈕（可安裝時顯示） ====== -->
 <button id="installBtn" class="hidden fixed z-40 right-4 bottom-20 lg:bottom-6 h-12 px-5 bg-primary hover:bg-primary-hover text-white font-bold rounded-full shadow-2xl shadow-primary/40 items-center gap-2">
-<span class="material-symbols-outlined">install_mobile</span> 安裝 App
+<span class="material-symbols-outlined">install_mobile</span> <span data-i18n="install.app">安裝 App</span>
 </button>
 
 <!-- ====== 機票 Modal ====== -->
@@ -589,7 +593,7 @@
 <img src="logo.png" alt="Logo" class="size-9 object-contain"/>
 <div>
 <p class="text-primary font-black text-lg leading-none">T-SKYLER</p>
-<p class="text-slate-400 text-[10px] tracking-[0.2em] font-semibold">AIRLINES · 登機證</p>
+<p class="text-slate-400 text-[10px] tracking-[0.2em] font-semibold">AIRLINES · <span data-i18n="bp.subtitle">登機證</span></p>
 </div>
 </div>
 <span id="bpClass" class="text-[11px] font-bold text-white bg-primary px-3 py-1 rounded-full">ECONOMY</span>
@@ -612,14 +616,14 @@
 </div>
 
 <div class="grid grid-cols-3 sm:grid-cols-4 gap-y-4 gap-x-2 border-t border-slate-200 pt-5">
-<div><p class="bp-label">乘客</p><p id="bpName" class="bp-val">MASON ZENG</p></div>
-<div><p class="bp-label">航班</p><p id="bpFlight" class="bp-val">TS 388</p></div>
-<div><p class="bp-label">日期</p><p id="bpDate" class="bp-val">—</p></div>
-<div><p class="bp-label">登機時間</p><p id="bpBoard" class="bp-val">—</p></div>
-<div><p class="bp-label">起飛</p><p id="bpDepTime" class="bp-val">—</p></div>
-<div><p class="bp-label">抵達</p><p id="bpArrTime" class="bp-val">—</p></div>
-<div><p class="bp-label">登機門</p><p id="bpGate" class="bp-val">A12</p></div>
-<div><p class="bp-label">座位</p><p id="bpSeat" class="bp-val">14A</p></div>
+<div><p class="bp-label" data-i18n="bp.passenger">乘客</p><p id="bpName" class="bp-val">MASON ZENG</p></div>
+<div><p class="bp-label" data-i18n="bp.flight">航班</p><p id="bpFlight" class="bp-val">TS 388</p></div>
+<div><p class="bp-label" data-i18n="bp.date">日期</p><p id="bpDate" class="bp-val">—</p></div>
+<div><p class="bp-label" data-i18n="bp.boarding">登機時間</p><p id="bpBoard" class="bp-val">—</p></div>
+<div><p class="bp-label" data-i18n="bp.dep">起飛</p><p id="bpDepTime" class="bp-val">—</p></div>
+<div><p class="bp-label" data-i18n="bp.arr">抵達</p><p id="bpArrTime" class="bp-val">—</p></div>
+<div><p class="bp-label" data-i18n="bp.gate">登機門</p><p id="bpGate" class="bp-val">A12</p></div>
+<div><p class="bp-label" data-i18n="bp.seat">座位</p><p id="bpSeat" class="bp-val">14A</p></div>
 </div>
 </div>
 
@@ -635,9 +639,9 @@
 </div>
 </div>
 <div class="space-y-2 my-4 text-sm">
-<div class="flex justify-between"><span class="text-white/60">航班</span><span id="bpFlight2" class="font-bold">TS 388</span></div>
-<div class="flex justify-between"><span class="text-white/60">座位</span><span id="bpSeat2" class="font-bold">14A</span></div>
-<div class="flex justify-between"><span class="text-white/60">票價</span><span id="bpPrice" class="font-bold">$—</span></div>
+<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.flight">航班</span><span id="bpFlight2" class="font-bold">TS 388</span></div>
+<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.seat">座位</span><span id="bpSeat2" class="font-bold">14A</span></div>
+<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.price">票價</span><span id="bpPrice" class="font-bold">$—</span></div>
 </div>
 <!-- 條碼 -->
 <a href="https://reurl.cc/M2pZ5K" target="_blank" rel="noopener" class="block bg-white rounded-md p-2 mt-2" title="掃描或點擊查看">
@@ -650,10 +654,10 @@
 <!-- 動作按鈕 -->
 <div class="flex flex-col sm:flex-row gap-3 mt-5">
 <button id="saveTicket" class="flex-1 h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all">
-<span class="material-symbols-outlined">download</span> 儲存成圖檔
+<span class="material-symbols-outlined">download</span> <span data-i18n="bp.save">儲存成圖檔</span>
 </button>
 <button id="regenTicket" class="flex-1 h-12 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/20 flex items-center justify-center gap-2 transition-all">
-<span class="material-symbols-outlined">refresh</span> 重新生成
+<span class="material-symbols-outlined">refresh</span> <span data-i18n="bp.regen">重新生成</span>
 </button>
 </div>
 </div>
@@ -720,7 +724,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   var CITY_OF={}, AIRPORT={};
   REGIONS.forEach(function(g){ g.airports.forEach(function(a){ a.region=g.region; CITY_OF[a.code]=a.city; AIRPORT[a.code]=a; }); });
-  function cityFor(code){ return CITY_OF[code] || code; }
+  function cityFor(code){ var k='city.'+code; return (typeof D!=='undefined'&&D[k])? (D[k][LANG_IDX]||D[k][0]) : (CITY_OF[code]||code); }
   function isTW(code){ return !!(AIRPORT[code] && AIRPORT[code].tw); }
 
   var fromSel=document.getElementById("from"), toSel=document.getElementById("to");
@@ -733,10 +737,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       var airs=g.airports.filter(pred);
       if(!airs.length) return;
       var og=document.createElement("optgroup");
-      og.label=g.region;
+      og.label=regionLabel(g.region);
       airs.forEach(function(a){
         var o=document.createElement("option");
-        o.value=a.code; o.textContent=a.city+" ("+a.code+")";
+        o.value=a.code; o.textContent=cityFor(a.code)+" ("+a.code+")";
         if(a.code===defaultCode) o.selected=true;
         og.appendChild(o);
       });
@@ -804,7 +808,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
   function refreshPromo(){
     Array.prototype.forEach.call(document.querySelectorAll('.promo-price'), function(el){
-      el.textContent='來回票價 '+money(+el.getAttribute('data-usd'))+' 起';
+      el.textContent=tf('promo.rt',{p:money(+el.getAttribute('data-usd'))});
     });
   }
   // 取得匯率與 IP 國家貨幣（自動，使用者不需選擇）
@@ -821,16 +825,291 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     });
   }
 
+  // ====== 多語言 i18n（中/英/日/韓） ======
+  var LANG_ORDER=['zh-Hant','en','ja','ko'];
+  var LANGS=[{code:'zh-Hant',label:'中文'},{code:'en',label:'English'},{code:'ja',label:'日本語'},{code:'ko',label:'한국어'}];
+  var LANG_IDX=0;
+  // 每個 key 對應 [中, 英, 日, 韓]
+  var D={
+    'nav.book':['預訂','Book','予約','예약'],
+    'nav.trips':['管理行程','My Trips','旅程管理','여정 관리'],
+    'nav.help':['協助','Help','ヘルプ','도움말'],
+    'nav.member':['會員計畫','Membership','会員プログラム','멤버십'],
+    'nav.signin':['登入','Sign In','ログイン','로그인'],
+    'tab.home':['首頁','Home','ホーム','홈'],
+    'tab.flights':['航班','Flights','フライト','항공편'],
+    'tab.member':['會員','Member','会員','멤버'],
+    'tab.mine':['我的','My','マイ','마이'],
+    'hero.title':['探索世界<br class="hidden sm:block"/> 與 T-Skyler 同行','Explore the World<br class="hidden sm:block"/> with T-Skyler','世界を巡る<br class="hidden sm:block"/> T-Skylerと共に','세계를 누비다<br class="hidden sm:block"/> T-Skyler와 함께'],
+    'hero.sub':['每一哩路都是頂級服務。在三萬英呎高空體驗舒適與奢華。','Premium service every mile. Comfort and luxury at 30,000 feet.','すべての旅に最高のサービスを。3万フィートで快適と贅沢を。','모든 여정에 최고의 서비스를. 3만 피트 상공의 편안함과 럭셔리.'],
+    'search.flight':['航班','Flights','フライト','항공편'],
+    'search.hotel':['飯店','Hotels','ホテル','호텔'],
+    'search.car':['租車','Cars','レンタカー','렌터카'],
+    'search.from':['出發地 (城市或機場)','From (city or airport)','出発地（都市・空港）','출발지 (도시·공항)'],
+    'search.to':['目的地 (城市或機場)','To (city or airport)','目的地（都市・空港）','목적지 (도시·공항)'],
+    'search.depart':['去程日期','Departure date','往路の日付','가는 날'],
+    'search.return':['回程日期 (選填)','Return date (optional)','復路の日付（任意）','오는 날 (선택)'],
+    'search.btn':['搜尋航班','Search Flights','フライトを検索','항공편 검색'],
+    'pax.unit':['{n} 位乘客','{n} Passenger(s)','{n} 名','승객 {n}명'],
+    'sec.dest.title':['精選目的地','Featured Destinations','おすすめの目的地','추천 여행지'],
+    'sec.dest.sub':['探索本季最受歡迎的航線。',"Explore this season's most popular routes.",'今季人気の路線を探そう。','이번 시즌 인기 노선을 만나보세요.'],
+    'sec.dest.all':['查看所有優惠','View all deals','すべての特典を見る','모든 혜택 보기'],
+    'badge.best':['超值首選','Best Value','お得','가성비'],
+    'badge.hot':['熱門優惠','Hot Deal','人気','인기 특가'],
+    'promo.rt':['來回票價 {p} 起','Round trip from {p}','往復 {p}〜','왕복 {p}부터'],
+    'dest.tokyo':['東京 (Tokyo)，日本','Tokyo, Japan','東京、日本','도쿄, 일본'],
+    'dest.london':['倫敦 (London)，英國','London, UK','ロンドン、イギリス','런던, 영국'],
+    'dest.ny':['紐約 (New York)，美國','New York, USA','ニューヨーク、アメリカ','뉴욕, 미국'],
+    'home.club.title':['加入 Skyler 會員俱樂部','Join the Skyler Club','Skylerクラブに参加','Skyler 클럽 가입'],
+    'home.club.sub':['每次飛行皆可累積哩程，解鎖貴賓室使用權、優先登機及額外行李額度。','Earn miles on every flight to unlock lounge access, priority boarding and extra baggage.','フライトごとにマイルが貯まり、ラウンジ利用・優先搭乗・追加手荷物が解放。','비행마다 마일 적립으로 라운지·우선 탑승·추가 수하물 혜택.'],
+    'home.club.btn':['免費加入','Join Free','無料で参加','무료 가입'],
+    'foot.tagline':['連結您的世界，盡享安全、舒適與風格。您的非凡旅程由此開始。','Connecting your world in safety, comfort and style. Your journey starts here.','安全・快適・スタイルで世界をつなぐ。旅はここから。','안전·편안함·스타일로 세계를 잇다. 여정은 여기서 시작.'],
+    'foot.about':['關於我們','About Us','会社情報','회사 소개'],
+    'foot.brand':['品牌故事','Our Story','ブランドストーリー','브랜드 스토리'],
+    'foot.careers':['人才招募','Careers','採用情報','채용'],
+    'foot.news':['新聞中心','Newsroom','ニュース','뉴스'],
+    'foot.blog':['部落格','Blog','ブログ','블로그'],
+    'foot.support':['支援服務','Support','サポート','지원'],
+    'foot.helpc':['幫助中心','Help Center','ヘルプセンター','도움말 센터'],
+    'foot.contact':['聯絡我們','Contact Us','お問い合わせ','문의하기'],
+    'foot.baggage':['行李資訊','Baggage Info','手荷物案内','수하물 안내'],
+    'foot.special':['特殊協助','Special Assistance','特別なサポート','특별 지원'],
+    'foot.legal':['法律條款','Legal','規約','약관'],
+    'foot.terms':['服務條款','Terms of Service','利用規約','이용약관'],
+    'foot.privacy':['隱私政策','Privacy Policy','プライバシー','개인정보처리방침'],
+    'foot.cookie':['Cookie 政策','Cookie Policy','Cookieポリシー','쿠키 정책'],
+    'foot.copyright':['© 2026 T-Skyler 航空. 保留所有權利.','© 2026 T-Skyler Airlines. All rights reserved.','© 2026 T-Skyler Airlines. All rights reserved.','© 2026 T-Skyler Airlines. All rights reserved.'],
+    'foot.sitemap':['網站地圖','Sitemap','サイトマップ','사이트맵'],
+    'foot.access':['無障礙聲明','Accessibility','アクセシビリティ','접근성'],
+    'fl.back':['返回搜尋','Back to Search','検索に戻る','검색으로'],
+    'fl.choose':['選擇您的航班','Choose your flight','フライトを選択','항공편 선택'],
+    'fl.count':['共 {n} 個航班','{n} flights','全 {n} 便','총 {n}편'],
+    'sort.label':['排序','Sort','並び替え','정렬'],
+    'sort.dep':['出發時間','Departure','出発時刻','출발 시간'],
+    'sort.price':['價格','Price','価格','가격'],
+    'sort.dur':['航程','Duration','所要時間','소요 시간'],
+    'fl.direct':['直飛','Direct','直行','직항'],
+    'fl.stop1':['1 次轉機','1 stop','経由1回','1회 경유'],
+    'fl.select':['選擇','Select','選択','선택'],
+    'price.from':['起','from','〜','부터'],
+    'unit.seats':['座','seats','席','석'],
+    'bk.back':['返回航班列表','Back to flights','フライト一覧に戻る','항공편 목록으로'],
+    'bk.title':['選擇艙等與行李','Select Cabin & Baggage','クラスと手荷物','좌석 등급과 수하물'],
+    'bk.name':['乘客姓名','Passenger Name','搭乗者氏名','탑승자 이름'],
+    'bk.name.ph':['請輸入乘客英文姓名（例如 MASON ZENG）','Enter passenger name (e.g. MASON ZENG)','搭乗者氏名（例：MASON ZENG）','탑승자 이름 (예: MASON ZENG)'],
+    'bk.cabin':['艙等','Cabin Class','座席クラス','좌석 등급'],
+    'bk.baggage':['行李額度','Baggage','手荷物','수하물'],
+    'bk.total':['總計','Total','合計','합계'],
+    'bk.confirm':['選擇座位','Select Seats','座席を選択','좌석 선택'],
+    'bk.miles':['可累積 {n} 哩','Earn {n} mi','{n} マイル獲得','{n} 마일 적립'],
+    'bk.paxmul':['（{p} × {n} 位）','({p} × {n})','（{p} × {n}）','({p} × {n}명)'],
+    'cabin.ECONOMY':['經濟艙','Economy','エコノミー','이코노미'],
+    'cabin.PREMIUM':['豪華經濟艙','Premium Economy','プレミアムエコノミー','프리미엄 이코노미'],
+    'cabin.BUSINESS':['商務艙','Business','ビジネス','비즈니스'],
+    'cabin.FIRST':['頭等艙','First','ファースト','퍼스트'],
+    'cabin.ECONOMY.d':['標準座椅 · 含餐點','Standard seat · Meals','標準シート・機内食','일반 좌석 · 기내식'],
+    'cabin.PREMIUM.d':['加寬座椅 · 更大間距','Wider seat · More legroom','広いシート・余裕の間隔','넓은 좌석 · 넓은 간격'],
+    'cabin.BUSINESS.d':['平躺座椅 · 貴賓室','Lie-flat · Lounge','フルフラット・ラウンジ','풀플랫 · 라운지'],
+    'cabin.FIRST.d':['獨立套房 · 專屬管家','Private suite · Butler','個室スイート・専属執事','프라이빗 스위트 · 집사'],
+    'bag.light':['輕便','Light','軽量','라이트'],
+    'bag.standard':['標準','Standard','標準','스탠다드'],
+    'bag.heavy':['豪華','Plus','プラス','플러스'],
+    'bag.light.d':['僅手提行李 7kg','Carry-on only 7kg','手荷物のみ7kg','기내 수하물만 7kg'],
+    'bag.standard.d':['託運 23kg ×1','1 checked 23kg','受託23kg×1','위탁 23kg ×1'],
+    'bag.heavy.d':['託運 23kg ×2','2 checked 23kg','受託23kg×2','위탁 23kg ×2'],
+    'seat.back':['返回訂票','Back to booking','予約に戻る','예약으로'],
+    'seat.title':['選擇座位','Select Seat','座席選択','좌석 선택'],
+    'seat.pick':['{ac} · {cabin} · 請選擇 {n} 個座位','{ac} · {cabin} · Pick {n} seat(s)','{ac}・{cabin}・{n}席を選択','{ac} · {cabin} · {n}석 선택'],
+    'legend.avail':['可選','Available','選択可','선택 가능'],
+    'legend.paid':['加價座位','Paid seat','有料席','유료 좌석'],
+    'legend.sel':['已選','Selected','選択中','선택됨'],
+    'legend.sold':['已售出','Sold','販売済','판매됨'],
+    'seat.front':['機艙前方','Front of cabin','機首方向','기내 앞쪽'],
+    'facility.galley':['廚房','Galley','ギャレー','갤리'],
+    'facility.lav':['廁所','Lavatory','化粧室','화장실'],
+    'seat.selected':['已選座位','Selected seats','選択した座席','선택한 좌석'],
+    'seat.gen':['生成機票','Generate Ticket','搭乗券を発行','항공권 생성'],
+    'seat.surcharge':['（含加價 {x}）',' (incl. {x})','（追加 {x}）',' ({x} 추가)'],
+    'seat.notenough':['此艙等座位不足，請減少乘客人數或改選其他艙等','Not enough seats in this cabin. Reduce passengers or change cabin.','この座席クラスは空席不足です。人数を減らすかクラスを変更してください。','이 좌석 등급의 좌석이 부족합니다. 인원을 줄이거나 등급을 변경하세요.'],
+    'alert.needname':['請輸入乘客姓名','Please enter passenger name','搭乗者氏名を入力してください','탑승자 이름을 입력하세요'],
+    'alert.samecity':['出發地與目的地不能相同','Origin and destination cannot be the same','出発地と目的地が同じです','출발지와 목적지가 같을 수 없습니다'],
+    'alert.savefail':['儲存失敗，請再試一次','Save failed, please try again','保存に失敗しました','저장 실패, 다시 시도하세요'],
+    'trips.back':['返回首頁','Back to Home','ホームに戻る','홈으로'],
+    'trips.title':['我的行程','My Trips','マイ旅程','내 여정'],
+    'trips.sub':['您已生成的登機證會自動儲存在此裝置。','Your boarding passes are saved on this device.','発行した搭乗券はこの端末に保存されます。','발행한 탑승권은 이 기기에 저장됩니다.'],
+    'trips.empty':['尚無行程，快去搜尋並預訂吧！','No trips yet — search and book a flight!','旅程がありません。検索して予約しましょう！','여정이 없습니다. 검색하고 예약해 보세요!'],
+    'trips.start':['開始搜尋','Start searching','検索を始める','검색 시작'],
+    'trips.pax':['乘客','Passenger','搭乗者','탑승자'],
+    'trips.flight':['航班','Flight','便名','편명'],
+    'trips.dep':['出發','Departure','出発','출발'],
+    'trips.miles':['可累積哩程','Miles earned','獲得マイル','적립 마일'],
+    'trips.view':['查看登機證','View Pass','搭乗券を見る','탑승권 보기'],
+    'trips.del':['刪除','Delete','削除','삭제'],
+    'trips.delconfirm':['確定刪除這筆行程？','Delete this trip?','この旅程を削除しますか？','이 여정을 삭제할까요?'],
+    'mem.back':['返回首頁','Back to Home','ホームに戻る','홈으로'],
+    'mem.title':['Skyler 會員俱樂部','Skyler Club','Skylerクラブ','Skyler 클럽'],
+    'mem.sub':['每一次飛行都讓你更靠近下一張頭等艙。','Every flight brings you closer to first class.','フライトごとにファーストクラスへ近づく。','비행할수록 퍼스트클래스에 가까워집니다.'],
+    'mem.member':['尊貴會員','Valued Member','会員様','회원님'],
+    'mem.miles':['累積哩程','Total Miles','累積マイル','누적 마일'],
+    'mem.milesUnit':['哩','mi','マイル','마일'],
+    'mem.tiers':['會員等級與權益','Tiers & Benefits','会員ランクと特典','등급과 혜택'],
+    'mem.toNext':['距離 {tier} 還差 {n} 哩','{n} mi to {tier}','{tier}まであと {n} マイル','{tier}까지 {n} 마일'],
+    'mem.max':['已達最高等級 🎉','Top tier reached 🎉','最高ランク達成 🎉','최고 등급 달성 🎉'],
+    'mem.current':['目前等級','Current','現在のランク','현재 등급'],
+    'mem.joinFree':['入會即享','On joining','入会特典','가입 시'],
+    'mem.milesFrom':['{n} 哩起','From {n} mi','{n}マイル〜','{n}마일부터'],
+    'tier.EXPLORER':['探索卡','Explorer','エクスプローラー','익스플로러'],
+    'tier.SILVER':['銀卡','Silver','シルバー','실버'],
+    'tier.GOLD':['金卡','Gold','ゴールド','골드'],
+    'tier.PLATINUM':['白金卡','Platinum','プラチナ','플래티넘'],
+    'perk.seat':['線上選位','Online seat selection','オンライン座席指定','온라인 좌석 지정'],
+    'perk.epass':['電子登機證','E-boarding pass','電子搭乗券','전자 탑승권'],
+    'perk.miles':['哩程累積','Mileage earning','マイル積算','마일 적립'],
+    'perk.checkin':['優先報到','Priority check-in','優先チェックイン','우선 체크인'],
+    'perk.bag10':['+10kg 行李額度','+10kg baggage','+10kg手荷物','+10kg 수하물'],
+    'perk.cs':['專屬客服','Dedicated support','専用サポート','전담 고객센터'],
+    'perk.lounge':['貴賓室使用','Lounge access','ラウンジ利用','라운지 이용'],
+    'perk.board':['優先登機','Priority boarding','優先搭乗','우선 탑승'],
+    'perk.freeseat':['免費選位','Free seat selection','無料座席指定','무료 좌석 지정'],
+    'perk.flounge':['頭等貴賓室','First lounge','ファーストラウンジ','퍼스트 라운지'],
+    'perk.guarantee':['保證訂位','Guaranteed booking','予約保証','예약 보장'],
+    'perk.upgrade':['艙等升等券','Upgrade voucher','アップグレード券','업그레이드 쿠폰'],
+    'help.title':['幫助中心','Help Center','ヘルプセンター','도움말 센터'],
+    'help.sub':['常見問題與聯絡方式。','FAQs and contact info.','よくある質問と連絡先。','자주 묻는 질문과 연락처.'],
+    'contact.title':['聯絡我們','Contact Us','お問い合わせ','문의하기'],
+    'contact.phone':['客服專線','Hotline','カスタマー窓口','고객센터'],
+    'contact.email':['電子郵件','Email','メール','이메일'],
+    'contact.hours':['服務時間','Hours','受付時間','운영 시간'],
+    'contact.hours.v':['24 小時全年無休','24/7','年中無休 24時間','연중무휴 24시간'],
+    'about.title':['關於 T-Skyler 航空','About T-Skyler Airlines','T-Skyler航空について','T-Skyler 항공 소개'],
+    'about.sub':['連結你的世界，盡享安全、舒適與風格。','Connecting your world in safety, comfort and style.','安全・快適・スタイルで世界をつなぐ。','안전·편안함·스타일로 세계를 잇다.'],
+    'about.stat.types':['機型','Aircraft Types','機材タイプ','기종'],
+    'about.stat.dest':['全球航點','Destinations','就航地','취항지'],
+    'about.stat.rating':['服務評等','Service Rating','サービス評価','서비스 등급'],
+    'about.stat.founded':['成立年份','Founded','設立','설립'],
+    'about.p1':['T-Skyler 航空以台灣為樞紐，連結亞洲、歐洲、北美與大洋洲的主要城市。我們相信旅行不只是抵達，更是一段值得期待的旅程。','Hubbed in Taiwan, T-Skyler connects major cities across Asia, Europe, North America and Oceania. We believe travel is not just arriving — it is a journey worth anticipating.','台湾をハブに、アジア・欧州・北米・オセアニアの主要都市を結びます。旅は到着だけでなく、期待に満ちた時間です。','대만을 허브로 아시아·유럽·북미·오세아니아 주요 도시를 잇습니다. 여행은 도착이 아니라 기대되는 여정입니다.'],
+    'about.p2':['從窄體的空中巴士 A320neo 到旗艦廣體波音 777-9，我們依航程與需求精心調度機隊，讓每一次飛行都兼顧效率與舒適。四種艙等、完善的選位與行李方案，只為打造屬於你的專屬高空體驗。','From the narrowbody Airbus A320neo to the flagship widebody Boeing 777-9, we match aircraft to each route for efficiency and comfort. Four cabins and full seat & baggage options craft your personal experience aloft.','小型のA320neoから旗艦777-9まで、路線に応じて最適な機材を配置。4つのクラスと充実の座席・手荷物で、あなただけの空の体験を。','협동체 A320neo부터 기함 777-9까지 노선에 맞춰 기재를 배치합니다. 4개 등급과 좌석·수하물 옵션으로 당신만의 비행 경험을.'],
+    'about.p3':['三萬英呎之上，T-Skyler 與你同行。','At 30,000 feet, T-Skyler flies with you.','3万フィートの空で、T-Skylerはあなたと共に。','3만 피트 상공에서 T-Skyler가 함께합니다.'],
+    'bp.passenger':['乘客','Passenger','搭乗者','탑승자'],
+    'bp.flight':['航班','Flight','便名','편명'],
+    'bp.date':['日期','Date','日付','날짜'],
+    'bp.boarding':['登機時間','Boarding','搭乗時刻','탑승 시각'],
+    'bp.dep':['起飛','Departure','出発','출발'],
+    'bp.arr':['抵達','Arrival','到着','도착'],
+    'bp.gate':['登機門','Gate','ゲート','게이트'],
+    'bp.seat':['座位','Seat','座席','좌석'],
+    'bp.price':['票價','Fare','運賃','요금'],
+    'bp.subtitle':['登機證','BOARDING PASS','搭乗券','탑승권'],
+    'bp.save':['儲存成圖檔','Save as Image','画像で保存','이미지로 저장'],
+    'bp.regen':['重新生成','Reissue','再発行','재발행'],
+    'install.app':['安裝 App','Install App','アプリをインストール','앱 설치'],
+    'region.台灣':['台灣','Taiwan','台湾','대만'],
+    'region.亞洲':['亞洲','Asia','アジア','아시아'],
+    'region.歐洲':['歐洲','Europe','ヨーロッパ','유럽'],
+    'region.北美洲':['北美洲','North America','北米','북미'],
+    'region.大洋洲':['大洋洲','Oceania','オセアニア','오세아니아'],
+    'region.中東':['中東','Middle East','中東','중동'],
+    'city.TPE':['桃園','Taoyuan','桃園','타오위안'],'city.TSA':['松山','Songshan','松山','쑹산'],'city.RMQ':['台中','Taichung','台中','타이중'],'city.KHH':['高雄','Kaohsiung','高雄','가오슝'],
+    'city.NRT':['東京','Tokyo','東京','도쿄'],'city.KIX':['大阪','Osaka','大阪','오사카'],'city.ICN':['首爾','Seoul','ソウル','서울'],'city.HKG':['香港','Hong Kong','香港','홍콩'],'city.SIN':['新加坡','Singapore','シンガポール','싱가포르'],'city.BKK':['曼谷','Bangkok','バンコク','방콕'],'city.PVG':['上海','Shanghai','上海','상하이'],'city.PEK':['北京','Beijing','北京','베이징'],'city.KUL':['吉隆坡','Kuala Lumpur','クアラルンプール','쿠알라룸푸르'],'city.MNL':['馬尼拉','Manila','マニラ','마닐라'],
+    'city.LHR':['倫敦','London','ロンドン','런던'],'city.CDG':['巴黎','Paris','パリ','파리'],'city.FRA':['法蘭克福','Frankfurt','フランクフルト','프랑크푸르트'],'city.AMS':['阿姆斯特丹','Amsterdam','アムステルダム','암스테르담'],'city.FCO':['羅馬','Rome','ローマ','로마'],'city.IST':['伊斯坦堡','Istanbul','イスタンブール','이스탄불'],
+    'city.JFK':['紐約','New York','ニューヨーク','뉴욕'],'city.LAX':['洛杉磯','Los Angeles','ロサンゼルス','로스앤젤레스'],'city.SFO':['舊金山','San Francisco','サンフランシスコ','샌프란시스코'],'city.ORD':['芝加哥','Chicago','シカゴ','시카고'],'city.YVR':['溫哥華','Vancouver','バンクーバー','밴쿠버'],
+    'city.SYD':['雪梨','Sydney','シドニー','시드니'],'city.MEL':['墨爾本','Melbourne','メルボルン','멜버른'],'city.AKL':['奧克蘭','Auckland','オークランド','오클랜드'],
+    'city.DXB':['杜拜','Dubai','ドバイ','두바이'],'city.DOH':['杜哈','Doha','ドーハ','도하']
+  };
+  // FAQ 問答（中/英/日/韓）
+  D['faq.q1']=['如何搜尋與預訂航班？','How do I search and book a flight?','フライトの検索と予約方法は？','항공편 검색·예약 방법은?'];
+  D['faq.a1']=['在首頁選擇出發地、目的地與日期後按「搜尋航班」，挑選班次、艙等、行李與座位，輸入乘客姓名即可生成電子登機證。','On the home page choose origin, destination and date, tap “Search Flights”, then pick a flight, cabin, baggage and seat, and enter the passenger name to generate an e-boarding pass.','トップで出発地・目的地・日付を選び「検索」、便・クラス・手荷物・座席を選択し、氏名を入力すると電子搭乗券が発行されます。','홈에서 출발지·목적지·날짜를 선택해 “검색”, 항공편·등급·수하물·좌석을 고르고 이름을 입력하면 전자 탑승권이 생성됩니다.'];
+  D['faq.q2']=['為什麼出發地選國外時，目的地只能選台灣？','Why is the destination limited to Taiwan when departing abroad?','海外出発時に目的地が台湾のみになるのはなぜ？','해외 출발 시 목적지가 대만만 되는 이유는?'];
+  D['faq.a2']=['T-Skyler 為台灣籍航空，航線以台灣往返各國為主，因此國外出發的目的地僅限台灣（桃園、松山、台中、高雄）。','T-Skyler is a Taiwan-based airline operating routes between Taiwan and the world, so flights from abroad land only in Taiwan (Taoyuan, Songshan, Taichung, Kaohsiung).','T-Skylerは台湾の航空会社で、台湾と各国を結ぶ路線が中心のため、海外発の目的地は台湾（桃園・松山・台中・高雄）に限られます。','T-Skyler는 대만 국적 항공사로 대만과 각국을 잇는 노선을 운항하므로 해외 출발의 목적지는 대만(타오위안·쑹산·타이중·가오슝)으로 제한됩니다.'];
+  D['faq.q3']=['票價是用什麼貨幣顯示？','What currency are fares shown in?','運賃はどの通貨で表示されますか？','요금은 어떤 통화로 표시되나요?'];
+  D['faq.a3']=['系統會依你所在國家（IP）自動換算為當地貨幣，採即時匯率，金額僅供參考。','Fares are auto-converted to your local currency based on your IP, using live exchange rates (for reference only).','IPに基づき現地通貨へ自動換算し、リアルタイム為替を使用します（参考値）。','IP 기준 현지 통화로 실시간 환율로 자동 환산되어 표시됩니다(참고용).'];
+  D['faq.q4']=['哪些座位需要加價？','Which seats cost extra?','追加料金がかかる座席は？','추가 요금이 있는 좌석은?'];
+  D['faq.a4']=['腿部空間較大的座位（緊急出口排與艙壁第一排）為加價座位，會以綠色標示，費用依航程長短計算。','Extra-legroom seats (exit rows and the bulkhead first row) are paid seats, shown in green, priced by route distance.','足元が広い座席（非常口列・隔壁前列）は有料席で、緑色で表示され、距離に応じて課金されます。','레그룸이 넓은 좌석(비상구열·벌크헤드 첫 열)은 유료석이며 초록색으로 표시되고 거리에 따라 요금이 부과됩니다.'];
+  D['faq.q5']=['為什麼有些機型沒有頭等艙或豪華經濟艙？','Why do some aircraft lack First or Premium Economy?','一部の機材にファーストやプレミアムエコノミーが無いのはなぜ？','일부 기종에 퍼스트·프리미엄 이코노미가 없는 이유는?'];
+  D['faq.a5']=['窄體客機（A320neo / A321）僅提供經濟艙與商務艙；頭等艙僅在旗艦廣體機（A350-1000、B777-9）提供。','Narrowbody jets (A320neo / A321) offer only Economy and Business; First class is only on flagship widebodies (A350-1000, B777-9).','狭胴機（A320neo / A321）はエコノミーとビジネスのみ。ファーストは旗艦のワイドボディ（A350-1000・B777-9）のみです。','협동체(A320neo / A321)는 이코노미·비즈니스만 제공하며, 퍼스트는 기함 광동체(A350-1000, B777-9)에만 있습니다.'];
+  D['faq.q6']=['我生成的登機證會儲存在哪裡？','Where are my generated boarding passes stored?','発行した搭乗券はどこに保存されますか？','생성한 탑승권은 어디에 저장되나요?'];
+  D['faq.a6']=['登機證會自動存到此裝置的「我的行程」，可隨時重新查看或刪除；資料僅儲存在你的瀏覽器中。','They are saved to “My Trips” on this device and can be reopened or deleted anytime; data stays only in your browser.','搭乗券はこの端末の「マイ旅程」に保存され、いつでも再表示・削除できます。データはブラウザ内のみに保存されます。','탑승권은 이 기기의 “내 여정”에 저장되어 언제든 다시 보거나 삭제할 수 있으며, 데이터는 브라우저에만 저장됩니다.'];
+  D['faq.q7']=['如何累積與查詢哩程？','How do I earn and check miles?','マイルの獲得と確認方法は？','마일 적립·조회 방법은?'];
+  D['faq.a7']=['每完成一次訂位即累積該航線哩程，於「會員計畫」頁可查看累積哩程、會員等級與升等進度。','You earn route miles with each booking; check total miles, tier and upgrade progress on the Membership page.','予約ごとに区間マイルが貯まり、「会員プログラム」で累計マイル・ランク・昇格状況を確認できます。','예약할 때마다 구간 마일이 적립되며, “멤버십” 페이지에서 누적 마일·등급·승급 현황을 확인할 수 있습니다.'];
+
+  D['pax.short']=['位','pax','名','명'];
+  D['incl']=['已含','Incl.','込み','포함'];
+  function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
+  function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
+  function regionLabel(zh){ return t('region.'+zh); }
+
+  function applyI18n(){
+    document.documentElement.lang = LANG_ORDER[LANG_IDX];
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){ el.textContent=t(el.getAttribute('data-i18n')); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-ph]'), function(el){ el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function(el){ el.innerHTML=t(el.getAttribute('data-i18n-html')); });
+    populatePax();
+    refillAirportSelects();
+    refreshPromo();
+    var faq=document.getElementById('faqList'); if(faq) faq.removeAttribute('data-done');
+    // 重新渲染目前的動態頁面
+    if(typeof route==='function') reRenderCurrent();
+  }
+  function reRenderCurrent(){
+    var h=(location.hash||'').replace('#','');
+    if(h==='flights' && state.flights.length) renderFlights();
+    else if(h==='booking' && state.sel) renderBooking();
+    else if(h==='seats' && state.sel) renderSeats();
+    else if(h==='trips') renderTrips();
+    else if(h==='member') renderMember();
+    else if(h==='help') renderFaq();
+    var modal=document.getElementById('ticketModal');
+    if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
+  }
+  function populatePax(){
+    var sel=document.getElementById('pax'); if(!sel) return;
+    var cur=sel.value||'1';
+    var html=''; for(var i=1;i<=9;i++) html+='<option value="'+i+'">'+tf('pax.unit',{n:i})+'</option>';
+    sel.innerHTML=html; sel.value=cur;
+  }
+  function refillAirportSelects(){
+    if(!fromSel) return;
+    var fv=fromSel.value, tv=toSel.value;
+    fillSelect(fromSel, fv);
+    refreshTo();
+    if([].slice.call(toSel.options).some(function(o){return o.value===tv;})) toSel.value=tv;
+  }
+  function setLang(code){
+    var idx=LANG_ORDER.indexOf(code); if(idx<0) idx=0;
+    LANG_IDX=idx;
+    try{ localStorage.setItem('tskyler_lang', LANG_ORDER[idx]); }catch(e){}
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-sel'), function(s){ if(s.value!==LANG_ORDER[idx]) s.value=LANG_ORDER[idx]; });
+    applyI18n();
+  }
+  function initLang(){
+    var saved=null; try{ saved=localStorage.getItem('tskyler_lang'); }catch(e){}
+    var code=saved;
+    if(!code){
+      var nav=(navigator.language||'').toLowerCase();
+      if(nav.indexOf('zh')===0) code='zh-Hant';
+      else if(nav.indexOf('ja')===0) code='ja';
+      else if(nav.indexOf('ko')===0) code='ko';
+      else if(nav.indexOf('en')===0) code='en';
+      else code='zh-Hant';
+    }
+    var html=LANGS.map(function(l){ return '<option value="'+l.code+'">'+l.label+'</option>'; }).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('.lang-sel'), function(s){
+      s.innerHTML=html;
+      s.addEventListener('change', function(){ setLang(this.value); });
+    });
+    setLang(code);
+  }
+
   // 機隊（range=續航 km，seats=載客量，cabins=該機型提供的艙等）
   var FLEET={
-    "A320neo":    {name:"空中巴士 A320neo",      range:6300,  seats:180, cabins:["ECONOMY","BUSINESS"]},
-    "A321":       {name:"空中巴士 A321neo",      range:7400,  seats:220, cabins:["ECONOMY","BUSINESS"]},
-    "A330-900neo":{name:"空中巴士 A330-900neo", range:13300, seats:287, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "A350-900":   {name:"空中巴士 A350-900",     range:15000, seats:325, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "A350-1000":  {name:"空中巴士 A350-1000",    range:16100, seats:410, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
-    "B777-9":     {name:"波音 777-9",            range:13500, seats:426, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
-    "B787-9":     {name:"波音 787-9",            range:14140, seats:296, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "B787-10":    {name:"波音 787-10",           range:11750, seats:336, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
+    "A320neo":    {name:"Airbus A320neo",   range:6300,  seats:180, cabins:["ECONOMY","BUSINESS"]},
+    "A321":       {name:"Airbus A321neo",   range:7400,  seats:220, cabins:["ECONOMY","BUSINESS"]},
+    "A330-900neo":{name:"Airbus A330-900neo",range:13300,seats:287, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-900":   {name:"Airbus A350-900",  range:15000, seats:325, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-1000":  {name:"Airbus A350-1000", range:16100, seats:410, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B777-9":     {name:"Boeing 777-9",     range:13500, seats:426, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B787-9":     {name:"Boeing 787-9",     range:14140, seats:296, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "B787-10":    {name:"Boeing 787-10",    range:11750, seats:336, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
   };
 
   // 兩機場間大圓距離(km)
@@ -962,10 +1241,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   // ====== 會員計畫 ======
   var TIERS=[
-    {code:'EXPLORER', name:'探索卡', min:0,      color:'#64748b', perks:['線上選位','電子登機證','哩程累積']},
-    {code:'SILVER',   name:'銀卡',   min:25000,  color:'#94a3b8', perks:['優先報到','+10kg 行李額度','專屬客服']},
-    {code:'GOLD',     name:'金卡',   min:60000,  color:'#caa53d', perks:['貴賓室使用','優先登機','免費選位']},
-    {code:'PLATINUM', name:'白金卡', min:120000, color:'#8a7ff0', perks:['頭等貴賓室','保證訂位','艙等升等券']}
+    {code:'EXPLORER', min:0,      color:'#64748b', perks:['perk.seat','perk.epass','perk.miles']},
+    {code:'SILVER',   min:25000,  color:'#94a3b8', perks:['perk.checkin','perk.bag10','perk.cs']},
+    {code:'GOLD',     min:60000,  color:'#caa53d', perks:['perk.lounge','perk.board','perk.freeseat']},
+    {code:'PLATINUM', min:120000, color:'#8a7ff0', perks:['perk.flounge','perk.guarantee','perk.upgrade']}
   ];
   function renderMember(){
     var trips=loadTrips();
@@ -975,25 +1254,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     for(i=0;i<TIERS.length;i++){ if(TIERS[i].min>miles){ next=TIERS[i]; break; } }
     var card=document.getElementById('memberCard');
     card.style.background='linear-gradient(135deg,'+tier.color+' 0%,#001B38 90%)';
-    document.getElementById('memberTierBadge').textContent=tier.name;
+    document.getElementById('memberTierBadge').textContent=t('tier.'+tier.code);
     document.getElementById('memberMiles').textContent=miles.toLocaleString('en-US');
-    document.getElementById('memberName').textContent=(trips[0]&&trips[0].name)||'尊貴會員';
+    document.getElementById('memberName').textContent=(trips[0]&&trips[0].name)||t('mem.member');
     var bar=document.getElementById('memberProgressBar'), pt=document.getElementById('memberProgressText'), nt=document.getElementById('memberNextTier');
     if(next){
       var pct=Math.max(0,Math.min(100, Math.round((miles-tier.min)/(next.min-tier.min)*100)));
       bar.style.width=pct+'%';
-      pt.textContent='距離 '+next.name+' 還差 '+(next.min-miles).toLocaleString('en-US')+' 哩';
-      nt.textContent=next.name;
-    } else { bar.style.width='100%'; pt.textContent='已達最高等級 🎉'; nt.textContent=''; }
-    document.getElementById('tierGrid').innerHTML=TIERS.map(function(t){
-      var cur=t.code===tier.code;
+      pt.textContent=tf('mem.toNext',{tier:t('tier.'+next.code), n:(next.min-miles).toLocaleString('en-US')});
+      nt.textContent=t('tier.'+next.code);
+    } else { bar.style.width='100%'; pt.textContent=t('mem.max'); nt.textContent=''; }
+    document.getElementById('tierGrid').innerHTML=TIERS.map(function(tr){
+      var cur=tr.code===tier.code;
       return '<div class="rounded-xl p-5 border bg-card-dark '+(cur?'border-primary ring-2 ring-primary/40':'border-white/10')+'">'+
         '<div class="flex items-center justify-between mb-3">'+
-          '<div class="flex items-center gap-2"><span class="size-3 rounded-full inline-block" style="background:'+t.color+'"></span><p class="text-white font-bold">'+t.name+'</p></div>'+
-          (cur?'<span class="text-[10px] font-black text-primary-hover">目前等級</span>':'')+
+          '<div class="flex items-center gap-2"><span class="size-3 rounded-full inline-block" style="background:'+tr.color+'"></span><p class="text-white font-bold">'+t('tier.'+tr.code)+'</p></div>'+
+          (cur?'<span class="text-[10px] font-black text-primary-hover">'+t('mem.current')+'</span>':'')+
         '</div>'+
-        '<p class="text-white/50 text-xs mb-3">'+(t.min===0?'入會即享':t.min.toLocaleString('en-US')+' 哩起')+'</p>'+
-        '<ul class="space-y-1.5">'+t.perks.map(function(p){ return '<li class="flex items-center gap-2 text-white/70 text-sm"><span class="material-symbols-outlined text-primary-hover text-[16px]">check</span>'+p+'</li>'; }).join('')+'</ul>'+
+        '<p class="text-white/50 text-xs mb-3">'+(tr.min===0?t('mem.joinFree'):tf('mem.milesFrom',{n:tr.min.toLocaleString('en-US')}))+'</p>'+
+        '<ul class="space-y-1.5">'+tr.perks.map(function(p){ return '<li class="flex items-center gap-2 text-white/70 text-sm"><span class="material-symbols-outlined text-primary-hover text-[16px]">check</span>'+t(p)+'</li>'; }).join('')+'</ul>'+
       '</div>';
     }).join('');
   }
@@ -1050,7 +1329,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       '<span>'+state.fromCode+'</span><span class="material-symbols-outlined text-primary-hover">flight</span><span>'+state.toCode+'</span>';
     document.getElementById('flMeta').textContent =
       cityFor(state.fromCode)+' → '+cityFor(state.toCode)+' · '+state.dateTxt;
-    document.getElementById('flCount').textContent = state.flights.length;
+    document.getElementById('flCountWrap').textContent = tf('fl.count',{n:state.flights.length});
     var wrap=document.getElementById('flightList');
     wrap.innerHTML="";
     state.flights.forEach(function(f,idx){
@@ -1061,14 +1340,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
           '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.depMin)+'</p><p class="text-white/50 text-xs">'+state.fromCode+'</p></div>'+
           '<div class="flex-1 flex flex-col items-center min-w-[80px]"><p class="text-white/40 text-[11px]">'+fmtDur(f.durMin)+'</p>'+
             '<div class="w-full border-t border-white/20 my-1 relative"><span class="material-symbols-outlined text-primary-hover text-[16px] absolute -top-2 left-1/2 -translate-x-1/2 bg-card-dark px-1">flight</span></div>'+
-            '<p class="text-white/40 text-[11px]">'+(f.stops?'1 次轉機':'直飛')+'</p></div>'+
+            '<p class="text-white/40 text-[11px]">'+(f.stops?t('fl.stop1'):t('fl.direct'))+'</p></div>'+
           '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.arrMin)+'</p><p class="text-white/50 text-xs">'+state.toCode+'</p></div>'+
         '</div>'+
         '<div class="flex-1 text-white/60 text-sm border-t sm:border-t-0 sm:border-l border-white/10 sm:pl-4 pt-3 sm:pt-0">'+
-          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' 座</p></div>'+
+          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' '+t('unit.seats')+'</p></div>'+
         '<div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">'+
-          '<p class="text-primary-hover text-xl font-black">'+money(f.price)+'<span class="text-white/40 text-xs font-medium"> 起</span></p>'+
-          '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">選擇</button>'+
+          '<p class="text-primary-hover text-xl font-black">'+money(f.price)+'<span class="text-white/40 text-xs font-medium"> '+t('price.from')+'</span></p>'+
+          '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">'+t('fl.select')+'</button>'+
         '</div>';
       wrap.appendChild(card);
     });
@@ -1098,7 +1377,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function doSearch(){
     state.fromCode=document.getElementById('from').value||"TPE";
     state.toCode=document.getElementById('to').value||"NRT";
-    if(state.fromCode===state.toCode){ alert('出發地與目的地不能相同'); return; }
+    if(state.fromCode===state.toCode){ alert(t('alert.samecity')); return; }
     state.dateTxt=fmtDate(document.getElementById('depart').value);
     state.pax=parseInt(document.getElementById('pax').value,10)||1;
     state.sort='dep';
@@ -1144,8 +1423,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return '<div class="flex items-center gap-1 my-2">'+
       '<span class="exit-tab">EXIT</span>'+
       '<div class="flex-1 flex gap-1">'+
-        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">restaurant</span>廚房</span>'+
-        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">wc</span>廁所</span>'+
+        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">restaurant</span>'+t('facility.galley')+'</span>'+
+        '<span class="facility flex-1"><span class="material-symbols-outlined text-[12px]">wc</span>'+t('facility.lav')+'</span>'+
       '</div>'+
       '<span class="exit-tab">EXIT</span>'+
     '</div>';
@@ -1154,7 +1433,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function renderSeats(){
     var ac=state.sel.aircraft, cfg=state.seatCfg.cfg, pat=state.seatCfg.pat, exitSet=state.seatCfg.exitSet;
     document.getElementById('seatInfo').textContent =
-      FLEET[ac].name+' · '+state.cabin.name+' · 請選擇 '+(state.pax||1)+' 個座位';
+      tf('seat.pick',{ac:FLEET[ac].name, cabin:t('cabin.'+state.cabin.code), n:(state.pax||1)});
     var fl=document.getElementById('seatFeeLabel'); if(fl) fl.textContent = state.seatFee? ('+'+money(state.seatFee)) : '';
     // 固定寬度，讓設施列與座位排對齊
     var nSeats=pat.reduce(function(a,g){return a+g.length;},0), nAisle=pat.length-1;
@@ -1191,7 +1470,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function updateSeatBar(){
     var fee=seatFeesTotal();
     document.getElementById('seatSelected').textContent =
-      (state.selectedSeats.length ? state.selectedSeats.join('、') : '—') + (fee? '（含加價 '+money(fee)+'）' : '');
+      (state.selectedSeats.length ? state.selectedSeats.join('、') : '—') + (fee? tf('seat.surcharge',{x:money(fee)}) : '');
     var ok=state.selectedSeats.length===(state.pax||1);
     var btn=document.getElementById('confirmSeats');
     btn.disabled=!ok;
@@ -1263,24 +1542,24 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function addTrip(p){ p.id='t'+p.savedAt+rint(100,999); var a=loadTrips(); a.unshift(p); if(a.length>30) a=a.slice(0,30); saveTrips(a); }
   function deleteTrip(id){ saveTrips(loadTrips().filter(function(t){ return t.id!==id; })); renderTrips(); }
 
-  function tripCard(t){
+  function tripCard(tp){
     return '<div class="bg-card-dark border border-white/10 rounded-xl p-4 sm:p-5">'+
       '<div class="flex items-center justify-between gap-3">'+
-        '<div class="flex items-center gap-3 text-white text-xl font-black"><span>'+t.fromCode+'</span><span class="material-symbols-outlined text-primary-hover text-[18px]">flight</span><span>'+t.toCode+'</span></div>'+
-        '<span class="text-[11px] font-bold text-white bg-primary/80 px-2.5 py-1 rounded-full">'+t.cabinName+'</span>'+
+        '<div class="flex items-center gap-3 text-white text-xl font-black"><span>'+tp.fromCode+'</span><span class="material-symbols-outlined text-primary-hover text-[18px]">flight</span><span>'+tp.toCode+'</span></div>'+
+        '<span class="text-[11px] font-bold text-white bg-primary/80 px-2.5 py-1 rounded-full">'+t('cabin.'+tp.cabinCode)+'</span>'+
       '</div>'+
-      '<p class="text-white/50 text-sm mt-1">'+t.fromCity+' → '+t.toCity+' · '+t.date+'</p>'+
+      '<p class="text-white/50 text-sm mt-1">'+cityFor(tp.fromCode)+' → '+cityFor(tp.toCode)+' · '+tp.date+'</p>'+
       '<div class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 gap-x-3 mt-4">'+
-        '<div><p class="text-white/40 text-[11px]">乘客</p><p class="text-white font-bold text-sm truncate">'+t.name+'</p></div>'+
-        '<div><p class="text-white/40 text-[11px]">航班</p><p class="text-white font-bold text-sm">'+t.no+'</p></div>'+
-        '<div><p class="text-white/40 text-[11px]">出發</p><p class="text-white font-bold text-sm">'+fmtTime(t.depMin)+'</p></div>'+
-        '<div><p class="text-white/40 text-[11px]">可累積哩程</p><p class="text-white font-bold text-sm">'+t.miles+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">'+t('trips.pax')+'</p><p class="text-white font-bold text-sm truncate">'+tp.name+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">'+t('trips.flight')+'</p><p class="text-white font-bold text-sm">'+tp.no+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">'+t('trips.dep')+'</p><p class="text-white font-bold text-sm">'+fmtTime(tp.depMin)+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">'+t('trips.miles')+'</p><p class="text-white font-bold text-sm">'+tp.miles+'</p></div>'+
       '</div>'+
       '<div class="flex items-center justify-between mt-4 pt-3 border-t border-white/10">'+
-        '<p class="text-primary-hover font-black">'+money(t.total!=null?t.total:t.price*(t.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(t.pax||1)+' 位</span></p>'+
+        '<p class="text-primary-hover font-black">'+money(tp.total!=null?tp.total:tp.price*(tp.pax||1))+'<span class="text-white/40 text-xs font-medium"> · '+(tp.pax||1)+' '+t('pax.short')+'</span></p>'+
         '<div class="flex gap-2">'+
-          '<button data-view-trip="'+t.id+'" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">查看登機證</button>'+
-          '<button data-del-trip="'+t.id+'" class="h-9 px-3 bg-white/10 hover:bg-white/20 text-white/80 text-sm font-bold rounded-lg">刪除</button>'+
+          '<button data-view-trip="'+tp.id+'" class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">'+t('trips.view')+'</button>'+
+          '<button data-del-trip="'+tp.id+'" class="h-9 px-3 bg-white/10 hover:bg-white/20 text-white/80 text-sm font-bold rounded-lg">'+t('trips.del')+'</button>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -1301,17 +1580,17 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return '<button data-code="'+o.code+'" class="'+cls+' text-left p-4 rounded-xl border transition-all '+
       (on?'border-primary bg-primary/15 ring-2 ring-primary/40':'border-white/10 bg-card-dark hover:border-white/30')+'">'+
       '<div class="flex items-start justify-between gap-2">'+
-        '<div><p class="text-white font-bold">'+o.name+'</p><p class="text-white/50 text-xs mt-0.5">'+o.desc+'</p></div>'+
-        '<span class="text-sm font-bold '+(on?'text-primary-hover':'text-white/60')+'">'+(o.add?'+$'+o.add:'已含')+'</span>'+
+        '<div><p class="text-white font-bold">'+t('bag.'+o.code)+'</p><p class="text-white/50 text-xs mt-0.5">'+t('bag.'+o.code+'.d')+'</p></div>'+
+        '<span class="text-sm font-bold '+(on?'text-primary-hover':'text-white/60')+'">'+(o.add?'+'+money(o.add):t('incl'))+'</span>'+
       '</div></button>';
   }
   // 艙等卡（含模擬圖）
   function cabinCard(o, on, price){
     return '<button data-code="'+o.code+'" class="cabin-opt text-left rounded-xl border overflow-hidden transition-all '+
       (on?'border-primary ring-2 ring-primary/40':'border-white/10 hover:border-white/30')+'">'+
-      '<div class="aspect-[16/9] w-full overflow-hidden bg-[#00224a]"><img src="'+CABIN_IMG[o.code]+'" alt="'+o.name+' 座艙" class="w-full h-full object-cover"/></div>'+
+      '<div class="aspect-[16/9] w-full overflow-hidden bg-[#00224a]"><img src="'+CABIN_IMG[o.code]+'" alt="'+t('cabin.'+o.code)+'" class="w-full h-full object-cover"/></div>'+
       '<div class="p-3 flex items-start justify-between gap-2">'+
-        '<div><p class="text-white font-bold text-sm">'+o.name+'</p><p class="text-white/50 text-[11px] mt-0.5">'+o.desc+'</p></div>'+
+        '<div><p class="text-white font-bold text-sm">'+t('cabin.'+o.code)+'</p><p class="text-white/50 text-[11px] mt-0.5">'+t('cabin.'+o.code+'.d')+'</p></div>'+
         '<span class="text-sm font-bold whitespace-nowrap '+(on?'text-primary-hover':'text-white/70')+'">'+money(price)+'</span>'+
       '</div></button>';
   }
@@ -1319,7 +1598,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var f=state.sel;
     document.getElementById('bkFlightInfo').textContent =
       f.no+' · '+FLEET[f.aircraft].name+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
-      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt+' · 可累積 '+f.km+' 哩';
+      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt+' · '+tf('bk.miles',{n:f.km});
     // 只顯示該機型提供的艙等（小機型沒有某些艙等）
     var avail=FLEET[f.aircraft].cabins;
     document.getElementById('cabinOptions').innerHTML =
@@ -1333,7 +1612,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var pax=state.pax||1;
     document.getElementById('bkTotal').textContent=money(per*pax);
     var note=document.getElementById('bkTotalNote');
-    if(note) note.textContent = pax>1 ? ('（'+money(per)+' × '+pax+' 位）') : '';
+    if(note) note.textContent = pax>1 ? tf('bk.paxmul',{p:money(per),n:pax}) : '';
   }
 
   Array.prototype.forEach.call(document.querySelectorAll('.sort-btn'), function(b){
@@ -1359,9 +1638,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   });
   document.getElementById("confirmBooking").addEventListener("click", function(){
     var nm=(document.getElementById('paxName').value||'').trim();
-    if(!nm){ alert('請輸入乘客姓名'); document.getElementById('paxName').focus(); return; }
+    if(!nm){ alert(t('alert.needname')); document.getElementById('paxName').focus(); return; }
     var cap=initSeats();
-    if(cap < (state.pax||1)){ alert('此艙等座位不足，請減少乘客人數或改選其他艙等'); return; }
+    if(cap < (state.pax||1)){ alert(t('seat.notenough')); return; }
     renderSeats();
     location.hash='seats';
   });
@@ -1386,7 +1665,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("tripList").addEventListener("click", function(e){
     var v=e.target.closest('[data-view-trip]'), d=e.target.closest('[data-del-trip]');
     if(v){ var t=loadTrips().filter(function(x){return x.id===v.getAttribute('data-view-trip');})[0]; if(t){ renderPass(t); showTicket(); } }
-    else if(d){ if(confirm('確定刪除這筆行程？')) deleteTrip(d.getAttribute('data-del-trip')); }
+    else if(d){ if(confirm(t('trips.delconfirm'))) deleteTrip(d.getAttribute('data-del-trip')); }
   });
 
   Array.prototype.forEach.call(document.querySelectorAll('.back-btn'), function(b){
@@ -1434,12 +1713,13 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       link.download="T-Skyler_"+((currentPass&&currentPass.fromCode)||state.fromCode)+"-"+((currentPass&&currentPass.toCode)||state.toCode)+".png";
       link.href=canvas.toDataURL("image/png"); link.click();
       btn.disabled=false;
-    }).catch(function(){ btn.disabled=false; alert("儲存失敗，請再試一次"); });
+    }).catch(function(){ btn.disabled=false; alert(t('alert.savefail')); });
   });
 
   var ad=document.getElementById('aboutDest'); if(ad) ad.textContent=Object.keys(AIRPORT).length;
 
   route();
+  initLang();
   initCurrency();
 })();
 </script>
