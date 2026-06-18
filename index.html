@@ -89,10 +89,16 @@
         /* ===== PWA 開啟動畫（重新設計） ===== */
         #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
           background:linear-gradient(165deg,#00132a 0%,#001B38 42%,#241b56 100%)}
-        #appSplash::before{content:"";position:absolute;width:540px;height:540px;border-radius:50%;
-          background:radial-gradient(circle,rgba(138,127,240,.28),transparent 62%);filter:blur(18px);animation:sGlow 2.6s ease-in-out infinite}
+        #appSplash::before{content:"";position:absolute;top:50%;left:50%;width:520px;height:520px;border-radius:50%;z-index:0;
+          background:radial-gradient(circle,rgba(138,127,240,.30),transparent 62%);filter:blur(20px);animation:sGlow 2.6s ease-in-out infinite}
         #appSplash.show{display:flex}
         #appSplash.hide{opacity:0;transform:scale(1.05);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
+        /* 背景：左右捲動的世界五大洲地圖（透明海洋、低調不搶眼） */
+        #appSplash .s-map{position:absolute;inset:0;z-index:0;pointer-events:none;
+          background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/BlankMap-World.svg/1920px-BlankMap-World.svg.png') repeat-x;
+          background-size:1500px auto;background-position:center;opacity:.09;
+          animation:sMap 55s linear infinite}
+        @keyframes sMap{from{background-position-x:0}to{background-position-x:-1500px}}
         #appSplash .s-stage{position:relative;width:128px;height:128px;display:flex;align-items:center;justify-content:center;z-index:1}
         #appSplash .s-ring{position:absolute;inset:0;border-radius:50%;
           background:conic-gradient(from 0deg,transparent 0 60%,rgba(169,156,255,.85) 88%,#fff 100%);
@@ -112,7 +118,7 @@
         @keyframes sFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
         @keyframes sWord{from{opacity:0;transform:translateY(8px);letter-spacing:.85em}to{opacity:1;transform:none}}
         @keyframes sDot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-5px)}}
-        @keyframes sGlow{0%,100%{opacity:.7;transform:scale(.95)}50%{opacity:1;transform:scale(1.06)}}
+        @keyframes sGlow{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(.95)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
         @media (prefers-reduced-motion: reduce){#appSplash *,#appSplash::before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
@@ -154,6 +160,7 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
+<div class="s-map"></div>
 <div class="s-stage"><span class="s-ring"></span><img src="icon-512.png" alt="" class="s-logo"/></div>
 <div class="s-word">T-SKYLER</div>
 <div class="s-tag">AIRLINES</div>
