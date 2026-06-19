@@ -93,24 +93,10 @@
           background-size:1920px auto;background-position:center;opacity:.18;
           animation:worldScroll 60s linear infinite;will-change:background-position}
         @keyframes worldScroll{from{background-position-x:0}to{background-position-x:-1920px}}
-        /* 背景飛來飛去的飛機 */
-        .world-bg .plane{position:absolute;left:0;color:#cdd6ff;will-change:transform}
-        .world-bg .plane svg{display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
-        .world-bg .p1{top:13%;animation:flyR 16s linear infinite}
-        .world-bg .p1 svg{width:26px;height:26px;transform:rotate(90deg);opacity:.55}
-        .world-bg .p2{top:57%;animation:flyL 21s linear 2.5s infinite}
-        .world-bg .p2 svg{width:20px;height:20px;transform:rotate(-90deg);opacity:.42}
-        .world-bg .p3{top:80%;animation:flyDiagUp 18s linear 1.2s infinite}
-        .world-bg .p3 svg{width:30px;height:30px;transform:rotate(48deg);opacity:.5}
-        .world-bg .p4{top:33%;animation:flyR 25s linear 6s infinite}
-        .world-bg .p4 svg{width:16px;height:16px;transform:rotate(90deg);opacity:.33}
-        .world-bg .p5{top:7%;animation:flyDiagDown 23s linear 9s infinite}
-        .world-bg .p5 svg{width:22px;height:22px;transform:rotate(222deg);opacity:.4}
-        @keyframes flyR{from{transform:translateX(-14vw)}to{transform:translateX(120vw)}}
-        @keyframes flyL{from{transform:translateX(120vw)}to{transform:translateX(-14vw)}}
-        @keyframes flyDiagUp{from{transform:translate(-14vw,18vh)}to{transform:translate(120vw,-22vh)}}
-        @keyframes flyDiagDown{from{transform:translate(120vw,-16vh)}to{transform:translate(-14vw,24vh)}}
-        @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}.world-bg .plane{display:none}}
+        /* 飛機沿地圖航線飛行 */
+        .world-bg .world-routes{position:absolute;inset:0;width:100%;height:100%}
+        .world-bg .world-routes .rp{fill:#e6ebff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.45))}
+        @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}}
 
         /* ===== PWA 開啟動畫 ===== */
         #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
@@ -186,11 +172,26 @@
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
 <div class="world-bg"><div class="world-map"></div>
-<span class="plane p1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
-<span class="plane p2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
-<span class="plane p3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
-<span class="plane p4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
-<span class="plane p5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+<svg class="world-routes" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
+<defs><g id="tsPlane" transform="scale(1.35) rotate(90)"><path transform="translate(-12,-12)" d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></g></defs>
+<g stroke="#a9b6ff" stroke-width="1.3" stroke-dasharray="3 7" opacity=".3">
+<path id="r1" d="M120,420 Q400,170 780,250"/>
+<path id="r2" d="M880,150 Q560,110 230,300"/>
+<path id="r3" d="M170,180 Q520,430 890,410"/>
+<path id="r4" d="M70,330 Q420,560 700,500"/>
+<path id="r5" d="M520,70 Q780,250 950,360"/>
+<path id="r6" d="M300,540 Q610,360 930,520"/>
+</g>
+<g fill="#cdd6ff" opacity=".45">
+<circle cx="120" cy="420" r="3.5"/><circle cx="780" cy="250" r="3.5"/><circle cx="880" cy="150" r="3.5"/><circle cx="230" cy="300" r="3.5"/><circle cx="170" cy="180" r="3.5"/><circle cx="890" cy="410" r="3.5"/><circle cx="70" cy="330" r="3.5"/><circle cx="700" cy="500" r="3.5"/><circle cx="950" cy="360" r="3.5"/><circle cx="520" cy="70" r="3.5"/><circle cx="930" cy="520" r="3.5"/>
+</g>
+<use href="#tsPlane" class="rp"><animateMotion dur="13s" begin="-2s" repeatCount="indefinite" rotate="auto"><mpath href="#r1"/></animateMotion></use>
+<use href="#tsPlane" class="rp"><animateMotion dur="16s" begin="-7s" repeatCount="indefinite" rotate="auto"><mpath href="#r2"/></animateMotion></use>
+<use href="#tsPlane" class="rp"><animateMotion dur="14s" begin="-4s" repeatCount="indefinite" rotate="auto"><mpath href="#r3"/></animateMotion></use>
+<use href="#tsPlane" class="rp"><animateMotion dur="17s" begin="-11s" repeatCount="indefinite" rotate="auto"><mpath href="#r4"/></animateMotion></use>
+<use href="#tsPlane" class="rp"><animateMotion dur="12s" begin="-5s" repeatCount="indefinite" rotate="auto"><mpath href="#r5"/></animateMotion></use>
+<use href="#tsPlane" class="rp"><animateMotion dur="15s" begin="-9s" repeatCount="indefinite" rotate="auto"><mpath href="#r6"/></animateMotion></use>
+</svg>
 </div>
 <img src="icon-512.png" alt="" class="s-logo"/>
 <div class="s-word">T-SKYLER</div>
@@ -209,7 +210,7 @@
   var sp=document.getElementById('appSplash');
   // 把開場動畫的世界地圖＋飛機背景複製到搜尋跳轉動畫
   var src=document.querySelector('#appSplash .world-bg'), dst=document.querySelector('#searchTransition .world-bg');
-  if(src&&dst) dst.innerHTML=src.innerHTML;
+  if(src&&dst) dst.innerHTML=src.innerHTML.replace(/id="/g,'id="st-').replace(/href="#/g,'href="#st-');
   var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
   if(sp&&standalone){
     sp.classList.add('show');
@@ -1781,7 +1782,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     setTimeout(function(){
       el.classList.add('hide');
       setTimeout(function(){ el.classList.remove('show'); el.classList.remove('hide'); }, 500);
-    }, 1000);
+    }, 2200);
   }
 
   // ====== 選位 ======
