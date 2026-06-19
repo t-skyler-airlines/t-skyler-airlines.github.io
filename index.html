@@ -86,40 +86,34 @@
         }
     </script>
 <style>
-        /* ===== PWA 開啟動畫（重新設計） ===== */
+        /* ===== 可重用：滿版麥卡托世界地圖背景（像捲軸般橫向移動） ===== */
+        .world-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+        .world-bg .world-map{position:absolute;inset:0;
+          background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Mercator_Projection.svg/3840px-Mercator_Projection.svg.png') repeat-x;
+          background-size:1920px auto;background-position:center;opacity:.18;
+          animation:worldScroll 60s linear infinite;will-change:background-position}
+        @keyframes worldScroll{from{background-position-x:0}to{background-position-x:-1920px}}
+        @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}}
+
+        /* ===== PWA 開啟動畫 ===== */
         #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
-          background:linear-gradient(165deg,#00132a 0%,#001B38 42%,#241b56 100%)}
-        #appSplash::before{content:"";position:absolute;top:50%;left:50%;width:520px;height:520px;border-radius:50%;z-index:0;
-          background:radial-gradient(circle,rgba(138,127,240,.30),transparent 62%);filter:blur(20px);animation:sGlow 2.6s ease-in-out infinite}
+          background:linear-gradient(165deg,#00132a 0%,#001B38 45%,#1c1640 100%)}
+        #appSplash::after{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 45% at 50% 50%,rgba(0,15,32,.55),transparent 75%)}
         #appSplash.show{display:flex}
-        #appSplash.hide{opacity:0;transform:scale(1.05);transition:opacity .6s ease,transform .6s ease;pointer-events:none}
-        /* 背景：左右捲動的世界五大洲地圖（透明海洋、低調不搶眼） */
-        #appSplash .s-map{position:absolute;inset:0;z-index:0;pointer-events:none;
-          background:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/BlankMap-World.svg/1920px-BlankMap-World.svg.png') repeat-x;
-          background-size:1500px auto;background-position:center;opacity:.09;
-          animation:sMap 55s linear infinite}
-        @keyframes sMap{from{background-position-x:0}to{background-position-x:-1500px}}
-        #appSplash .s-stage{position:relative;width:128px;height:128px;display:flex;align-items:center;justify-content:center;z-index:1}
-        #appSplash .s-ring{position:absolute;inset:0;border-radius:50%;
-          background:conic-gradient(from 0deg,transparent 0 60%,rgba(169,156,255,.85) 88%,#fff 100%);
-          -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-          mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));
-          animation:sSpin 1.05s linear infinite}
-        #appSplash .s-logo{width:78px;height:78px;object-fit:contain;filter:drop-shadow(0 6px 22px rgba(0,0,0,.45));
+        #appSplash.hide{opacity:0;transition:opacity .55s ease;pointer-events:none}
+        #appSplash .s-logo{width:86px;height:86px;object-fit:contain;z-index:1;filter:drop-shadow(0 8px 26px rgba(0,0,0,.55));
           animation:sIn .8s cubic-bezier(.2,.85,.25,1) both,sFloat 3s ease-in-out .8s infinite}
-        #appSplash .s-word{margin-top:30px;color:#fff;font-weight:800;font-size:26px;letter-spacing:.5em;padding-left:.5em;z-index:1;opacity:0;animation:sWord .7s .35s ease forwards}
-        #appSplash .s-tag{margin-top:7px;color:rgba(255,255,255,.5);font-weight:600;font-size:11px;letter-spacing:.55em;padding-left:.55em;z-index:1;opacity:0;animation:sWord .7s .5s ease forwards}
-        #appSplash .s-dots{display:flex;gap:7px;margin-top:34px;z-index:1}
+        #appSplash .s-word{margin-top:24px;color:#fff;font-weight:800;font-size:26px;letter-spacing:.5em;padding-left:.5em;z-index:1;opacity:0;animation:sWord .7s .35s ease forwards;text-shadow:0 2px 18px rgba(0,0,0,.5)}
+        #appSplash .s-tag{margin-top:7px;color:rgba(255,255,255,.55);font-weight:600;font-size:11px;letter-spacing:.55em;padding-left:.55em;z-index:1;opacity:0;animation:sWord .7s .5s ease forwards}
+        #appSplash .s-dots{display:flex;gap:7px;margin-top:30px;z-index:1}
         #appSplash .s-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.85);animation:sDot 1.1s ease-in-out infinite}
         #appSplash .s-dots span:nth-child(2){animation-delay:.18s}
         #appSplash .s-dots span:nth-child(3){animation-delay:.36s}
-        @keyframes sSpin{to{transform:rotate(360deg)}}
         @keyframes sIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
         @keyframes sFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
         @keyframes sWord{from{opacity:0;transform:translateY(8px);letter-spacing:.85em}to{opacity:1;transform:none}}
         @keyframes sDot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-5px)}}
-        @keyframes sGlow{0%,100%{opacity:.7;transform:translate(-50%,-50%) scale(.95)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}}
-        @media (prefers-reduced-motion: reduce){#appSplash *,#appSplash::before{animation-duration:.01ms!important;animation-iteration-count:1!important}}
+        @media (prefers-reduced-motion: reduce){#appSplash .s-logo,#appSplash .s-word,#appSplash .s-tag,#appSplash .s-dots span{animation-duration:.01ms!important;animation-iteration-count:1!important}}
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
@@ -160,8 +154,8 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
-<div class="s-map"></div>
-<div class="s-stage"><span class="s-ring"></span><img src="icon-512.png" alt="" class="s-logo"/></div>
+<div class="world-bg"><div class="world-map"></div></div>
+<img src="icon-512.png" alt="" class="s-logo"/>
 <div class="s-word">T-SKYLER</div>
 <div class="s-tag">AIRLINES</div>
 <div class="s-dots"><span></span><span></span><span></span></div>
