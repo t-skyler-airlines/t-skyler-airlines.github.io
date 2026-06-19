@@ -93,9 +93,6 @@
           background-size:1920px auto;background-position:center;opacity:.18;
           animation:worldScroll 60s linear infinite;will-change:background-position}
         @keyframes worldScroll{from{background-position-x:0}to{background-position-x:-1920px}}
-        /* 飛機沿地圖航線飛行 */
-        .world-bg .world-routes{position:absolute;inset:0;width:100%;height:100%}
-        .world-bg .world-routes .rp{fill:#e6ebff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.45))}
         @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}}
 
         /* ===== PWA 開啟動畫 ===== */
@@ -118,19 +115,14 @@
         @keyframes sDot{0%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-5px)}}
         @media (prefers-reduced-motion: reduce){#appSplash .s-logo,#appSplash .s-word,#appSplash .s-tag,#appSplash .s-dots span{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 
-        /* ===== 搜尋跳轉動畫（沿用世界地圖＋飛機背景） ===== */
-        #searchTransition{position:fixed;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
+        /* ===== 搜尋跳轉動畫（沿用世界地圖背景；不額外停留） ===== */
+        #searchTransition{position:fixed;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;opacity:1;
           background:linear-gradient(165deg,#00132a 0%,#001B38 45%,#1c1640 100%)}
         #searchTransition::after{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 60% 45% at 50% 50%,rgba(0,15,32,.55),transparent 75%)}
-        #searchTransition.show{display:flex;animation:stFade .3s ease}
-        #searchTransition.hide{opacity:0;transition:opacity .45s ease;pointer-events:none}
-        #searchTransition .st-logo{width:64px;height:64px;object-fit:contain;z-index:1;filter:drop-shadow(0 8px 26px rgba(0,0,0,.55));animation:sFloat 2.4s ease-in-out infinite}
-        #searchTransition .st-text{margin-top:18px;color:#fff;font-weight:700;font-size:15px;letter-spacing:.08em;z-index:1;text-shadow:0 2px 14px rgba(0,0,0,.5)}
-        #searchTransition .s-dots{display:flex;gap:7px;margin-top:16px;z-index:1}
-        #searchTransition .s-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.85);animation:sDot 1.1s ease-in-out infinite}
-        #searchTransition .s-dots span:nth-child(2){animation-delay:.18s}
-        #searchTransition .s-dots span:nth-child(3){animation-delay:.36s}
-        @keyframes stFade{from{opacity:0}to{opacity:1}}
+        #searchTransition.show{display:flex}
+        #searchTransition.hide{opacity:0;transition:opacity .4s ease;pointer-events:none}
+        #searchTransition .st-logo{width:64px;height:64px;object-fit:contain;z-index:1;filter:drop-shadow(0 8px 26px rgba(0,0,0,.55))}
+        #searchTransition .st-text{margin-top:18px;color:#fff;font-weight:700;font-size:16px;letter-spacing:.08em;z-index:1;text-shadow:0 2px 14px rgba(0,0,0,.5)}
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
@@ -171,28 +163,7 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
-<div class="world-bg"><div class="world-map"></div>
-<svg class="world-routes" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" fill="none" aria-hidden="true">
-<defs><g id="tsPlane" transform="scale(1.35) rotate(90)"><path transform="translate(-12,-12)" d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></g></defs>
-<g stroke="#a9b6ff" stroke-width="1.3" stroke-dasharray="3 7" opacity=".3">
-<path id="r1" d="M120,420 Q400,170 780,250"/>
-<path id="r2" d="M880,150 Q560,110 230,300"/>
-<path id="r3" d="M170,180 Q520,430 890,410"/>
-<path id="r4" d="M70,330 Q420,560 700,500"/>
-<path id="r5" d="M520,70 Q780,250 950,360"/>
-<path id="r6" d="M300,540 Q610,360 930,520"/>
-</g>
-<g fill="#cdd6ff" opacity=".45">
-<circle cx="120" cy="420" r="3.5"/><circle cx="780" cy="250" r="3.5"/><circle cx="880" cy="150" r="3.5"/><circle cx="230" cy="300" r="3.5"/><circle cx="170" cy="180" r="3.5"/><circle cx="890" cy="410" r="3.5"/><circle cx="70" cy="330" r="3.5"/><circle cx="700" cy="500" r="3.5"/><circle cx="950" cy="360" r="3.5"/><circle cx="520" cy="70" r="3.5"/><circle cx="930" cy="520" r="3.5"/>
-</g>
-<use href="#tsPlane" class="rp"><animateMotion dur="13s" begin="-2s" repeatCount="indefinite" rotate="auto"><mpath href="#r1"/></animateMotion></use>
-<use href="#tsPlane" class="rp"><animateMotion dur="16s" begin="-7s" repeatCount="indefinite" rotate="auto"><mpath href="#r2"/></animateMotion></use>
-<use href="#tsPlane" class="rp"><animateMotion dur="14s" begin="-4s" repeatCount="indefinite" rotate="auto"><mpath href="#r3"/></animateMotion></use>
-<use href="#tsPlane" class="rp"><animateMotion dur="17s" begin="-11s" repeatCount="indefinite" rotate="auto"><mpath href="#r4"/></animateMotion></use>
-<use href="#tsPlane" class="rp"><animateMotion dur="12s" begin="-5s" repeatCount="indefinite" rotate="auto"><mpath href="#r5"/></animateMotion></use>
-<use href="#tsPlane" class="rp"><animateMotion dur="15s" begin="-9s" repeatCount="indefinite" rotate="auto"><mpath href="#r6"/></animateMotion></use>
-</svg>
-</div>
+<div class="world-bg"><div class="world-map"></div></div>
 <img src="icon-512.png" alt="" class="s-logo"/>
 <div class="s-word">T-SKYLER</div>
 <div class="s-tag">AIRLINES</div>
@@ -202,8 +173,7 @@
 <div id="searchTransition" aria-hidden="true">
 <div class="world-bg"></div>
 <img src="icon-512.png" alt="" class="st-logo"/>
-<p class="st-text" data-i18n="search.loading">搜尋航班中…</p>
-<div class="s-dots"><span></span><span></span><span></span></div>
+<p class="st-text" data-i18n="search.loading">搜尋航班中</p>
 </div>
 <script>
 (function(){
@@ -1224,7 +1194,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['faq.a7']=['每完成一次訂位即累積該航線哩程，於「會員計畫」頁可查看累積哩程、會員等級與升等進度。','You earn route miles with each booking; check total miles, tier and upgrade progress on the Membership page.','予約ごとに区間マイルが貯まり、「会員プログラム」で累計マイル・ランク・昇格状況を確認できます。','예약할 때마다 구간 마일이 적립되며, “멤버십” 페이지에서 누적 마일·등급·승급 현황을 확인할 수 있습니다.'];
 
   D['pax.short']=['位','pax','名','명'];
-  D['search.loading']=['搜尋航班中…','Searching flights…','フライトを検索中…','항공편 검색 중…'];
+  D['search.loading']=['搜尋航班中','Searching flights','フライトを検索中','항공편 검색 중'];
   D['incl']=['已含','Incl.','込み','포함'];
   D['meta.title']=['T-Skyler 航空 — 線上訂票、選位與電子登機證','T-Skyler Airlines — Book Flights, Pick Seats & E-Boarding Pass','T-Skyler航空 — オンライン予約・座席指定・電子搭乗券','T-Skyler 항공 — 온라인 예약·좌석 선택·전자 탑승권'];
   D['meta.desc']=['台灣往返全球的線上訂票體驗：搜尋航班、依機型選位、選擇艙等與行李，立即生成可下載的電子登機證。','Online booking between Taiwan and the world: search flights, pick seats by aircraft, choose cabin and baggage, and instantly generate a downloadable e-boarding pass.','台湾と世界を結ぶオンライン予約：フライト検索、機材ごとの座席指定、クラス・手荷物選択、電子搭乗券をその場で発行。','대만과 세계를 잇는 온라인 예약: 항공편 검색, 기종별 좌석 선택, 등급·수하물 선택, 전자 탑승권 즉시 발급.'];
@@ -1778,11 +1748,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 搜尋跳轉時播放世界地圖＋飛機動畫
   function showSearchTransition(){
     var el=document.getElementById('searchTransition'); if(!el) return;
+    // 不額外停留：顯示後立即淡出，只當作切換過場
     el.classList.remove('hide'); el.classList.add('show');
     setTimeout(function(){
       el.classList.add('hide');
-      setTimeout(function(){ el.classList.remove('show'); el.classList.remove('hide'); }, 500);
-    }, 2200);
+      setTimeout(function(){ el.classList.remove('show'); el.classList.remove('hide'); }, 420);
+    }, 60);
   }
 
   // ====== 選位 ======
