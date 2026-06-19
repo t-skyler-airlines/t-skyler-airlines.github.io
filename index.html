@@ -93,7 +93,24 @@
           background-size:1920px auto;background-position:center;opacity:.18;
           animation:worldScroll 60s linear infinite;will-change:background-position}
         @keyframes worldScroll{from{background-position-x:0}to{background-position-x:-1920px}}
-        @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}}
+        /* 背景飛來飛去的飛機 */
+        .world-bg .plane{position:absolute;left:0;color:#cdd6ff;will-change:transform}
+        .world-bg .plane svg{display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.4))}
+        .world-bg .p1{top:13%;animation:flyR 16s linear infinite}
+        .world-bg .p1 svg{width:26px;height:26px;transform:rotate(90deg);opacity:.55}
+        .world-bg .p2{top:57%;animation:flyL 21s linear 2.5s infinite}
+        .world-bg .p2 svg{width:20px;height:20px;transform:rotate(-90deg);opacity:.42}
+        .world-bg .p3{top:80%;animation:flyDiagUp 18s linear 1.2s infinite}
+        .world-bg .p3 svg{width:30px;height:30px;transform:rotate(48deg);opacity:.5}
+        .world-bg .p4{top:33%;animation:flyR 25s linear 6s infinite}
+        .world-bg .p4 svg{width:16px;height:16px;transform:rotate(90deg);opacity:.33}
+        .world-bg .p5{top:7%;animation:flyDiagDown 23s linear 9s infinite}
+        .world-bg .p5 svg{width:22px;height:22px;transform:rotate(222deg);opacity:.4}
+        @keyframes flyR{from{transform:translateX(-14vw)}to{transform:translateX(120vw)}}
+        @keyframes flyL{from{transform:translateX(120vw)}to{transform:translateX(-14vw)}}
+        @keyframes flyDiagUp{from{transform:translate(-14vw,18vh)}to{transform:translate(120vw,-22vh)}}
+        @keyframes flyDiagDown{from{transform:translate(120vw,-16vh)}to{transform:translate(-14vw,24vh)}}
+        @media (prefers-reduced-motion: reduce){.world-bg .world-map{animation:none}.world-bg .plane{display:none}}
 
         /* ===== PWA 開啟動畫 ===== */
         #appSplash{position:fixed;inset:0;z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
@@ -154,7 +171,13 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
 <!-- ====== PWA 開啟動畫（僅安裝為 App 時顯示） ====== -->
 <div id="appSplash" aria-hidden="true">
-<div class="world-bg"><div class="world-map"></div></div>
+<div class="world-bg"><div class="world-map"></div>
+<span class="plane p1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+<span class="plane p2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+<span class="plane p3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+<span class="plane p4"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+<span class="plane p5"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-.55 0-1 .45-1 1v6.2L3 14v2l8-2.3V19l-2 1.3V22l3-.8 3 .8v-1.7L13 19v-3.1l8 2.3v-2l-8-4.8V3c0-.55-.45-1-1-1z"/></svg></span>
+</div>
 <img src="icon-512.png" alt="" class="s-logo"/>
 <div class="s-word">T-SKYLER</div>
 <div class="s-tag">AIRLINES</div>
