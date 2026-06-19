@@ -1748,12 +1748,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 搜尋跳轉時播放世界地圖＋飛機動畫
   function showSearchTransition(){
     var el=document.getElementById('searchTransition'); if(!el) return;
-    // 不額外停留：顯示後立即淡出，只當作切換過場
+    // 顯示過場動畫，短暫停留後淡出（不做長時間等待）
     el.classList.remove('hide'); el.classList.add('show');
     setTimeout(function(){
       el.classList.add('hide');
-      setTimeout(function(){ el.classList.remove('show'); el.classList.remove('hide'); }, 420);
-    }, 60);
+      setTimeout(function(){ el.classList.remove('show'); el.classList.remove('hide'); }, 450);
+    }, 850);
   }
 
   // ====== 選位 ======
