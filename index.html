@@ -210,6 +210,10 @@
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">how_to_reg</span>
 <span class="font-semibold" data-i18n="nav.checkin">報到 / 動態</span>
 </a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#packages">
+<span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">luggage</span>
+<span class="font-semibold" data-i18n="nav.packages">套裝行程</span>
+</a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#help">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">support_agent</span>
 <span class="font-semibold" data-i18n="nav.help">協助</span>
@@ -729,6 +733,18 @@
 <div id="infoBody" class="space-y-5"></div>
 </div>
 </section>
+
+<!-- ====== 套裝行程 View ====== -->
+<section id="view-packages" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">luggage</span> <span data-i18n="pkg.title">套裝行程</span></h3>
+<p class="text-white/50 text-sm mb-6" data-i18n="pkg.sub">結合航班、住宿與行程的一站式套票。</p>
+<div id="pkgList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -833,6 +849,26 @@
 <p id="jmDesc" class="text-white/60 text-sm mb-5"></p>
 <h4 id="jmReqTitle" class="text-white font-bold mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-[18px]">checklist</span><span></span></h4>
 <ul id="jmReqList" class="space-y-2 text-white/75 text-sm mb-1"></ul>
+</div>
+</div>
+
+<!-- ====== 套裝行程 Modal ====== -->
+<div id="pkgModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
+<div class="relative w-full max-w-[640px] my-8 bg-card-dark border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+<button id="closePkg" class="absolute top-3 right-3 z-10 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center"><span class="material-symbols-outlined">close</span></button>
+<div class="aspect-[21/9] w-full overflow-hidden bg-[#00224a]"><img id="pmImg" src="" alt="" class="w-full h-full object-cover"/></div>
+<div class="p-6">
+<h3 id="pmTitle" class="text-white text-xl font-black mb-1"></h3>
+<p id="pmMeta" class="text-white/50 text-sm mb-5"></p>
+<h4 class="text-white font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-[18px]">check_circle</span><span data-i18n="pkg.includes">費用包含</span></h4>
+<ul id="pmIncludes" class="grid grid-cols-1 sm:grid-cols-2 gap-y-1.5 gap-x-3 text-white/75 text-sm mb-5"></ul>
+<h4 class="text-white font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-[18px]">map</span><span data-i18n="pkg.itinerary">行程安排</span></h4>
+<ol id="pmItinerary" class="space-y-3 text-white/75 text-sm mb-5"></ol>
+<div class="sticky bottom-0 -mx-6 -mb-6 px-6 py-4 bg-card-dark/95 backdrop-blur border-t border-white/10 flex items-center justify-between gap-4">
+<div><p id="pmPrice" class="text-primary-hover text-2xl font-black"></p><p id="pmMiles" class="text-white/40 text-xs"></p></div>
+<button id="pmBook" class="h-12 px-7 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center gap-2"><span class="material-symbols-outlined">shopping_bag</span> <span data-i18n="pkg.book">預訂套票</span></button>
+</div>
+</div>
 </div>
 </div>
 
@@ -1526,6 +1562,29 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['info.ac.h3']=['意見回饋','Feedback','フィードバック','피드백'];
   D['info.ac.p3']=['若你在使用上遇到任何無障礙問題，歡迎來信 TSARC2026@gmail.com，我們會盡快改善。','If you encounter any accessibility issues, email us at TSARC2026@gmail.com and we will work to improve.','アクセシビリティの問題があれば TSARC2026@gmail.com までご連絡ください。','접근성 문제가 있으면 TSARC2026@gmail.com 으로 알려 주세요.'];
 
+  // 套裝行程
+  D['nav.packages']=['套裝行程','Packages','パッケージ','패키지'];
+  D['pkg.title']=['套裝行程','Tour Packages','ツアーパッケージ','패키지 투어'];
+  D['pkg.sub']=['結合航班、住宿與行程的一站式套票，預訂即可累積哩程。','All-in-one packages — flights, hotels and tours. Book to earn miles.','フライト・宿泊・観光をまとめたパッケージ。予約でマイルが貯まります。','항공·숙박·투어를 한 번에. 예약 시 마일이 적립됩니다.'];
+  D['pkg.titleTpl']=['{city} {days} 日精選','{days}-Day {city} Escape','{city} {days}日プラン','{city} {days}일 패키지'];
+  D['pkg.nights']=['{n} 晚','{n} nights','{n}泊','{n}박'];
+  D['pkg.dayN']=['第 {n} 天','Day {n}','{n}日目','{n}일차'];
+  D['pkg.d1']=['抵達 {city}，專車接送並辦理飯店入住。','Arrive in {city}; private transfer and hotel check-in.','{city}着、専用車送迎＆ホテルチェックイン。','{city} 도착, 전용 차량 픽업 및 호텔 체크인.'];
+  D['pkg.d2']=['{city} 市區經典景點巡禮。','Classic city highlights tour of {city}.','{city}市内の名所巡り。','{city} 시내 명소 투어.'];
+  D['pkg.d3']=['在地文化與特色美食體驗。','Local culture and signature cuisine.','現地文化とご当地グルメ体験。','현지 문화와 대표 미식 체험.'];
+  D['pkg.d4']=['{city} 近郊一日遊。','Day trip around {city}.','{city}近郊への日帰り旅行。','{city} 근교 당일 여행.'];
+  D['pkg.d5']=['自由活動，前往機場搭機返程。','Free time, then transfer to the airport for departure.','自由行動後、空港へ移動し帰路へ。','자유 시간 후 공항으로 이동, 귀국.'];
+  D['pkg.includes']=['費用包含','Included','含まれるもの','포함 사항'];
+  D['pkg.itinerary']=['行程安排','Itinerary','旅程','일정'];
+  D['pkg.inc.flight']=['台北 ↔ {city} 來回機票','Taipei ↔ {city} round-trip flights','台北 ↔ {city} 往復航空券','타이베이 ↔ {city} 왕복 항공권'];
+  D['pkg.inc.hotel']=['{n} 晚精選住宿','{n} nights selected hotel','厳選ホテル{n}泊','엄선 호텔 {n}박'];
+  D['pkg.inc.transfer']=['機場往返接送','Airport transfers','空港送迎','공항 픽업/샌딩'];
+  D['pkg.inc.tour']=['市區觀光與導覽','City sightseeing & guide','市内観光・ガイド','시내 관광 및 가이드'];
+  D['pkg.inc.insurance']=['旅遊平安保險','Travel insurance','旅行保険','여행자 보험'];
+  D['pkg.book']=['預訂套票','Book Package','パッケージを予約','패키지 예약'];
+  D['pkg.booked']=['套票預訂成功！已累積 {n} 哩。','Package booked! You earned {n} miles.','パッケージ予約完了！{n}マイル獲得。','패키지 예약 완료! {n} 마일 적립.'];
+  D['pkg.perPerson']=['／人起','/person','／人〜','/인부터'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1563,6 +1622,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='deals') renderDeals();
     else if(h==='news') renderNews();
     else if(INFO[h]) renderInfo(h);
+    else if(h==='packages') renderPackages();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1891,6 +1951,58 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).join('');
   }
 
+  // ====== 套裝行程 ======
+  var PACKAGES=[{code:'NRT',days:5,price:1280},{code:'ICN',days:4,price:820},{code:'BKK',days:5,price:720},{code:'CDG',days:6,price:1980},{code:'LHR',days:6,price:2080},{code:'SYD',days:7,price:2480}];
+  var pkgCurrent=null;
+  function pkgImg(code){ for(var i=0;i<DESTINATIONS.length;i++){ if(DESTINATIONS[i].code===code) return DESTINATIONS[i].img; } return ''; }
+  function pkgMiles(code){ return distKm('TPE',code)*2; }
+  function pkgTitle(p){ return tf('pkg.titleTpl',{city:cityFor(p.code), days:p.days}); }
+  function renderPackages(){
+    var wrap=document.getElementById('pkgList'); if(!wrap) return;
+    wrap.innerHTML=PACKAGES.map(function(p,idx){
+      return '<button data-pkg="'+idx+'" class="group text-left overflow-hidden rounded-xl bg-card-dark shadow-lg hover:shadow-primary/20 transition-all">'+
+        '<div class="aspect-[4/3] w-full overflow-hidden"><img src="'+pkgImg(p.code)+'" alt="'+cityFor(p.code)+'" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/></div>'+
+        '<div class="p-5"><h4 class="text-white text-lg font-bold mb-1">'+pkgTitle(p)+'</h4>'+
+          '<p class="text-white/50 text-sm mb-3">'+cityFor('TPE')+' → '+cityFor(p.code)+' · '+tf('pkg.nights',{n:p.days-1})+'</p>'+
+          '<div class="flex items-end justify-between"><div><p class="text-primary-hover font-black text-xl">'+money(p.price)+'<span class="text-white/40 text-xs font-medium">'+t('pkg.perPerson')+'</span></p>'+
+            '<p class="text-emerald-300 text-[11px] font-bold">+'+pkgMiles(p.code).toLocaleString('en-US')+' '+t('mem.milesUnit')+'</p></div>'+
+            '<span class="material-symbols-outlined text-white/40">arrow_forward</span></div></div></button>';
+    }).join('');
+  }
+  function openPkgModal(idx){
+    var p=PACKAGES[idx]; if(!p) return; pkgCurrent=p;
+    var city=cityFor(p.code), nights=p.days-1;
+    document.getElementById('pmImg').src=pkgImg(p.code);
+    document.getElementById('pmTitle').textContent=pkgTitle(p);
+    document.getElementById('pmMeta').textContent=cityFor('TPE')+' → '+city+' · '+tf('pkg.nights',{n:nights});
+    document.getElementById('pmIncludes').innerHTML=[tf('pkg.inc.flight',{city:city}),tf('pkg.inc.hotel',{n:nights}),t('pkg.inc.transfer'),t('pkg.inc.tour'),t('pkg.inc.insurance')]
+      .map(function(x){ return '<li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary-hover text-[15px] mt-0.5">check</span><span>'+x+'</span></li>'; }).join('');
+    var mid=['pkg.d2','pkg.d3','pkg.d4'], days='';
+    for(var d=1;d<=p.days;d++){
+      var key = d===1?'pkg.d1' : (d===p.days?'pkg.d5' : mid[(d-2)%3]);
+      days+='<li class="flex items-start gap-3"><span class="shrink-0 size-7 rounded-full bg-primary/25 text-primary-hover text-xs font-bold flex items-center justify-center">'+d+'</span><div><p class="text-white/40 text-[11px]">'+tf('pkg.dayN',{n:d})+'</p><p>'+tf(key,{city:city})+'</p></div></li>';
+    }
+    document.getElementById('pmItinerary').innerHTML=days;
+    document.getElementById('pmPrice').textContent=money(p.price)+' '+t('pkg.perPerson');
+    document.getElementById('pmMiles').textContent=tf('bk.miles',{n:pkgMiles(p.code).toLocaleString('en-US')});
+    var m=document.getElementById('pkgModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
+  }
+  function closePkgModal(){ var m=document.getElementById('pkgModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; }
+  function loadPackages(){ try{ return JSON.parse(localStorage.getItem('tskyler_packages'))||[]; }catch(e){ return []; } }
+  function savePackages(a){ try{ localStorage.setItem('tskyler_packages', JSON.stringify(a)); }catch(e){} }
+  function bookPackage(){
+    if(!pkgCurrent) return;
+    var miles=pkgMiles(pkgCurrent.code);
+    var a=loadPackages(); a.unshift({id:'p'+Date.now(), code:pkgCurrent.code, title:pkgTitle(pkgCurrent), price:pkgCurrent.price, miles:miles, savedAt:Date.now()}); savePackages(a);
+    closePkgModal();
+    alert(tf('pkg.booked',{n:miles.toLocaleString('en-US')}));
+  }
+  // 會員總哩程 = 行程 + 套票
+  function totalMiles(){
+    var m=loadTrips().reduce(function(s,t){ return s+(t.miles||0)*(t.pax||1); },0);
+    return m + loadPackages().reduce(function(s,p){ return s+(p.miles||0); },0);
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -1913,7 +2025,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
           '<p class="text-white/40 text-xs mt-3">'+t('account.loginNote')+'</p>'+
         '</div>';
     } else {
-      var trips=loadTrips(); var miles=trips.reduce(function(s,tp){ return s+(tp.miles||0)*(tp.pax||1); },0);
+      var trips=loadTrips(); var miles=totalMiles();
       var tier=TIERS[0]; for(var i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
       body.innerHTML =
         '<div class="rounded-2xl p-6 sm:p-8 mb-6 shadow-2xl relative overflow-hidden" style="background:linear-gradient(135deg,'+tier.color+' 0%,#001B38 92%)">'+
@@ -1982,7 +2094,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars', deals:'view-deals', news:'view-news', baggage:'view-info', special:'view-info', terms:'view-info', privacy:'view-info', accessibility:'view-info' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars', deals:'view-deals', news:'view-news', baggage:'view-info', special:'view-info', terms:'view-info', privacy:'view-info', accessibility:'view-info', packages:'view-packages' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1998,6 +2110,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-deals') renderDeals();
     else if(view==='view-news') renderNews();
     else if(view==='view-info') renderInfo(h);
+    else if(view==='view-packages') renderPackages();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -2011,7 +2124,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   ];
   function renderMember(){
     var trips=loadTrips();
-    var miles=trips.reduce(function(s,t){ return s + (t.miles||0)*(t.pax||1); },0);
+    var miles=totalMiles();
     var tier=TIERS[0], next=null, i;
     for(i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
     for(i=0;i<TIERS.length;i++){ if(TIERS[i].min>miles){ next=TIERS[i]; break; } }
@@ -2429,6 +2542,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var b=e.target.closest('.deal-book'); if(!b) return;
     bookDestination(b.getAttribute('data-dest'));
   });
+
+  // 套裝行程
+  document.getElementById("pkgList").addEventListener("click", function(e){
+    var b=e.target.closest('[data-pkg]'); if(!b) return;
+    openPkgModal(+b.getAttribute('data-pkg'));
+  });
+  document.getElementById("closePkg").addEventListener("click", closePkgModal);
+  document.getElementById("pkgModal").addEventListener("click", function(e){ if(e.target===this) closePkgModal(); });
+  document.getElementById("pmBook").addEventListener("click", bookPackage);
 
   // 飯店 / 租車
   document.getElementById("hotelBtn").addEventListener("click", renderHotels);
