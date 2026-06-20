@@ -72,6 +72,7 @@
                     colors: {
                         "primary": "#2e256b",
                         "primary-hover": "#3d3285",
+                        "accent": "#d4af37",
                         "background-light": "#f6f6f8",
                         "background-dark": "#001B38",
                         "card-dark": "#002855",
@@ -126,6 +127,9 @@
         /* ===== 目的地輪播 ===== */
         .no-scrollbar::-webkit-scrollbar{display:none}
         .no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+        /* FIDS 起飛看板狀態閃爍 */
+        @keyframes fidsBlink{0%,100%{opacity:1}50%{opacity:.35}}
+        .st-blink{animation:fidsBlink 1.4s ease-in-out infinite}
         /* 防止圖示字型載入前顯示英文字（FOUT）：載入完成前先隱藏圖示 */
         .material-symbols-outlined{visibility:hidden}
         html.icons-ready .material-symbols-outlined{visibility:visible}
@@ -670,13 +674,28 @@
 </div>
 <div id="fsResult" class="mt-4"></div>
 </div>
-<div class="bg-card-dark border border-white/10 rounded-2xl p-5 sm:p-6 mt-5">
-<div class="flex items-center justify-between mb-1">
-<h4 class="text-white font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">schedule</span> <span data-i18n="fs.board">即時航班看板</span></h4>
-<button id="fsRefresh" class="flex items-center gap-1 text-white/60 hover:text-white text-sm font-medium"><span class="material-symbols-outlined text-[18px]">refresh</span> <span data-i18n="fs.refresh">重新整理</span></button>
+<div class="rounded-2xl overflow-hidden border border-white/10 shadow-2xl mt-5">
+<!-- FIDS 看板標頭 -->
+<div class="bg-primary px-4 sm:px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-accent text-3xl">flight_takeoff</span>
+<h4 class="text-white font-black text-lg sm:text-2xl tracking-tight flex items-baseline gap-2"><span data-i18n="fs.board">起飛動態看板</span> <span class="text-accent text-sm font-bold tracking-[0.3em] uppercase hidden sm:inline">Departures</span></h4>
 </div>
-<p class="text-white/50 text-sm mb-3" data-i18n="fs.boardSub">今日進出港航班即時動態。</p>
-<div id="fsBoard"></div>
+<div class="flex items-center gap-4">
+<div class="text-right hidden xs:block sm:block"><p id="fsDate" class="text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold"></p><p id="fsClock" class="text-xl sm:text-2xl font-mono font-bold text-white tracking-tighter">--:--:--</p></div>
+<button id="fsRefresh" class="p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors" title="重新整理"><span class="material-symbols-outlined">refresh</span></button>
+</div>
+</div>
+<!-- 欄位標題 -->
+<div class="grid grid-cols-12 gap-2 px-4 sm:px-6 py-3 bg-black/35 border-b border-white/10 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-white/45">
+<div class="col-span-3 sm:col-span-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span><span data-i18n="tbl.time">時間</span></div>
+<div class="hidden sm:flex sm:col-span-3 items-center gap-1"><span class="material-symbols-outlined text-[14px]">business</span><span data-i18n="tbl.airline">航空公司</span></div>
+<div class="col-span-3 sm:col-span-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">confirmation_number</span><span data-i18n="tbl.flight">班機</span></div>
+<div class="col-span-3 sm:col-span-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span><span data-i18n="tbl.dest">目的地</span></div>
+<div class="hidden sm:flex sm:col-span-1 items-center gap-1"><span data-i18n="tbl.gate">登機門</span></div>
+<div class="col-span-3 sm:col-span-2 flex items-center justify-end gap-1"><span data-i18n="tbl.status">狀態</span></div>
+</div>
+<div id="fsBoard" class="bg-card-dark/40"></div>
 </div>
 </div>
 </section>
@@ -1040,8 +1059,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     ]}
   ];
 
-  var CITY_OF={}, AIRPORT={};
-  REGIONS.forEach(function(g){ g.airports.forEach(function(a){ a.region=g.region; CITY_OF[a.code]=a.city; AIRPORT[a.code]=a; }); });
+  var CITY_OF={}, AIRPORT={}, DEST_NO={}, _destIdx=0;
+  REGIONS.forEach(function(g){ g.airports.forEach(function(a){ a.region=g.region; CITY_OF[a.code]=a.city; AIRPORT[a.code]=a; DEST_NO[a.code]=(++_destIdx)*100; }); });
+  // 航班編號依目的地分類：同一目的地共用百位區段（例如東京 TS 1xx、大阪 TS 2xx）
+  function flightNum(code, seq){ return (DEST_NO[code]||100) + ((seq-1)%99 + 1); }
   function cityFor(code){ var k='city.'+code; return (typeof D!=='undefined'&&D[k])? (D[k][LANG_IDX]||D[k][0]) : (CITY_OF[code]||code); }
   function isTW(code){ return !!(AIRPORT[code] && AIRPORT[code].tw); }
 
@@ -1512,9 +1533,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['st.departed']=['已起飛','Departed','出発済','출발함'];
   D['st.arrived']=['已抵達','Arrived','到着済','도착함'];
   D['st.cancelled']=['取消','Cancelled','欠航','결항'];
-  D['fs.board']=['即時航班看板','Live Flight Board','運航案内板','실시간 항공편 현황판'];
-  D['fs.boardSub']=['今日進出港航班即時動態。','Live status of today’s departures and arrivals.','本日の発着便の運航状況。','오늘 출·도착편 실시간 현황.'];
+  D['st.finalcall']=['最後呼叫','Last Call','最終案内','최종 탑승 안내'];
+  D['fs.board']=['起飛動態看板','Departures','出発案内','출발 안내판'];
+  D['fs.boardSub']=['本站即時起飛航班動態。','Live departure status board.','リアルタイム出発案内。','실시간 출발 현황판.'];
   D['fs.refresh']=['重新整理','Refresh','更新','새로고침'];
+  D['tbl.time']=['時間','Time','時刻','시각'];
+  D['tbl.airline']=['航空公司','Airline','航空会社','항공사'];
+  D['tbl.flight']=['班機','Flight','便名','편명'];
+  D['tbl.dest']=['目的地','Destination','目的地','목적지'];
+  D['tbl.gate']=['登機門','Gate','搭乗口','게이트'];
+  D['tbl.status']=['狀態','Remarks','状況','상태'];
 
   // 飯店 / 租車
   D['hotels.title']=['飯店搜尋','Hotel Search','ホテル検索','호텔 검색'];
@@ -2086,29 +2114,53 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return m + loadPackages().reduce(function(s,p){ return s+(p.miles||0); },0);
   }
 
-  // 即時航班看板
+  // 起飛看板狀態（仿 FIDS）
+  var FS_STATUS={
+    ontime:   {k:'st.ontime',   col:'#2dd4bf'},
+    boarding: {k:'st.boarding', col:'#4ade80', blink:true},
+    finalcall:{k:'st.finalcall',col:'#fbbf24', blink:true},
+    delayed:  {k:'st.delayed',  col:'#f87171'},
+    departed: {k:'st.departed', col:'#94a3b8'},
+    cancelled:{k:'st.cancelled',col:'#f87171', strike:true}
+  };
+  function fsAirlines(){ return [{name:'T-Skyler 航空',en:'T-Skyler Airlines',code:'TS'}].concat(PARTNERS.map(function(p){ return {name:p.name, en:p.name, code:p.code}; })); }
+  // 依目前時間產生即時起飛航班
   function renderStatusBoard(){
     var wrap=document.getElementById('fsBoard'); if(!wrap) return;
-    var cities=['NRT','ICN','HKG','SIN','BKK','CDG','LHR','JFK','LAX','SYD','DXB','PVG','MNL','KIX','KHH'];
-    var stKeys=['st.ontime','st.boarding','st.delayed','st.departed','st.arrived','st.cancelled'];
-    var stCol=['#34d399','#60a5fa','#fbbf24','#94a3b8','#94a3b8','#f87171'];
-    var pool=[0,0,0,0,1,1,2,2,3,4,4,5];  // 多數準時、取消較少
-    var rows=[];
-    for(var i=0;i<16;i++){
-      var dir=Math.random()<0.5?'dep':'arr', city=pick(cities);
-      rows.push({no:'TS '+rint(100,999), from:dir==='dep'?'TPE':city, to:dir==='dep'?city:'TPE', dir:dir, depMin:rint(5*60,23*60), si:pick(pool), gate:'ABCD'[rint(0,3)]+rint(1,28)});
+    var dests=['NRT','KIX','ICN','HKG','SIN','BKK','PVG','PEK','MNL','KUL','CDG','FRA','LHR','AMS','FCO','JFK','LAX','SFO','ORD','YVR','SYD','MEL','AKL','DXB','DOH'];
+    var ALS=fsAirlines();
+    var now=new Date(), nowMin=now.getHours()*60+now.getMinutes();
+    var seqByDest={}, rows=[], tmin=nowMin-9;
+    for(var i=0;i<18;i++){
+      tmin += rint(3,8);
+      var dest=pick(dests); seqByDest[dest]=(seqByDest[dest]||0)+1;
+      var num=flightNum(dest, seqByDest[dest]);
+      var al=Math.random()<0.62?ALS[0]:pick(ALS.slice(1));
+      var rel=tmin-nowMin, st;
+      if(rel<-1) st=Math.random()<0.9?'departed':'cancelled';
+      else if(rel<=2) st='finalcall';
+      else if(rel<=12) st=Math.random()<0.85?'boarding':'delayed';
+      else st=Math.random()<0.14?'delayed':(Math.random()<0.05?'cancelled':'ontime');
+      rows.push({time:tmin, code:al.code, name:al.name, en:al.en, no:al.code+' '+num, dest:dest, gate:'ABCD'[rint(0,3)]+rint(1,28), st:st});
     }
-    rows.sort(function(a,b){ return a.depMin-b.depMin; });
-    wrap.innerHTML=rows.map(function(r){
-      var timeCls=(r.si===5)?'line-through text-white/40':'text-white';
-      return '<div class="flex items-center gap-3 py-3 border-b border-white/5 last:border-0">'+
-        '<div class="w-14 font-black '+timeCls+'">'+fmtTime(r.depMin)+'</div>'+
-        '<div class="flex-1 min-w-0"><p class="text-white font-bold text-sm">'+r.no+'</p>'+
-          '<p class="text-white/50 text-xs flex items-center gap-1">'+r.from+'<span class="material-symbols-outlined text-[13px]">arrow_forward</span>'+r.to+' · '+(r.dir==='dep'?t('fs.dep'):t('fs.arr'))+'</p></div>'+
-        '<div class="text-white/45 text-xs hidden sm:block whitespace-nowrap">'+t('fs.gate')+' '+(r.si===5?'—':r.gate)+'</div>'+
-        '<span class="text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap" style="background:'+stCol[r.si]+'26;color:'+stCol[r.si]+'">'+t(stKeys[r.si])+'</span>'+
+    wrap.innerHTML=rows.map(function(r,idx){
+      var s=FS_STATUS[r.st], col=s.col, blink=s.blink?' st-blink':'', strike=s.strike?' line-through':'';
+      var zebra = idx%2 ? 'bg-white/[0.02]' : '';
+      return '<div class="grid grid-cols-12 gap-2 px-4 sm:px-6 py-3.5 items-center border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors '+zebra+'">'+
+        '<div class="col-span-3 sm:col-span-2 font-mono text-base sm:text-lg font-bold text-accent'+strike+'">'+fmtTime(r.time)+'</div>'+
+        '<div class="hidden sm:flex sm:col-span-3 flex-col min-w-0"><span class="text-white font-semibold text-sm truncate">'+r.name+'</span><span class="text-white/40 text-xs truncate">'+r.en+'</span></div>'+
+        '<div class="col-span-3 sm:col-span-2 font-bold text-white text-sm'+strike+'">'+r.no+'</div>'+
+        '<div class="col-span-3 sm:col-span-2 flex flex-col min-w-0"><span class="text-white font-bold text-sm sm:text-base leading-tight truncate">'+cityFor(r.dest)+'</span><span class="text-white/40 text-[11px] truncate">'+r.dest+'</span></div>'+
+        '<div class="hidden sm:block sm:col-span-1 font-mono font-bold text-white">'+(s.strike?'—':r.gate)+'</div>'+
+        '<div class="col-span-3 sm:col-span-2 text-right'+blink+'" style="color:'+col+'"><p class="font-bold text-sm leading-tight">'+t(s.k)+'</p></div>'+
       '</div>';
     }).join('');
+  }
+  function updateFsClock(){
+    var el=document.getElementById('fsClock'); if(!el) return;
+    var d=new Date(); function p(n){ return n<10?'0'+n:''+n; }
+    el.textContent=p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());
+    var dd=document.getElementById('fsDate'); if(dd){ var days=['SUN','MON','TUE','WED','THU','FRI','SAT']; dd.textContent=days[d.getDay()]+' '+p(d.getDate())+' '+MON[d.getMonth()]; }
   }
 
   // ====== 會員登入 / 個人中心 ======
@@ -2304,7 +2356,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       var durMin=baseDur+rint(-15,25);
       var partner = Math.random()<0.35 ? pick(PARTNERS) : null;  // 約三成為聯營航班
       list.push({
-        no:"TS "+rint(100,999),
+        no:"TS "+flightNum(state.toCode, i+1),
         depMin:depMin, durMin:durMin, arrMin:depMin+durMin,
         aircraft:aircraftFor(km), km:km,
         price:Math.round(ecoBase*(0.96+Math.random()*0.1)/5)*5,  // 同航線票價相近
@@ -2801,6 +2853,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   route();
   initLang();
   initCurrency();
+  updateFsClock();
+  setInterval(updateFsClock, 1000);
 })();
 </script>
 <script>
