@@ -525,24 +525,32 @@
 <h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="mem.title">Skyler 會員俱樂部</h3>
 <p class="text-white/50 text-sm mb-8" data-i18n="mem.sub">每一次飛行都讓你更靠近下一張頭等艙。</p>
 
-<!-- 虛擬會員卡（仿機票） -->
-<div id="memberCard" class="rounded-2xl overflow-hidden shadow-2xl mb-4 flex flex-col sm:flex-row">
-<div class="flex-1 p-6 sm:p-7 relative">
-<div class="absolute -right-12 -top-12 size-44 bg-white/10 rounded-full blur-2xl"></div>
-<div class="relative flex items-center justify-between mb-5">
-<div class="flex items-center gap-2"><span class="material-symbols-outlined text-white">workspace_premium</span><span class="text-white/85 text-sm font-bold tracking-[0.2em]">T-SKYLER CLUB</span></div>
-<span id="memberTierBadge" class="text-[11px] font-black text-white bg-black/25 px-3 py-1 rounded-full">—</span>
+<!-- 虛擬會員卡（信用卡尺寸質感） -->
+<div id="memberCard" class="relative mx-auto sm:mx-0 w-full max-w-[440px] aspect-[1.585/1] rounded-2xl overflow-hidden shadow-2xl text-white select-none">
+<div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(120deg,rgba(255,255,255,.24),transparent 42%)"></div>
+<div class="absolute -right-10 -top-16 size-48 bg-white/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(to top,rgba(0,0,0,.42),transparent 56%)"></div>
+<div class="relative h-full p-5 sm:p-6 flex flex-col">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<img src="logo.png" alt="" class="size-8 object-contain drop-shadow-md"/>
+<div class="leading-none"><p class="font-black tracking-[0.18em] text-sm">T-SKYLER</p><p class="text-[8px] tracking-[0.35em] opacity-75 mt-0.5">CLUB</p></div>
 </div>
-<p class="text-white/60 text-[11px] tracking-widest font-semibold relative" data-i18n="mem.member">尊貴會員</p>
-<p id="memberName" class="text-white text-2xl font-black mb-5 relative">—</p>
-<div class="flex gap-8 relative">
-<div><p class="text-white/55 text-[11px]" data-i18n="vcard.no">卡號</p><p id="memberNo" class="text-white font-bold tracking-wider">—</p></div>
-<div><p class="text-white/55 text-[11px]" data-i18n="mem.miles">累積哩程</p><p class="text-white font-bold"><span id="memberMiles">0</span> <span class="text-xs text-white/70" data-i18n="mem.milesUnit">哩</span></p></div>
+<span id="memberTierBadge" class="text-[10px] font-black tracking-wider px-3 py-1 rounded-full bg-black/30 backdrop-blur">—</span>
 </div>
+<div class="flex items-center gap-3 mt-3 sm:mt-4">
+<svg width="40" height="30" viewBox="0 0 40 30" class="drop-shadow"><rect width="40" height="30" rx="5" fill="#e9c46a"/><g stroke="#a9802a" stroke-width="1.3" fill="none"><path d="M0 10h40M0 20h40M14 0v30M26 0v30"/></g><rect x="14" y="10" width="12" height="10" rx="1.5" fill="#d4af37" stroke="#a9802a" stroke-width="1"/></svg>
+<span class="material-symbols-outlined opacity-80" style="transform:rotate(90deg)">contactless</span>
 </div>
-<div class="relative sm:w-[150px] p-4 flex sm:flex-col items-center justify-center gap-2 bg-black/20">
-<div class="bg-white rounded-md p-1.5"><div id="memberQR" class="flex items-center justify-center"></div></div>
-<span id="memberTierStub" class="text-white/80 text-[10px] font-bold tracking-wider">—</span>
+<p id="memberNo" class="font-mono text-lg sm:text-xl font-bold tracking-[0.18em] mt-3 drop-shadow">—</p>
+<div class="flex items-end justify-between mt-auto gap-3">
+<div class="min-w-0">
+<p class="text-[8px] tracking-[0.2em] opacity-70 uppercase">Cardholder · 持卡人</p>
+<p id="memberName" class="font-bold tracking-wide uppercase text-sm sm:text-base truncate">—</p>
+<p class="text-[9px] tracking-wider opacity-75 mt-1 flex items-center gap-2"><span>SINCE <span id="memberSince">2026</span></span><span class="opacity-50">·</span><span><span id="memberMiles">0</span> <span data-i18n="mem.milesUnit">哩</span></span></p>
+</div>
+<div class="bg-white rounded-md p-1 shrink-0"><div id="memberQR" class="flex items-center justify-center"></div></div>
+</div>
 </div>
 </div>
 <div class="mb-4">
@@ -2220,14 +2228,13 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
   // 登機證條碼：QR code，掃描後連到指定網址
   var TICKET_URL="https://reurl.cc/M2pZ5K";
-  function makeQR(el){
-    el.innerHTML="";
+  function makeQR(el, size){
+    size=size||112; el.innerHTML="";
     if(window.QRCode){
-      new QRCode(el, {text:TICKET_URL, width:112, height:112, colorDark:"#0f172a", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.M});
+      new QRCode(el, {text:TICKET_URL, width:size, height:size, colorDark:"#0f172a", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.M});
     } else {
-      // 後備：用線上 API 產生 QR 圖
-      var img=new Image(); img.width=112; img.height=112; img.crossOrigin="anonymous";
-      img.src="https://api.qrserver.com/v1/create-qr-code/?size=112x112&data="+encodeURIComponent(TICKET_URL);
+      var img=new Image(); img.width=size; img.height=size; img.crossOrigin="anonymous";
+      img.src="https://api.qrserver.com/v1/create-qr-code/?size="+size+"x"+size+"&data="+encodeURIComponent(TICKET_URL);
       el.appendChild(img);
     }
   }
@@ -2290,15 +2297,21 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     for(i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
     for(i=0;i<TIERS.length;i++){ if(TIERS[i].min>miles){ next=TIERS[i]; break; } }
     var card=document.getElementById('memberCard');
-    card.style.background='linear-gradient(120deg,'+tier.color+' 0%,#001B38 92%)';
+    var grad={
+      EXPLORER:'linear-gradient(135deg,#5b6b7f 0%,#2a3543 100%)',
+      SILVER:'linear-gradient(135deg,#e2e8f0 0%,#94a3b8 52%,#5b6776 100%)',
+      GOLD:'linear-gradient(135deg,#f2d680 0%,#c79a36 52%,#9a7220 100%)',
+      PLATINUM:'linear-gradient(135deg,#cabfff 0%,#8a7ff0 52%,#544a9c 100%)'
+    }[tier.code] || 'linear-gradient(135deg,#475569,#1e293b)';
+    card.style.background=grad;
     document.getElementById('memberTierBadge').textContent=t('tier.'+tier.code);
-    document.getElementById('memberTierStub').textContent=t('tier.'+tier.code);
     document.getElementById('memberMiles').textContent=miles.toLocaleString('en-US');
     var u=getUser();
     document.getElementById('memberName').textContent=(u&&u.name)||(trips[0]&&trips[0].name)||t('mem.member');
     var seed=hashStr((u&&(u.email||u.name))||'GUEST')%1000000000, dg=('000000000'+seed).slice(-9);
     document.getElementById('memberNo').textContent='TS '+dg.slice(0,3)+' '+dg.slice(3,6)+' '+dg.slice(6,9);
-    makeQR(document.getElementById('memberQR'));
+    document.getElementById('memberSince').textContent=2023+(hashStr((u&&(u.email||u.name))||'GUEST')%4);
+    makeQR(document.getElementById('memberQR'), 54);
     var bar=document.getElementById('memberProgressBar'), pt=document.getElementById('memberProgressText'), nt=document.getElementById('memberNextTier');
     if(next){
       var pct=Math.max(0,Math.min(100, Math.round((miles-tier.min)/(next.min-tier.min)*100)));
