@@ -363,7 +363,7 @@
 <h3 class="text-3xl font-bold text-white mb-2" data-i18n="sec.dest.title">精選目的地</h3>
 <p class="text-white/60" data-i18n="sec.dest.sub">探索本季最受歡迎的航線。</p>
 </div>
-<a class="text-primary-hover text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#">
+<a class="text-primary-hover text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all" href="#deals">
 <span data-i18n="sec.dest.all">查看所有優惠</span> <span class="material-symbols-outlined text-sm">arrow_forward</span>
 </a>
 </div>
@@ -694,6 +694,30 @@
 <div id="carList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 </div>
 </section>
+
+<!-- ====== 優惠專區 View ====== -->
+<section id="view-deals" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">sell</span> <span data-i18n="deals.title">優惠專區</span></h3>
+<p class="text-white/50 text-sm mb-6" data-i18n="deals.sub">把握限時優惠，立刻啟程。</p>
+<div id="dealList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+</div>
+</section>
+
+<!-- ====== 新聞中心 View ====== -->
+<section id="view-news" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[820px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">newspaper</span> <span data-i18n="news.title">新聞中心</span></h3>
+<p class="text-white/50 text-sm mb-6" data-i18n="news.sub">最新消息、航線與品牌動態。</p>
+<div id="newsList" class="space-y-4"></div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -730,8 +754,8 @@
 <ul class="flex flex-col gap-3 text-sm text-white/60">
 <li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.brand">品牌故事</a></li>
 <li><a class="hover:text-white transition-colors" href="#careers" data-i18n="foot.careers">人才招募</a></li>
-<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.news">新聞中心</a></li>
-<li><a class="hover:text-white transition-colors" href="#about" data-i18n="foot.blog">部落格</a></li>
+<li><a class="hover:text-white transition-colors" href="#news" data-i18n="foot.news">新聞中心</a></li>
+<li><a class="hover:text-white transition-colors" href="#news" data-i18n="foot.blog">部落格</a></li>
 </ul>
 </div>
 <div>
@@ -1440,6 +1464,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['car.business']=['商務','Business','ビジネス','비즈니스'];
   D['car.luxury']=['豪華','Luxury','ラグジュアリー','럭셔리'];
 
+  // 優惠專區 / 新聞中心
+  D['deals.title']=['優惠專區','Deals','特典・セール','특가 존'];
+  D['deals.sub']=['把握限時優惠，立刻啟程。','Grab limited-time deals and take off.','期間限定の特典で、今すぐ旅へ。','한정 특가로 지금 떠나세요.'];
+  D['deals.book']=['立即預訂','Book Now','今すぐ予約','지금 예약'];
+  D['news.title']=['新聞中心','Newsroom','ニュース','뉴스룸'];
+  D['news.sub']=['最新消息、航線與品牌動態。','Latest news, routes and brand updates.','最新ニュース・路線・ブランド情報。','최신 소식, 노선 및 브랜드 소식.'];
+  D['news.cat.route']=['航線','Routes','路線','노선'];
+  D['news.cat.fleet']=['機隊','Fleet','機材','기단'];
+  D['news.cat.member']=['會員','Membership','会員','멤버십'];
+  D['news.cat.green']=['永續','Sustainability','サステナビリティ','지속가능성'];
+  D['news.1.t']=['台北—巴黎每日直飛正式開航','Taipei–Paris daily direct service launches','台北—パリ毎日直行便が就航','타이베이–파리 매일 직항 취항'];
+  D['news.1.b']=['T-Skyler 以 A350-900 執飛台北桃園往返巴黎戴高樂，每日一班，全艙等供應。','T-Skyler now flies Taipei Taoyuan–Paris CDG daily with the A350-900, across all cabins.','T-SkylerはA350-900で台北桃園—パリCDGを毎日運航、全クラスで提供。','T-Skyler가 A350-900으로 타이베이 타오위안–파리 CDG를 매일 전 등급 운항합니다.'];
+  D['news.2.t']=['旗艦 A350-1000 全新頭等套房亮相','Flagship A350-1000 debuts new First suites','旗艦A350-1000、新ファーストスイート登場','기함 A350-1000 새 퍼스트 스위트 공개'];
+  D['news.2.b']=['全新頭等艙採 1-1 獨立套房設計，搭配可全平躺床鋪與專屬管家服務。','The new First cabin features 1-1 private suites with fully flat beds and personal butler service.','新ファーストは1-1個室、フルフラットベッドと専属バトラー。','새 퍼스트는 1-1 개인 스위트, 풀플랫 베드와 전담 집사 서비스를 제공합니다.'];
+  D['news.3.t']=['會員雙倍哩程活動開跑','Double miles promotion now live','ダブルマイルキャンペーン開始','더블 마일 프로모션 시작'];
+  D['news.3.b']=['即日起至月底，完成任一航線訂位即可獲得雙倍哩程，加速升等。','Book any route by month-end to earn double miles and reach the next tier faster.','月末までの予約でマイル2倍、ランクアップを加速。','이달 말까지 예약 시 마일 2배 적립, 더 빠른 등급 상승.'];
+  D['news.4.t']=['導入永續航空燃油 邁向淨零','Sustainable aviation fuel adopted on the path to net zero','SAF導入でネットゼロへ','지속가능 항공연료 도입, 넷제로로'];
+  D['news.4.b']=['T-Skyler 於長程航線逐步導入永續航空燃油（SAF），降低碳排放。','T-Skyler is phasing in sustainable aviation fuel (SAF) on long-haul routes to cut emissions.','T-Skylerは長距離路線でSAFを順次導入し排出を削減。','T-Skyler는 장거리 노선에 SAF를 단계적으로 도입해 배출을 줄입니다.'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1474,6 +1517,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='account') renderAccount();
     else if(h==='hotels'){ fillHCCities(); renderHotels(); }
     else if(h==='cars'){ fillHCCities(); renderCars(); }
+    else if(h==='deals') renderDeals();
+    else if(h==='news') renderNews();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1757,6 +1802,32 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).join('');
   }
 
+  // ====== 優惠專區 ======
+  function renderDeals(){
+    var wrap=document.getElementById('dealList'); if(!wrap) return;
+    wrap.innerHTML=DESTINATIONS.map(function(d){
+      var off=10+(hashStr('D'+d.code)%31), disc=Math.round(d.usd*(100-off)/100/5)*5;
+      return '<div class="group relative overflow-hidden rounded-xl bg-card-dark shadow-lg hover:shadow-primary/20 transition-all">'+
+        '<div class="aspect-[4/3] w-full overflow-hidden"><img src="'+d.img+'" alt="'+cityFor(d.code)+'" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"/>'+
+          '<div class="absolute top-3 left-3 bg-red-500 text-white text-xs font-black px-3 py-1 rounded-full shadow">-'+off+'%</div></div>'+
+        '<div class="p-5"><div class="flex items-center gap-2 text-white font-bold mb-1"><span>TPE</span><span class="material-symbols-outlined text-primary-hover text-[16px]">flight</span><span>'+d.code+'</span></div>'+
+          '<p class="text-white/50 text-sm mb-3">'+cityFor('TPE')+' → '+cityFor(d.code)+'</p>'+
+          '<div class="flex items-end justify-between"><div><p class="text-white/40 text-xs line-through">'+money(d.usd)+'</p><p class="text-primary-hover font-black text-xl">'+money(disc)+'<span class="text-white/40 text-xs font-medium"> '+t('price.from')+'</span></p></div>'+
+          '<button data-dest="'+d.code+'" class="deal-book h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">'+t('deals.book')+'</button></div></div></div>';
+    }).join('');
+  }
+  // ====== 新聞中心 ======
+  var NEWS=[{n:1,date:'2026-06-15',cat:'news.cat.route'},{n:2,date:'2026-06-08',cat:'news.cat.fleet'},{n:3,date:'2026-06-01',cat:'news.cat.member'},{n:4,date:'2026-05-22',cat:'news.cat.green'}];
+  function renderNews(){
+    var wrap=document.getElementById('newsList'); if(!wrap) return;
+    wrap.innerHTML=NEWS.map(function(a){
+      return '<div class="bg-card-dark border border-white/10 rounded-xl p-5 hover:border-primary/40 transition-all">'+
+        '<div class="flex items-center gap-3 mb-2"><span class="text-[10px] font-bold text-primary-hover bg-primary/15 px-2.5 py-1 rounded-full">'+t(a.cat)+'</span><span class="text-white/40 text-xs">'+a.date+'</span></div>'+
+        '<h4 class="text-white font-bold text-lg mb-1">'+t('news.'+a.n+'.t')+'</h4>'+
+        '<p class="text-white/55 text-sm leading-relaxed">'+t('news.'+a.n+'.b')+'</p></div>';
+    }).join('');
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -1848,7 +1919,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars', deals:'view-deals', news:'view-news' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1861,6 +1932,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-account') renderAccount();
     else if(view==='view-hotels') renderHotels();
     else if(view==='view-cars') renderCars();
+    else if(view==='view-deals') renderDeals();
+    else if(view==='view-news') renderNews();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -2285,6 +2358,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 側邊欄/標頭登入鈕 → 會員中心
   Array.prototype.forEach.call(document.querySelectorAll('.auth-btn'), function(b){
     b.addEventListener('click', function(){ location.hash='account'; });
+  });
+
+  // 優惠專區：立即預訂
+  document.getElementById("dealList").addEventListener("click", function(e){
+    var b=e.target.closest('.deal-book'); if(!b) return;
+    bookDestination(b.getAttribute('data-dest'));
   });
 
   // 飯店 / 租車
