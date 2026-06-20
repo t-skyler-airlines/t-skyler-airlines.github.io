@@ -280,11 +280,11 @@
 <span class="material-symbols-outlined">flight</span>
 <span class="font-bold" data-i18n="search.flight">航班</span>
 </button>
-<button class="flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap">
+<button type="button" class="tab-go flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap" data-go="hotels">
 <span class="material-symbols-outlined">hotel</span>
 <span class="font-medium" data-i18n="search.hotel">飯店</span>
 </button>
-<button class="flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap">
+<button type="button" class="tab-go flex items-center gap-2 text-white/60 hover:text-white transition-colors px-2 whitespace-nowrap" data-go="cars">
 <span class="material-symbols-outlined">directions_car</span>
 <span class="font-medium" data-i18n="search.car">租車</span>
 </button>
@@ -658,6 +658,40 @@
 <div id="fsResult" class="mt-4"></div>
 </div>
 </div>
+</div>
+</section>
+
+<!-- ====== 飯店搜尋 View ====== -->
+<section id="view-hotels" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-5 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">hotel</span> <span data-i18n="hotels.title">飯店搜尋</span></h3>
+<div class="bg-card-dark/95 border border-white/10 rounded-2xl p-4 sm:p-5 mb-6 grid grid-cols-1 sm:grid-cols-4 gap-3">
+<div class="relative min-w-0 sm:col-span-2"><div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10"><span class="material-symbols-outlined text-white/50">location_city</span></div><select id="hotelCity" class="w-full h-12 pl-11 pr-8 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white font-medium appearance-none cursor-pointer"></select></div>
+<input id="hotelIn" type="text" data-i18n-ph="hc.checkin" placeholder="入住" class="h-12 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
+<button id="hotelBtn" class="h-12 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">search</span> <span data-i18n="hotels.btn">搜尋飯店</span></button>
+</div>
+<p id="hotelMeta" class="text-white/50 text-sm mb-4"></p>
+<div id="hotelList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+</div>
+</section>
+
+<!-- ====== 租車搜尋 View ====== -->
+<section id="view-cars" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-5 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">directions_car</span> <span data-i18n="cars.title">租車搜尋</span></h3>
+<div class="bg-card-dark/95 border border-white/10 rounded-2xl p-4 sm:p-5 mb-6 grid grid-cols-1 sm:grid-cols-4 gap-3">
+<div class="relative min-w-0 sm:col-span-2"><div class="absolute inset-y-0 left-3 flex items-center pointer-events-none z-10"><span class="material-symbols-outlined text-white/50">location_on</span></div><select id="carCity" class="w-full h-12 pl-11 pr-8 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white font-medium appearance-none cursor-pointer"></select></div>
+<input id="carIn" type="text" data-i18n-ph="hc.pickup" placeholder="取車" class="h-12 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40" onfocus="this.type='date'" onblur="if(!this.value)this.type='text'"/>
+<button id="carBtn" class="h-12 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">search</span> <span data-i18n="cars.btn">搜尋車輛</span></button>
+</div>
+<p id="carMeta" class="text-white/50 text-sm mb-4"></p>
+<div id="carList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
 </div>
 </section>
 </main>
@@ -1385,6 +1419,27 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['st.departed']=['已起飛','Departed','出発済','출발함'];
   D['st.arrived']=['已抵達','Arrived','到着済','도착함'];
 
+  // 飯店 / 租車
+  D['hotels.title']=['飯店搜尋','Hotel Search','ホテル検索','호텔 검색'];
+  D['hotels.btn']=['搜尋飯店','Search Hotels','ホテルを検索','호텔 검색'];
+  D['hotels.results']=['{city} · 共 {n} 間飯店','{city} · {n} hotels','{city} · {n} 軒','{city} · {n}곳'];
+  D['cars.title']=['租車搜尋','Car Rental','レンタカー検索','렌터카 검색'];
+  D['cars.btn']=['搜尋車輛','Search Cars','車を検索','차량 검색'];
+  D['cars.results']=['{city} · 共 {n} 款車型','{city} · {n} cars','{city} · {n} 車種','{city} · {n}종'];
+  D['hc.city']=['城市','City','都市','도시'];
+  D['hc.checkin']=['入住','Check-in','チェックイン','체크인'];
+  D['hc.checkout']=['退房','Check-out','チェックアウト','체크아웃'];
+  D['hc.pickup']=['取車','Pick-up','貸出','대여'];
+  D['hc.return']=['還車','Return','返却','반납'];
+  D['hc.night']=['／晚','/night','／泊','/박'];
+  D['hc.day']=['／天','/day','／日','/일'];
+  D['hc.select']=['選擇','Select','選択','선택'];
+  D['hc.auto']=['自排','Automatic','AT','자동'];
+  D['car.economy']=['經濟','Economy','エコノミー','이코노미'];
+  D['car.suv']=['休旅 SUV','SUV','SUV','SUV'];
+  D['car.business']=['商務','Business','ビジネス','비즈니스'];
+  D['car.luxury']=['豪華','Luxury','ラグジュアリー','럭셔리'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1398,6 +1453,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-html]'), function(el){ el.innerHTML=t(el.getAttribute('data-i18n-html')); });
     populatePax();
     refillAirportSelects();
+    if(typeof fillHCCities==='function') fillHCCities();
     refreshPromo();
     renderDest();
     if(typeof updateAuthUI==='function') updateAuthUI();
@@ -1416,6 +1472,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='careers') renderCareers();
     else if(h==='cookie') renderCookie();
     else if(h==='account') renderAccount();
+    else if(h==='hotels'){ fillHCCities(); renderHotels(); }
+    else if(h==='cars'){ fillHCCities(); renderCars(); }
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1659,6 +1717,46 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       '</div></div>';
   }
 
+  // ====== 飯店 / 租車 ======
+  var HOTEL_SUFFIX=['Grand','Bay Resort','Central Suites','Royal','Harbour Inn','Skyline'];
+  var CAR_CLASSES=[
+    {key:'car.economy', model:'Toyota Corolla', seats:5, mult:1},
+    {key:'car.suv', model:'Honda CR-V', seats:5, mult:1.6},
+    {key:'car.business', model:'Mercedes E-Class', seats:5, mult:2.4},
+    {key:'car.luxury', model:'BMW 7 Series', seats:4, mult:3.4}
+  ];
+  function enCity(code){ return (D['city.'+code]||[])[1] || cityFor(code); }
+  function fillHCCities(){
+    ['hotelCity','carCity'].forEach(function(id){ var s=document.getElementById(id); if(!s) return; var v=s.value; fillSelect(s, v||'TPE'); if(v) s.value=v; });
+  }
+  function renderHotels(){
+    var code=(document.getElementById('hotelCity').value)||'TPE', base=60+(hashStr('H'+code)%140);
+    var list=HOTEL_SUFFIX.map(function(suf,i){ var hh=hashStr('H'+code+i);
+      return {name:enCity(code)+' '+suf, stars:3+(hh%3), rating:(80+(hh%19))/10, price:Math.round(base*(0.7+(hh%70)/100)/5)*5}; });
+    document.getElementById('hotelMeta').textContent=tf('hotels.results',{city:cityFor(code), n:list.length});
+    document.getElementById('hotelList').innerHTML=list.map(function(o){
+      var stars=''; for(var i=0;i<5;i++) stars+=i<o.stars?'★':'☆';
+      return '<div class="bg-card-dark border border-white/10 rounded-xl overflow-hidden hover:border-primary/50 transition-all">'+
+        '<div class="h-24 bg-gradient-to-br from-primary to-card-dark flex items-center justify-center"><span class="material-symbols-outlined text-white/80 text-4xl">apartment</span></div>'+
+        '<div class="p-4"><div class="flex items-center justify-between gap-2"><p class="text-white font-bold">'+o.name+'</p><span class="text-amber-300 text-xs font-bold bg-amber-300/10 px-2 py-0.5 rounded">'+o.rating.toFixed(1)+'</span></div>'+
+        '<p class="text-amber-400 text-sm mb-3">'+stars+'</p>'+
+        '<div class="flex items-end justify-between"><p class="text-primary-hover font-black text-lg">'+money(o.price)+'<span class="text-white/40 text-xs font-medium">'+t('hc.night')+'</span></p>'+
+        '<button class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">'+t('hc.select')+'</button></div></div></div>';
+    }).join('');
+  }
+  function renderCars(){
+    var code=(document.getElementById('carCity').value)||'TPE', base=35+(hashStr('C'+code)%40);
+    document.getElementById('carMeta').textContent=tf('cars.results',{city:cityFor(code), n:CAR_CLASSES.length});
+    document.getElementById('carList').innerHTML=CAR_CLASSES.map(function(c){ var price=Math.round(base*c.mult/5)*5;
+      return '<div class="bg-card-dark border border-white/10 rounded-xl p-4 flex flex-col hover:border-primary/50 transition-all">'+
+        '<div class="flex items-center gap-3 mb-3"><div class="size-12 rounded-lg bg-primary/20 text-primary-hover flex items-center justify-center"><span class="material-symbols-outlined text-2xl">directions_car</span></div>'+
+        '<div><p class="text-white font-bold">'+t(c.key)+'</p><p class="text-white/50 text-xs">'+c.model+'</p></div></div>'+
+        '<div class="flex items-center gap-4 text-white/50 text-xs mb-3"><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">group</span>'+c.seats+' '+t('unit.seats')+'</span><span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">settings</span>'+t('hc.auto')+'</span></div>'+
+        '<div class="flex items-end justify-between mt-auto"><p class="text-primary-hover font-black text-lg">'+money(price)+'<span class="text-white/40 text-xs font-medium">'+t('hc.day')+'</span></p>'+
+        '<button class="h-9 px-4 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg">'+t('hc.select')+'</button></div></div>';
+    }).join('');
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -1750,7 +1848,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1761,6 +1859,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-careers') renderCareers();
     else if(view==='view-cookie') renderCookie();
     else if(view==='view-account') renderAccount();
+    else if(view==='view-hotels') renderHotels();
+    else if(view==='view-cars') renderCars();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -2185,6 +2285,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 側邊欄/標頭登入鈕 → 會員中心
   Array.prototype.forEach.call(document.querySelectorAll('.auth-btn'), function(b){
     b.addEventListener('click', function(){ location.hash='account'; });
+  });
+
+  // 飯店 / 租車
+  document.getElementById("hotelBtn").addEventListener("click", renderHotels);
+  document.getElementById("hotelCity").addEventListener("change", renderHotels);
+  document.getElementById("carBtn").addEventListener("click", renderCars);
+  document.getElementById("carCity").addEventListener("change", renderCars);
+  Array.prototype.forEach.call(document.querySelectorAll('.tab-go'), function(b){
+    b.addEventListener('click', function(){ location.hash=this.getAttribute('data-go'); });
   });
 
   // 報到 / 航班動態
