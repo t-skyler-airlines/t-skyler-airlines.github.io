@@ -897,6 +897,7 @@
 <div>
 <p class="text-primary font-black text-lg leading-none">T-SKYLER</p>
 <p class="text-slate-400 text-[10px] tracking-[0.2em] font-semibold">AIRLINES · <span data-i18n="bp.subtitle">登機證</span></p>
+<p id="bpOperator" class="text-amber-500 text-[9px] font-semibold mt-0.5"></p>
 </div>
 </div>
 <span id="bpClass" class="text-[11px] font-bold text-white bg-primary px-3 py-1 rounded-full">ECONOMY</span>
@@ -1593,6 +1594,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['pkg.perPerson']=['／人起','/person','／人〜','/인부터'];
   D['vcard.no']=['卡號','Card No.','会員番号','카드번호'];
   D['vcard.download']=['下載會員卡','Download Card','会員カードを保存','회원 카드 저장'];
+  D['fl.codeshare']=['聯營航班','Codeshare','共同運航','코드셰어'];
+  D['fl.operatedBy']=['由 {a} 執飛','Operated by {a}','{a} 運航','{a} 운항'];
 
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
@@ -1685,6 +1688,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     "B787-9":     {name:"Boeing 787-9",     range:14140, seats:296, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
     "B787-10":    {name:"Boeing 787-10",    range:11750, seats:336, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
   };
+
+  // 聯營（代碼共享）夥伴航空（虛構，非真實航空公司）
+  var PARTNERS=[
+    {name:'Aurora Air', code:'AU'}, {name:'Nimbus Airways', code:'NB'}, {name:'Zephyr Air', code:'ZP'},
+    {name:'Stratos', code:'ST'}, {name:'Celeste Airlines', code:'CE'}, {name:'Pacifica', code:'PC'}, {name:'Aerolux', code:'AX'}
+  ];
 
   // 兩機場間大圓距離(km)
   function distKm(a,b){
@@ -2202,12 +2211,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     for(var i=0;i<n;i++){
       var depMin=rint(5*60,22*60);
       var durMin=baseDur+rint(-15,25);
+      var partner = Math.random()<0.35 ? pick(PARTNERS) : null;  // 約三成為聯營航班
       list.push({
         no:"TS "+rint(100,999),
         depMin:depMin, durMin:durMin, arrMin:depMin+durMin,
         aircraft:aircraftFor(km), km:km,
         price:Math.round(ecoBase*(0.96+Math.random()*0.1)/5)*5,  // 同航線票價相近
-        stops:0
+        stops:0,
+        partner: partner ? {name:partner.name, code:partner.code, no:partner.code+' '+rint(1000,9999)} : null
       });
     }
     list.sort(function(a,b){ return a.depMin-b.depMin; });
@@ -2234,7 +2245,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
           '<div class="text-center"><p class="text-white text-xl font-black">'+fmtTime(f.arrMin)+'</p><p class="text-white/50 text-xs">'+state.toCode+'</p></div>'+
         '</div>'+
         '<div class="flex-1 text-white/60 text-sm border-t sm:border-t-0 sm:border-l border-white/10 sm:pl-4 pt-3 sm:pt-0">'+
-          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' '+t('unit.seats')+'</p></div>'+
+          '<p class="font-bold text-white">'+f.no+'</p><p class="text-xs">'+FLEET[f.aircraft].name+' · '+FLEET[f.aircraft].seats+' '+t('unit.seats')+'</p>'+
+          (f.partner?'<p class="text-[11px] text-amber-300/90 mt-0.5 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">connecting_airports</span>'+t('fl.codeshare')+' · '+tf('fl.operatedBy',{a:f.partner.name})+'（'+f.partner.no+'）</p>':'')+'</div>'+
         '<div class="flex sm:flex-col items-center sm:items-end justify-between gap-2">'+
           '<p class="text-primary-hover text-xl font-black">'+money(f.price)+'<span class="text-white/40 text-xs font-medium"> '+t('price.from')+'</span></p>'+
           '<button data-idx="'+idx+'" class="select-flight h-10 px-5 bg-primary hover:bg-primary-hover text-white text-sm font-bold rounded-lg transition-all">'+t('fl.select')+'</button>'+
@@ -2401,7 +2413,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       gate:pick(["A","B","C","D"])+rint(1,28),
       cabinCode:cabin.code, cabinName:cabin.name,
       price:base+leadFee, total:base*(state.pax||1)+allFees,
-      pax:state.pax||1, miles:f.km, pnr:newPNR(), savedAt:Date.now()
+      pax:state.pax||1, miles:f.km, pnr:newPNR(), savedAt:Date.now(),
+      partner: f.partner ? {name:f.partner.name, no:f.partner.no} : null
     };
   }
   // 重新發證：同航班，換座位/登機門/訂位代碼
@@ -2423,6 +2436,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     set('bpDate',p.date); set('bpBoard',fmtTime(p.boardMin));
     set('bpDepTime',fmtTime(p.depMin)); set('bpArrTime',fmtTime(p.arrMin));
     set('bpDuration',fmtDur(p.durMin));
+    set('bpOperator', p.partner ? (t('fl.codeshare')+' · '+tf('fl.operatedBy',{a:p.partner.name})+'（'+p.partner.no+'）') : '');
     set('bpGate',p.gate); set('bpSeat',p.seat); set('bpSeat2',p.seat);
     set('bpClass',p.cabinCode); set('bpPrice',money(p.price)); set('bpPnr',p.pnr);
     makeQR(document.getElementById('bpBarcode'));
@@ -2501,7 +2515,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var f=state.sel;
     document.getElementById('bkFlightInfo').textContent =
       f.no+' · '+FLEET[f.aircraft].name+' · '+cityFor(state.fromCode)+' ('+state.fromCode+') '+fmtTime(f.depMin)+' → '+
-      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt+' · '+tf('bk.miles',{n:f.km});
+      cityFor(state.toCode)+' ('+state.toCode+') '+fmtTime(f.arrMin)+' · '+state.dateTxt+' · '+tf('bk.miles',{n:f.km})+
+      (f.partner ? ' · '+t('fl.codeshare')+' '+tf('fl.operatedBy',{a:f.partner.name}) : '');
     // 只顯示該機型提供的艙等（小機型沒有某些艙等）
     var avail=FLEET[f.aircraft].cabins;
     document.getElementById('cabinOptions').innerHTML =
