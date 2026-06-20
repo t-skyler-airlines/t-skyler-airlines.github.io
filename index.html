@@ -387,7 +387,7 @@
 </div>
 <p class="text-white/80 text-lg" data-i18n="home.club.sub">每次飛行皆可累積哩程，解鎖貴賓室使用權、優先登機及額外行李額度。</p>
 </div>
-<button class="bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex-shrink-0" data-i18n="home.club.btn">
+<button type="button" class="tab-go bg-white text-primary hover:bg-gray-100 px-8 py-3 rounded-lg font-bold shadow-lg transition-colors flex-shrink-0" data-go="member" data-i18n="home.club.btn">
                         免費加入
                     </button>
 </div>
@@ -718,6 +718,17 @@
 <div id="newsList" class="space-y-4"></div>
 </div>
 </section>
+
+<!-- ====== 資訊頁（行李/特殊協助/條款/隱私/無障礙） ====== -->
+<section id="view-info" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 id="infoTitle" class="text-white text-2xl sm:text-3xl font-black mb-6 flex items-center gap-2"><span id="infoIcon" class="material-symbols-outlined text-primary-hover">info</span> <span id="infoTitleText"></span></h3>
+<div id="infoBody" class="space-y-5"></div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -764,15 +775,15 @@
 <li><a class="hover:text-white transition-colors" href="#checkin" data-i18n="nav.checkin">報到 / 動態</a></li>
 <li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.helpc">幫助中心</a></li>
 <li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.contact">聯絡我們</a></li>
-<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.baggage">行李資訊</a></li>
-<li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.special">特殊協助</a></li>
+<li><a class="hover:text-white transition-colors" href="#baggage" data-i18n="foot.baggage">行李資訊</a></li>
+<li><a class="hover:text-white transition-colors" href="#special" data-i18n="foot.special">特殊協助</a></li>
 </ul>
 </div>
 <div>
 <h5 class="text-white font-bold mb-4" data-i18n="foot.legal">法律條款</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
-<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.terms">服務條款</a></li>
-<li><a class="hover:text-white transition-colors" href="#" data-i18n="foot.privacy">隱私政策</a></li>
+<li><a class="hover:text-white transition-colors" href="#terms" data-i18n="foot.terms">服務條款</a></li>
+<li><a class="hover:text-white transition-colors" href="#privacy" data-i18n="foot.privacy">隱私政策</a></li>
 <li><a class="hover:text-white transition-colors" href="#cookie" data-i18n="foot.cookie">Cookie 政策</a></li>
 </ul>
 </div>
@@ -781,7 +792,7 @@
 <p data-i18n="foot.copyright">© 2026 T-Skyler Airlines / Tschool Aviation Research Club. All jokes reserved.</p>
 <div class="flex gap-6">
 <span data-i18n="foot.sitemap">網站地圖</span>
-<span data-i18n="foot.access">無障礙聲明</span>
+<a class="hover:text-white transition-colors" href="#accessibility" data-i18n="foot.access">無障礙聲明</a>
 </div>
 </div>
 </div>
@@ -1483,6 +1494,38 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['news.4.t']=['導入永續航空燃油 邁向淨零','Sustainable aviation fuel adopted on the path to net zero','SAF導入でネットゼロへ','지속가능 항공연료 도입, 넷제로로'];
   D['news.4.b']=['T-Skyler 於長程航線逐步導入永續航空燃油（SAF），降低碳排放。','T-Skyler is phasing in sustainable aviation fuel (SAF) on long-haul routes to cut emissions.','T-Skylerは長距離路線でSAFを順次導入し排出を削減。','T-Skyler는 장거리 노선에 SAF를 단계적으로 도입해 배출을 줄입니다.'];
 
+  // 資訊頁（行李/特殊協助/條款/隱私/無障礙）
+  D['info.bag.h1']=['手提行李','Carry-on Baggage','手荷物','기내 수하물'];
+  D['info.bag.p1']=['經濟與豪華經濟艙可攜帶一件手提行李（7kg）及一件個人物品；商務與頭等艙為兩件共 14kg。尺寸限 56×36×23 公分。','Economy and Premium Economy: one carry-on (7kg) plus a personal item; Business and First: two pieces up to 14kg total. Max size 56×36×23 cm.','エコノミー・プレミアムエコノミーは手荷物1個(7kg)＋身の回り品1個、ビジネス・ファーストは2個計14kg。寸法56×36×23cm以内。','이코노미·프리미엄 이코노미는 기내 수하물 1개(7kg)와 개인 물품 1개, 비즈니스·퍼스트는 2개 합계 14kg. 크기 56×36×23cm 이내.'];
+  D['info.bag.h2']=['託運行李','Checked Baggage','受託手荷物','위탁 수하물'];
+  D['info.bag.p2']=['依票價方案：經濟 0–23kg、商務 2×32kg、頭等 3×32kg。超重或超件將收取額外費用，建議出發前先於線上加購。','By fare: Economy 0–23kg, Business 2×32kg, First 3×32kg. Excess weight or pieces incur fees; pre-purchase online before departure.','運賃別：エコノミー0〜23kg、ビジネス2×32kg、ファースト3×32kg。超過分は追加料金、事前購入推奨。','요금별: 이코노미 0~23kg, 비즈니스 2×32kg, 퍼스트 3×32kg. 초과 시 추가 요금, 사전 구매 권장.'];
+  D['info.bag.h3']=['特殊與限制品','Special & Restricted Items','特殊・制限品','특수·제한 물품'];
+  D['info.bag.p3']=['運動器材與樂器請提前預訂；鋰電池與行動電源須隨身攜帶，不可託運；危險品依規定禁運。','Pre-book sports equipment and instruments. Lithium batteries and power banks must go in the cabin, not checked. Dangerous goods are prohibited.','スポーツ用品・楽器は事前予約。リチウム電池・モバイルバッテリーは機内持込のみ、危険品は不可。','스포츠 장비·악기는 사전 예약. 리튬 배터리·보조배터리는 기내 휴대만 가능, 위험물은 금지.'];
+  D['info.sa.h1']=['行動協助','Mobility Assistance','移動サポート','이동 지원'];
+  D['info.sa.p1']=['提供輪椅、優先登機與機上協助。請於出發前 48 小時告知，以便妥善安排。','Wheelchairs, priority boarding and onboard assistance are available. Please notify us at least 48 hours before departure.','車椅子・優先搭乗・機内サポートをご用意。出発48時間前までにご連絡ください。','휠체어·우선 탑승·기내 지원 제공. 출발 48시간 전까지 알려 주세요.'];
+  D['info.sa.h2']=['醫療需求','Medical Needs','医療ニーズ','의료 필요'];
+  D['info.sa.p2']=['若需機上氧氣、攜帶醫療設備或孕期搭機，請先與我們聯繫並備妥相關文件。','For onboard oxygen, medical devices or travelling while pregnant, please contact us in advance with the necessary documents.','機内酸素・医療機器・妊娠中の搭乗は、必要書類を準備のうえ事前連絡を。','기내 산소·의료 기기·임신 중 탑승은 필요 서류와 함께 사전 연락 바랍니다.'];
+  D['info.sa.h3']=['兒童與家庭','Children & Families','お子様・ご家族','어린이·가족'];
+  D['info.sa.p3']=['提供單獨旅行兒童（UM）服務、嬰兒搖籃與優先協助，讓親子旅程更安心。','Unaccompanied minor (UM) service, bassinets and priority assistance make family travel easier.','単独搭乗のお子様(UM)サービス、ベビーバシネット、優先サポートをご用意。','비동반 소아(UM) 서비스, 아기 요람, 우선 지원을 제공합니다.'];
+  D['info.tos.h1']=['訂位與付款','Booking & Payment','予約と支払い','예약과 결제'];
+  D['info.tos.p1']=['完成付款即代表您接受本公司運送條款。所示票價含稅費，當地貨幣金額依即時匯率換算，僅供參考。','Completing payment means you accept our conditions of carriage. Fares include taxes; local-currency amounts are converted at live rates for reference only.','支払い完了をもって運送約款に同意とみなします。運賃は税込、現地通貨はリアルタイム為替の参考値です。','결제 완료 시 운송 약관에 동의한 것으로 간주됩니다. 요금은 세금 포함, 현지 통화는 실시간 환율 참고값입니다.'];
+  D['info.tos.h2']=['變更與退票','Changes & Refunds','変更と払戻','변경과 환불'];
+  D['info.tos.p2']=['變更與退票依所購票價方案辦理，部分優惠票種不可退改或須收取手續費。','Changes and refunds follow your fare rules; some promotional fares are non-changeable/non-refundable or carry fees.','変更・払戻は運賃規則に従います。一部割引運賃は変更不可・払戻不可または手数料が必要です。','변경·환불은 운임 규정에 따릅니다. 일부 특가 운임은 변경/환불 불가 또는 수수료가 부과됩니다.'];
+  D['info.tos.h3']=['責任限制','Limitation of Liability','責任の制限','책임 제한'];
+  D['info.tos.p3']=['本公司之責任依華沙公約、蒙特婁公約及適用法規辦理。本網站為示範用途，不構成實際運送契約。','Our liability is governed by the Warsaw/Montreal Conventions and applicable law. This site is a demo and is not a real contract of carriage.','当社の責任はワルシャワ・モントリオール条約および適用法に従います。本サイトはデモであり実契約ではありません。','당사 책임은 바르샤바·몬트리올 협약 및 관련 법에 따릅니다. 본 사이트는 데모이며 실제 운송 계약이 아닙니다.'];
+  D['info.pp.h1']=['我們蒐集的資料','What We Collect','収集する情報','수집 정보'];
+  D['info.pp.p1']=['訂位、聯絡與裝置資訊。本網站為示範，所有訂位、會員與行程資料僅儲存在你的瀏覽器（localStorage）。','Booking, contact and device information. This is a demo — all booking, member and trip data is stored only in your browser (localStorage).','予約・連絡先・端末情報。本サイトはデモで、データはブラウザ(localStorage)にのみ保存。','예약·연락처·기기 정보. 데모이며 모든 데이터는 브라우저(localStorage)에만 저장됩니다.'];
+  D['info.pp.h2']=['如何使用','How We Use It','利用目的','이용 목적'];
+  D['info.pp.p2']=['用於提供訂票、報到、行程管理與改善服務體驗，不會販售你的個人資料。','To provide booking, check-in, trip management and to improve the experience. We never sell your personal data.','予約・搭乗手続き・旅程管理・体験向上のため。個人情報を販売しません。','예약·체크인·여정 관리 및 서비스 개선을 위해 사용하며 개인정보를 판매하지 않습니다.'];
+  D['info.pp.h3']=['你的權利','Your Rights','お客様の権利','이용자의 권리'];
+  D['info.pp.p3']=['你可查詢、更正或刪除個人資料；本站資料可隨時在裝置上清除（清除瀏覽器資料或登出）。','You may access, correct or delete your data; demo data can be cleared anytime on your device (clear browser data or sign out).','データの照会・訂正・削除が可能。デモデータは端末でいつでも消去できます。','데이터 조회·정정·삭제 가능. 데모 데이터는 기기에서 언제든 삭제할 수 있습니다.'];
+  D['info.ac.h1']=['我們的承諾','Our Commitment','私たちの約束','우리의 약속'];
+  D['info.ac.p1']=['我們致力讓網站符合 WCAG 2.1 AA：可用鍵盤操作、足夠色彩對比，並為圖片提供替代文字。','We aim to meet WCAG 2.1 AA: keyboard operability, sufficient colour contrast, and alt text for images.','WCAG 2.1 AA準拠を目指し、キーボード操作・十分なコントラスト・代替テキストを提供。','WCAG 2.1 AA 준수를 목표로 키보드 조작·충분한 대비·대체 텍스트를 제공합니다.'];
+  D['info.ac.h2']=['已具備功能','Existing Features','対応済み機能','지원 기능'];
+  D['info.ac.p2']=['響應式設計、語意化標記、四種語言、可放大文字與減少動態（尊重系統的偏好設定）。','Responsive design, semantic markup, four languages, scalable text and reduced motion (respecting your system settings).','レスポンシブ・セマンティック・4言語・拡大表示・モーション低減に対応。','반응형·시맨틱 마크업·4개 언어·텍스트 확대·모션 감소를 지원합니다.'];
+  D['info.ac.h3']=['意見回饋','Feedback','フィードバック','피드백'];
+  D['info.ac.p3']=['若你在使用上遇到任何無障礙問題，歡迎來信 TSARC2026@gmail.com，我們會盡快改善。','If you encounter any accessibility issues, email us at TSARC2026@gmail.com and we will work to improve.','アクセシビリティの問題があれば TSARC2026@gmail.com までご連絡ください。','접근성 문제가 있으면 TSARC2026@gmail.com 으로 알려 주세요.'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1519,6 +1562,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='cars'){ fillHCCities(); renderCars(); }
     else if(h==='deals') renderDeals();
     else if(h==='news') renderNews();
+    else if(INFO[h]) renderInfo(h);
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1828,6 +1872,25 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).join('');
   }
 
+  // ====== 資訊頁 ======
+  var INFO={
+    baggage:      {icon:'luggage',            title:'foot.baggage', secs:[['info.bag.h1','info.bag.p1'],['info.bag.h2','info.bag.p2'],['info.bag.h3','info.bag.p3']]},
+    special:      {icon:'accessible',         title:'foot.special',  secs:[['info.sa.h1','info.sa.p1'],['info.sa.h2','info.sa.p2'],['info.sa.h3','info.sa.p3']]},
+    terms:        {icon:'gavel',              title:'foot.terms',    secs:[['info.tos.h1','info.tos.p1'],['info.tos.h2','info.tos.p2'],['info.tos.h3','info.tos.p3']]},
+    privacy:      {icon:'shield',             title:'foot.privacy',  secs:[['info.pp.h1','info.pp.p1'],['info.pp.h2','info.pp.p2'],['info.pp.h3','info.pp.p3']]},
+    accessibility:{icon:'accessibility_new',  title:'foot.access',   secs:[['info.ac.h1','info.ac.p1'],['info.ac.h2','info.ac.p2'],['info.ac.h3','info.ac.p3']]}
+  };
+  function renderInfo(topic){
+    var cfg=INFO[topic]; if(!cfg) return;
+    document.getElementById('infoIcon').textContent=cfg.icon;
+    document.getElementById('infoTitleText').textContent=t(cfg.title);
+    document.getElementById('infoBody').innerHTML=cfg.secs.map(function(s){
+      return '<div class="bg-card-dark border border-white/10 rounded-xl p-5">'+
+        '<h4 class="text-white font-bold mb-2">'+t(s[0])+'</h4>'+
+        '<p class="text-white/60 text-sm leading-relaxed">'+t(s[1])+'</p></div>';
+    }).join('');
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -1919,7 +1982,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars', deals:'view-deals', news:'view-news' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin', hotels:'view-hotels', cars:'view-cars', deals:'view-deals', news:'view-news', baggage:'view-info', special:'view-info', terms:'view-info', privacy:'view-info', accessibility:'view-info' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1934,6 +1997,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-cars') renderCars();
     else if(view==='view-deals') renderDeals();
     else if(view==='view-news') renderNews();
+    else if(view==='view-info') renderInfo(h);
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
