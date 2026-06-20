@@ -669,6 +669,14 @@
 <div id="fsResult" class="mt-4"></div>
 </div>
 </div>
+<div class="bg-card-dark border border-white/10 rounded-2xl p-5 sm:p-6 mt-5">
+<div class="flex items-center justify-between mb-1">
+<h4 class="text-white font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">schedule</span> <span data-i18n="fs.board">即時航班看板</span></h4>
+<button id="fsRefresh" class="flex items-center gap-1 text-white/60 hover:text-white text-sm font-medium"><span class="material-symbols-outlined text-[18px]">refresh</span> <span data-i18n="fs.refresh">重新整理</span></button>
+</div>
+<p class="text-white/50 text-sm mb-3" data-i18n="fs.boardSub">今日進出港航班即時動態。</p>
+<div id="fsBoard"></div>
+</div>
 </div>
 </section>
 
@@ -1502,6 +1510,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['st.delayed']=['延誤','Delayed','遅延','지연'];
   D['st.departed']=['已起飛','Departed','出発済','출발함'];
   D['st.arrived']=['已抵達','Arrived','到着済','도착함'];
+  D['st.cancelled']=['取消','Cancelled','欠航','결항'];
+  D['fs.board']=['即時航班看板','Live Flight Board','運航案内板','실시간 항공편 현황판'];
+  D['fs.boardSub']=['今日進出港航班即時動態。','Live status of today’s departures and arrivals.','本日の発着便の運航状況。','오늘 출·도착편 실시간 현황.'];
+  D['fs.refresh']=['重新整理','Refresh','更新','새로고침'];
 
   // 飯店 / 租車
   D['hotels.title']=['飯店搜尋','Hotel Search','ホテル検索','호텔 검색'];
@@ -2072,6 +2084,31 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return m + loadPackages().reduce(function(s,p){ return s+(p.miles||0); },0);
   }
 
+  // 即時航班看板
+  function renderStatusBoard(){
+    var wrap=document.getElementById('fsBoard'); if(!wrap) return;
+    var cities=['NRT','ICN','HKG','SIN','BKK','CDG','LHR','JFK','LAX','SYD','DXB','PVG','MNL','KIX','KHH'];
+    var stKeys=['st.ontime','st.boarding','st.delayed','st.departed','st.arrived','st.cancelled'];
+    var stCol=['#34d399','#60a5fa','#fbbf24','#94a3b8','#94a3b8','#f87171'];
+    var pool=[0,0,0,0,1,1,2,2,3,4,4,5];  // 多數準時、取消較少
+    var rows=[];
+    for(var i=0;i<16;i++){
+      var dir=Math.random()<0.5?'dep':'arr', city=pick(cities);
+      rows.push({no:'TS '+rint(100,999), from:dir==='dep'?'TPE':city, to:dir==='dep'?city:'TPE', dir:dir, depMin:rint(5*60,23*60), si:pick(pool), gate:'ABCD'[rint(0,3)]+rint(1,28)});
+    }
+    rows.sort(function(a,b){ return a.depMin-b.depMin; });
+    wrap.innerHTML=rows.map(function(r){
+      var timeCls=(r.si===5)?'line-through text-white/40':'text-white';
+      return '<div class="flex items-center gap-3 py-3 border-b border-white/5 last:border-0">'+
+        '<div class="w-14 font-black '+timeCls+'">'+fmtTime(r.depMin)+'</div>'+
+        '<div class="flex-1 min-w-0"><p class="text-white font-bold text-sm">'+r.no+'</p>'+
+          '<p class="text-white/50 text-xs flex items-center gap-1">'+r.from+'<span class="material-symbols-outlined text-[13px]">arrow_forward</span>'+r.to+' · '+(r.dir==='dep'?t('fs.dep'):t('fs.arr'))+'</p></div>'+
+        '<div class="text-white/45 text-xs hidden sm:block whitespace-nowrap">'+t('fs.gate')+' '+(r.si===5?'—':r.gate)+'</div>'+
+        '<span class="text-[11px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap" style="background:'+stCol[r.si]+'26;color:'+stCol[r.si]+'">'+t(stKeys[r.si])+'</span>'+
+      '</div>';
+    }).join('');
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -2180,6 +2217,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-news') renderNews();
     else if(view==='view-info') renderInfo(h);
     else if(view==='view-packages') renderPackages();
+    else if(view==='view-checkin') renderStatusBoard();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -2656,6 +2694,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("ciPnr").addEventListener("keydown", function(e){ if(e.key==='Enter') doCheckin(); });
   document.getElementById("fsBtn").addEventListener("click", doFlightStatus);
   document.getElementById("fsNo").addEventListener("keydown", function(e){ if(e.key==='Enter') doFlightStatus(); });
+  document.getElementById("fsRefresh").addEventListener("click", renderStatusBoard);
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
