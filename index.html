@@ -222,9 +222,9 @@
 <select id="langSel" class="lang-sel w-full h-11 pl-11 pr-9 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-white text-sm font-medium appearance-none cursor-pointer"></select>
 <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[20px]">expand_more</span></div>
 </div>
-<button class="w-full flex items-center justify-center gap-2 h-10 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/10 transition-all">
+<button class="auth-btn w-full flex items-center justify-center gap-2 h-10 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/10 transition-all">
 <span class="material-symbols-outlined text-[18px]">account_circle</span>
-<span data-i18n="nav.signin">登入</span>
+<span class="signin-label">登入</span>
 </button>
 </div>
 </aside>
@@ -244,7 +244,7 @@
 <select id="langSelM" class="lang-sel h-9 pl-2 pr-6 bg-white/10 border border-white/10 rounded-lg text-white text-xs font-bold appearance-none cursor-pointer"></select>
 <div class="absolute inset-y-0 right-1 flex items-center pointer-events-none"><span class="material-symbols-outlined text-white/40 text-[16px]">expand_more</span></div>
 </div>
-<button class="flex items-center justify-center h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all border border-white/10">
+<button class="auth-btn flex items-center justify-center h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all border border-white/10">
 <span class="material-symbols-outlined text-[18px]">account_circle</span>
 </button>
 <button class="flex items-center justify-center size-9 rounded-lg text-white hover:bg-white/10">
@@ -617,6 +617,17 @@
 <h4 class="text-white font-bold mb-2 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">lightbulb</span> <span data-i18n="cookie.tip.h">小撇步</span></h4>
 <p id="cookieTip" class="text-white/60 text-sm leading-relaxed"></p>
 </div>
+</div>
+</section>
+
+<!-- ====== 會員中心 View ====== -->
+<section id="view-account" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[720px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">account_circle</span> <span data-i18n="account.title">會員中心</span></h3>
+<div id="accountBody" class="mt-6"></div>
 </div>
 </section>
 </main>
@@ -1300,6 +1311,23 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     '柔らかめは1〜2分短く。密閉で常温3〜4日。この「ポリシー」に追跡はなく、レーズンのみ。',
     '더 쫀득하게는 1~2분 적게 굽기. 밀폐 후 실온 3~4일. 이 “정책”엔 추적이 없고 건포도만 있습니다.'
   ];
+  // 會員登入 / 個人中心
+  D['account.title']=['會員中心','Account','会員センター','회원 센터'];
+  D['account.subGuest']=['登入以管理您的會員資料與行程。','Sign in to manage your membership and trips.','ログインして会員情報と旅程を管理。','로그인하여 회원 정보와 여정을 관리하세요.'];
+  D['account.name']=['姓名','Name','氏名','이름'];
+  D['account.email']=['電子郵件','Email','メール','이메일'];
+  D['account.namePh']=['您的姓名','Your name','お名前','이름'];
+  D['account.loginBtn']=['登入','Sign In','ログイン','로그인'];
+  D['account.loginNote']=['示範登入，資料僅儲存在此裝置。','Demo sign-in — data is stored on this device only.','デモログイン。データはこの端末にのみ保存。','데모 로그인 — 데이터는 이 기기에만 저장됩니다.'];
+  D['account.hi']=['您好','Hi','ようこそ','안녕하세요'];
+  D['account.tier']=['會員等級','Tier','会員ランク','등급'];
+  D['account.miles']=['累積哩程','Total Miles','累積マイル','누적 마일'];
+  D['account.mytrips']=['我的行程','My Trips','マイ旅程','내 여정'];
+  D['account.benefits']=['會員權益','Benefits','会員特典','회원 혜택'];
+  D['account.logout']=['登出','Sign Out','ログアウト','로그아웃'];
+  D['account.tripsCount']=['{n} 筆行程','{n} trips','{n} 件の旅程','여정 {n}건'];
+  D['alert.needlogin']=['請輸入姓名與電子郵件','Please enter your name and email','氏名とメールを入力してください','이름과 이메일을 입력하세요'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1315,6 +1343,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     refillAirportSelects();
     refreshPromo();
     renderDest();
+    if(typeof updateAuthUI==='function') updateAuthUI();
     var faq=document.getElementById('faqList'); if(faq) faq.removeAttribute('data-done');
     // 重新渲染目前的動態頁面
     if(typeof route==='function') reRenderCurrent();
@@ -1329,6 +1358,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='help') renderFaq();
     else if(h==='careers') renderCareers();
     else if(h==='cookie') renderCookie();
+    else if(h==='account') renderAccount();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
@@ -1537,6 +1567,50 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     document.getElementById('cookieTip').textContent=t('cookie.tip');
   }
 
+  // ====== 會員登入 / 個人中心 ======
+  function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
+  function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
+  function updateAuthUI(){
+    var u=getUser();
+    Array.prototype.forEach.call(document.querySelectorAll('.signin-label'), function(el){ el.textContent = u? u.name : t('nav.signin'); });
+  }
+  function renderAccount(){
+    var body=document.getElementById('accountBody'); if(!body) return;
+    var u=getUser();
+    if(!u){
+      body.innerHTML =
+        '<p class="text-white/50 text-sm mb-6">'+t('account.subGuest')+'</p>'+
+        '<div class="bg-card-dark border border-white/10 rounded-2xl p-6 max-w-md">'+
+          '<label class="block text-white/60 text-xs mb-1">'+t('account.name')+'</label>'+
+          '<input id="acName" type="text" autocomplete="name" class="w-full h-12 px-4 mb-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40" placeholder="'+t('account.namePh')+'"/>'+
+          '<label class="block text-white/60 text-xs mb-1">'+t('account.email')+'</label>'+
+          '<input id="acEmail" type="email" autocomplete="email" class="w-full h-12 px-4 mb-5 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40" placeholder="you@example.com"/>'+
+          '<button data-ac="login" class="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">login</span>'+t('account.loginBtn')+'</button>'+
+          '<p class="text-white/40 text-xs mt-3">'+t('account.loginNote')+'</p>'+
+        '</div>';
+    } else {
+      var trips=loadTrips(); var miles=trips.reduce(function(s,tp){ return s+(tp.miles||0)*(tp.pax||1); },0);
+      var tier=TIERS[0]; for(var i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
+      body.innerHTML =
+        '<div class="rounded-2xl p-6 sm:p-8 mb-6 shadow-2xl relative overflow-hidden" style="background:linear-gradient(135deg,'+tier.color+' 0%,#001B38 92%)">'+
+          '<div class="absolute -right-12 -top-12 size-44 bg-white/10 rounded-full blur-2xl"></div>'+
+          '<p class="text-white/70 text-sm relative">'+t('account.hi')+'，</p>'+
+          '<p class="text-white text-2xl font-black relative">'+u.name+'</p>'+
+          '<p class="text-white/60 text-sm mb-5 relative">'+u.email+'</p>'+
+          '<div class="flex gap-6 relative">'+
+            '<div><p class="text-white/60 text-[11px]">'+t('account.tier')+'</p><p class="text-white font-bold">'+t('tier.'+tier.code)+'</p></div>'+
+            '<div><p class="text-white/60 text-[11px]">'+t('account.miles')+'</p><p class="text-white font-bold">'+miles.toLocaleString('en-US')+'</p></div>'+
+            '<div><p class="text-white/60 text-[11px]">'+t('account.mytrips')+'</p><p class="text-white font-bold">'+tf('account.tripsCount',{n:trips.length})+'</p></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">'+
+          '<button data-goto="trips" class="h-12 bg-card-dark border border-white/10 hover:border-white/30 text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-primary-hover">confirmation_number</span>'+t('account.mytrips')+'</button>'+
+          '<button data-goto="member" class="h-12 bg-card-dark border border-white/10 hover:border-white/30 text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-primary-hover">stars</span>'+t('account.benefits')+'</button>'+
+          '<button data-ac="logout" class="h-12 bg-white/5 hover:bg-white/10 text-white/80 font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">logout</span>'+t('account.logout')+'</button>'+
+        '</div>';
+    }
+  }
+
   function fmtTime(mins){
     mins = ((mins%1440)+1440)%1440;
     return pad(Math.floor(mins/60))+":"+pad(mins%60);
@@ -1584,7 +1658,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -1594,6 +1668,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(view==='view-help') renderFaq();
     else if(view==='view-careers') renderCareers();
     else if(view==='view-cookie') renderCookie();
+    else if(view==='view-account') renderAccount();
     highlightTab(view);
   }
   window.addEventListener('hashchange', route);
@@ -2002,6 +2077,23 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   });
   document.getElementById("closeJob").addEventListener("click", closeJobModal);
   document.getElementById("jobModal").addEventListener("click", function(e){ if(e.target===this) closeJobModal(); });
+
+  // 會員中心：登入 / 登出 / 快捷
+  document.getElementById("accountBody").addEventListener("click", function(e){
+    var b=e.target.closest('[data-ac],[data-goto]'); if(!b) return;
+    if(b.hasAttribute('data-goto')){ location.hash=b.getAttribute('data-goto'); return; }
+    var act=b.getAttribute('data-ac');
+    if(act==='login'){
+      var nm=(document.getElementById('acName').value||'').trim();
+      var em=(document.getElementById('acEmail').value||'').trim();
+      if(!nm||!em){ alert(t('alert.needlogin')); return; }
+      setUser({name:nm, email:em}); renderAccount(); updateAuthUI();
+    } else if(act==='logout'){ setUser(null); renderAccount(); updateAuthUI(); }
+  });
+  // 側邊欄/標頭登入鈕 → 會員中心
+  Array.prototype.forEach.call(document.querySelectorAll('.auth-btn'), function(b){
+    b.addEventListener('click', function(){ location.hash='account'; });
+  });
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
