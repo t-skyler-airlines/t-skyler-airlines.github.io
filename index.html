@@ -207,8 +207,8 @@
 <span class="font-semibold" data-i18n="nav.trips">管理行程</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#checkin">
-<span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">how_to_reg</span>
-<span class="font-semibold" data-i18n="nav.checkin">報到 / 動態</span>
+<span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">flight_takeoff</span>
+<span class="font-semibold" data-i18n="nav.checkin">航班動態</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#packages">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">luggage</span>
@@ -493,7 +493,16 @@
 <span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
 <h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="trips.title">我的行程</h3>
-<p class="text-white/50 text-sm mb-8" data-i18n="trips.sub">您已生成的登機證會自動儲存在此裝置。</p>
+<p class="text-white/50 text-sm mb-6" data-i18n="trips.sub">您已生成的登機證會自動儲存在此裝置。</p>
+<div class="bg-card-dark border border-white/10 rounded-2xl p-5 sm:p-6 mb-8">
+<h4 class="text-white font-bold mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">how_to_reg</span> <span data-i18n="ci.title">線上報到</span></h4>
+<p class="text-white/50 text-sm mb-4" data-i18n="ci.desc">輸入訂位代碼以取得登機證。</p>
+<div class="flex flex-col sm:flex-row gap-3">
+<input id="ciPnr" type="text" data-i18n-ph="ci.pnrPh" placeholder="訂位代碼（例：XK4D9P）" class="flex-1 h-12 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-widest"/>
+<button id="ciBtn" class="h-12 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">how_to_reg</span> <span data-i18n="ci.btn">報到</span></button>
+</div>
+<p id="ciMsg" class="text-sm mt-3"></p>
+</div>
 <div id="tripEmpty" class="hidden flex flex-col items-center justify-center py-20 text-center">
 <span class="material-symbols-outlined text-white/20 text-6xl mb-3">flight_takeoff</span>
 <p class="text-white/50" data-i18n="trips.empty">尚無行程，快去搜尋並預訂吧！</p>
@@ -652,22 +661,14 @@
 <button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
 <span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
 </button>
-<h3 class="text-white text-2xl sm:text-3xl font-black mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">how_to_reg</span> <span data-i18n="ci.head">報到與航班動態</span></h3>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">flight_takeoff</span> <span data-i18n="fs.title">航班動態</span></h3>
 <div class="bg-card-dark border border-white/10 rounded-2xl p-6">
-<h4 class="text-white font-bold mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airplane_ticket</span> <span data-i18n="ci.title">線上報到</span></h4>
-<p class="text-white/50 text-sm mb-4" data-i18n="ci.desc">輸入訂位代碼以取得登機證。</p>
-<input id="ciPnr" type="text" data-i18n-ph="ci.pnrPh" placeholder="訂位代碼（例：XK4D9P）" class="w-full h-12 px-4 mb-3 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-widest"/>
-<button id="ciBtn" class="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">how_to_reg</span> <span data-i18n="ci.btn">報到</span></button>
-<p id="ciMsg" class="text-sm mt-3"></p>
-</div>
-<div class="bg-card-dark border border-white/10 rounded-2xl p-6">
-<h4 class="text-white font-bold mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">flight_takeoff</span> <span data-i18n="fs.title">航班動態</span></h4>
 <p class="text-white/50 text-sm mb-4" data-i18n="fs.desc">輸入航班編號查詢即時動態。</p>
-<input id="fsNo" type="text" data-i18n-ph="fs.ph" placeholder="航班編號（例：TS388）" class="w-full h-12 px-4 mb-3 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-wider"/>
-<button id="fsBtn" class="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">search</span> <span data-i18n="fs.btn">查詢</span></button>
-<div id="fsResult" class="mt-4"></div>
+<div class="flex flex-col sm:flex-row gap-3">
+<input id="fsNo" type="text" data-i18n-ph="fs.ph" placeholder="航班編號（例：TS388）" class="flex-1 h-12 px-4 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-wider"/>
+<button id="fsBtn" class="h-12 px-6 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">search</span> <span data-i18n="fs.btn">查詢</span></button>
 </div>
+<div id="fsResult" class="mt-4"></div>
 </div>
 <div class="bg-card-dark border border-white/10 rounded-2xl p-5 sm:p-6 mt-5">
 <div class="flex items-center justify-between mb-1">
@@ -1486,7 +1487,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['alert.needlogin']=['請輸入姓名與電子郵件','Please enter your name and email','氏名とメールを入力してください','이름과 이메일을 입력하세요'];
 
   // 線上報到 / 航班動態
-  D['nav.checkin']=['報到 / 動態','Check-in / Status','搭乗手続き / 運航','체크인 / 현황'];
+  D['nav.checkin']=['航班動態','Flight Status','運航状況','항공편 현황'];
   D['ci.head']=['報到與航班動態','Check-in & Flight Status','搭乗手続きと運航状況','체크인 및 항공편 현황'];
   D['ci.title']=['線上報到','Online Check-in','オンラインチェックイン','온라인 체크인'];
   D['ci.desc']=['輸入訂位代碼以取得登機證。','Enter your booking code (PNR) to get your boarding pass.','予約番号(PNR)を入力して搭乗券を取得。','예약번호(PNR)를 입력해 탑승권을 받으세요.'];
@@ -1660,6 +1661,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     else if(h==='news') renderNews();
     else if(INFO[h]) renderInfo(h);
     else if(h==='packages') renderPackages();
+    else if(h==='checkin') renderStatusBoard();
     var modal=document.getElementById('ticketModal');
     if(currentPass && modal && !modal.classList.contains('hidden')) renderPass(currentPass);
   }
