@@ -1,0 +1,13 @@
+name = "tskyler-wallet"
+main = "src/worker.js"
+compatibility_date = "2025-09-01"
+
+# 每日計數用的 KV 命名空間。
+# 執行 `wrangler kv namespace create PASS_KV` 後，把回傳的 id 貼到這裡。
+kv_namespaces = [
+  { binding = "PASS_KV", id = "PUT_YOUR_KV_NAMESPACE_ID_HERE" }
+]
+
+# WALLETWALLET_KEY 不要寫在這個檔案！
+# 請用：  wrangler secret put WALLETWALLET_KEY
+# 然後貼上你的 ww_live_... 金鑰（只會存在 Cloudflare，不進 git）。
