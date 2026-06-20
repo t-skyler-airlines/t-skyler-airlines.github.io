@@ -1,0 +1,13 @@
+{
+  "name": "tskyler-wallet",
+  "version": "1.0.0",
+  "private": true,
+  "description": "T-Skyler membership card -> Apple/Google Wallet pass (Cloudflare Worker)",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3"
+  }
+}

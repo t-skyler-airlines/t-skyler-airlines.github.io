@@ -2800,7 +2800,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   // 加入 Apple 錢包（透過 Cloudflare Worker → WalletWallet 產生簽章 .pkpass）
   // ↓ 部署 wallet-worker 後，把 Worker 網址填進來，按鈕才會出現並可用。
-  var WW_WORKER_URL = '';
+  var WW_WORKER_URL = 'https://tskyler-wallet.masonzneg702550.workers.dev';
   (function(){
     var wb=document.getElementById('walletBtn'); if(!wb) return;
     if(WW_WORKER_URL) wb.style.display='';
