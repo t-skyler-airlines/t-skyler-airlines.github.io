@@ -863,7 +863,12 @@
 <div id="pkgModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto">
 <div class="relative w-full max-w-[640px] my-8 bg-card-dark border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
 <button id="closePkg" class="absolute top-3 right-3 z-10 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center"><span class="material-symbols-outlined">close</span></button>
-<div class="aspect-[21/9] w-full overflow-hidden bg-[#00224a]"><img id="pmImg" src="" alt="" class="w-full h-full object-cover"/></div>
+<div class="relative aspect-[16/9] w-full overflow-hidden bg-[#00224a]">
+<div id="pmTrack" class="flex h-full transition-transform duration-500 ease-out"></div>
+<button id="pmPrev" type="button" class="absolute left-2 top-1/2 -translate-y-1/2 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center"><span class="material-symbols-outlined">chevron_left</span></button>
+<button id="pmNext" type="button" class="absolute right-2 top-1/2 -translate-y-1/2 size-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center"><span class="material-symbols-outlined">chevron_right</span></button>
+<div id="pmDots" class="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex gap-1.5"></div>
+</div>
 <div class="p-6">
 <h3 id="pmTitle" class="text-white text-xl font-black mb-1"></h3>
 <p id="pmMeta" class="text-white/50 text-sm mb-5"></p>
@@ -1592,6 +1597,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['pkg.book']=['預訂套票','Book Package','パッケージを予約','패키지 예약'];
   D['pkg.booked']=['套票預訂成功！已累積 {n} 哩。','Package booked! You earned {n} miles.','パッケージ予約完了！{n}マイル獲得。','패키지 예약 완료! {n} 마일 적립.'];
   D['pkg.perPerson']=['／人起','/person','／人〜','/인부터'];
+  D['pkg.meals']=['餐食','Meals','食事','식사'];
+  D['pkg.meal.b']=['早餐','Breakfast','朝食','조식'];
+  D['pkg.meal.l']=['午餐','Lunch','昼食','중식'];
+  D['pkg.meal.d']=['晚餐','Dinner','夕食','석식'];
+  D['pkg.meal.inc']=['含','Incl.','込み','포함'];
+  D['pkg.meal.own']=['自理','Own','自費','자유식'];
+  D['pkg.flightDep']=['搭乘 {no}：台北 → {city}','Flight {no}: Taipei → {city}','{no}便：台北 → {city}','{no}편: 타이베이 → {city}'];
+  D['pkg.flightRet']=['搭乘 {no}：{city} → 台北','Flight {no}: {city} → Taipei','{no}便：{city} → 台北','{no}편: {city} → 타이베이'];
   D['vcard.no']=['卡號','Card No.','会員番号','카드번호'];
   D['vcard.download']=['下載會員卡','Download Card','会員カードを保存','회원 카드 저장'];
   D['fl.codeshare']=['聯營航班','Codeshare','共同運航','코드셰어'];
@@ -1972,7 +1985,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // ====== 套裝行程 ======
   var PACKAGES=[{code:'NRT',days:5,price:1280},{code:'ICN',days:4,price:820},{code:'BKK',days:5,price:720},{code:'CDG',days:6,price:1980},{code:'LHR',days:6,price:2080},{code:'SYD',days:7,price:2480}];
   var pkgCurrent=null;
-  function pkgImg(code){ for(var i=0;i<DESTINATIONS.length;i++){ if(DESTINATIONS[i].code===code) return DESTINATIONS[i].img; } return ''; }
+  // 各景點無版權照片（Wikimedia Commons），每城市 7 張供輪播
+  var CITY_PHOTOS={
+    NRT:["https://upload.wikimedia.org/wikipedia/commons/5/5c/Tokyo-skyline.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Tokyo_night_view_1.jpg/960px-Tokyo_night_view_1.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Tokyo_by_night_2011.jpg/960px-Tokyo_by_night_2011.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Tokyo_Tower_at_night_7.JPG/960px-Tokyo_Tower_at_night_7.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Night_in_Tokyo_2014.JPG/960px-Night_in_Tokyo_2014.JPG","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Shinjuku_Station_South_Entrance_area_at_night%2C_Tokyo%2C_Japan_%282015-01-24_by_calvision_%40Pixabay_617590%29.jpg/960px-Shinjuku_Station_South_Entrance_area_at_night%2C_Tokyo%2C_Japan_%282015-01-24_by_calvision_%40Pixabay_617590%29.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Tokyo_Station_City_%28234809375%29.jpeg/960px-Tokyo_Station_City_%28234809375%29.jpeg"],
+    ICN:["https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Seoul_Night_Skyline_2022.jpg/960px-Seoul_Night_Skyline_2022.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Lotte_World_Tower_near_Cheongdam_Bridge.jpg/960px-Lotte_World_Tower_near_Cheongdam_Bridge.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Han_River_seen_from_Lotte_World_Tower.jpg/960px-Han_River_seen_from_Lotte_World_Tower.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/View_to_the_north_from_Lotte_World_Tower_at_night.jpg/960px-View_to_the_north_from_Lotte_World_Tower_at_night.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/View_to_the_west_from_Lotte_World_Tower_at_sunset.jpg/960px-View_to_the_west_from_Lotte_World_Tower_at_sunset.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Lotte_World_Tower_from_Seongsu_Bridge.jpg/960px-Lotte_World_Tower_from_Seongsu_Bridge.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Seoul_Skyline_Night_2018.jpg/960px-Seoul_Skyline_Night_2018.jpg"],
+    BKK:["https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Bangkok_Panorama_%28211522205%29.jpeg/960px-Bangkok_Panorama_%28211522205%29.jpeg","https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Bangkok_Skyline_from_Movenpick_Hotel%2C_Asok%2C_Bangkok_at_night.jpg/960px-Bangkok_Skyline_from_Movenpick_Hotel%2C_Asok%2C_Bangkok_at_night.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Twilight_over_the_modern_city_skyline_in_Ratchadamri_district%2C_Bangkok%2C_Thailand%2C_July_2019_-_Flickr_-_sergei.gussev.jpg/960px-Twilight_over_the_modern_city_skyline_in_Ratchadamri_district%2C_Bangkok%2C_Thailand%2C_July_2019_-_Flickr_-_sergei.gussev.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Wat_Phra_Kaew%2C_Bangkok%2C_Thailand.jpg/960px-Wat_Phra_Kaew%2C_Bangkok%2C_Thailand.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Bangkok_along_the_Chao_Phraya_and_Wat_Arun_%2814881617350%29.jpg/960px-Bangkok_along_the_Chao_Phraya_and_Wat_Arun_%2814881617350%29.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Bangkok_along_the_Chao_Phraya_and_Wat_Arun_%2814881701458%29.jpg/960px-Bangkok_along_the_Chao_Phraya_and_Wat_Arun_%2814881701458%29.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/I_can_watch_this_ALL_NIGHT_-_Flickr_-_Yogendra174.jpg/960px-I_can_watch_this_ALL_NIGHT_-_Flickr_-_Yogendra174.jpg"],
+    CDG:["https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Tour_eiffel_at_sunrise_from_the_trocadero.jpg/960px-Tour_eiffel_at_sunrise_from_the_trocadero.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Paris_Night.jpg/960px-Paris_Night.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Champ_de_Mars_from_the_Eiffel_Tower_-_July_2006_edit.jpg/960px-Champ_de_Mars_from_the_Eiffel_Tower_-_July_2006_edit.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg/960px-Tour_Eiffel_Wikimedia_Commons.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Eiffel_Tower_from_north_Avenue_de_New_York%2C_Aug_2010.jpg/960px-Eiffel_Tower_from_north_Avenue_de_New_York%2C_Aug_2010.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Sous_la_Tour_Eiffel_1.jpg/960px-Sous_la_Tour_Eiffel_1.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Lightning_striking_the_Eiffel_Tower_-_NOAA.jpg/960px-Lightning_striking_the_Eiffel_Tower_-_NOAA.jpg"],
+    LHR:["https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/London_Thames_Sunset_panorama_-_Feb_2008.jpg/960px-London_Thames_Sunset_panorama_-_Feb_2008.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/London_MMB_%C2%BB025_River_Thames_and_London_Eye.jpg/960px-London_MMB_%C2%BB025_River_Thames_and_London_Eye.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/London_MMB_%C2%BB024_River_Thames_and_London_Eye.jpg/960px-London_MMB_%C2%BB024_River_Thames_and_London_Eye.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/London_MMB_%C2%BB030_Waterloo_Millennium_Pier%2C_Palace_of_Westminster_and_Thames_Embankment.jpg/960px-London_MMB_%C2%BB030_Waterloo_Millennium_Pier%2C_Palace_of_Westminster_and_Thames_Embankment.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/London_MMB_%C2%ABF6_River_Thames_and_Ontario_Tower.jpg/960px-London_MMB_%C2%ABF6_River_Thames_and_Ontario_Tower.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/London_MMB_%C2%ABF5_River_Thames_and_Ontario_Tower.jpg/960px-London_MMB_%C2%ABF5_River_Thames_and_Ontario_Tower.jpg","https://upload.wikimedia.org/wikipedia/commons/9/9f/View_From_Waterloo_Bridge_-_geograph.org.uk_-_1565082.jpg"],
+    SYD:["https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Sydney_Opera_House_and_Harbour_Bridge_Dusk_2019-06-21.jpg/960px-Sydney_Opera_House_and_Harbour_Bridge_Dusk_2019-06-21.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Sydney_Harbour_Bridge_night.jpg/960px-Sydney_Harbour_Bridge_night.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Sydney_Harbour_Bridge_and_Opera_House_Earth_Hour.jpg/960px-Sydney_Harbour_Bridge_and_Opera_House_Earth_Hour.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Sydney_Opera_House_-_Dec_2008.jpg/960px-Sydney_Opera_House_-_Dec_2008.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Sydney_Opera_House_and_Harbour_Bridge.jpg/960px-Sydney_Opera_House_and_Harbour_Bridge.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Aerial_view_of_Sydney_landmarks.jpg/960px-Aerial_view_of_Sydney_landmarks.jpg","https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Sydney_opera_house_2010.jpg/960px-Sydney_opera_house_2010.jpg"]
+  };
+  function pkgImg(code){ return (CITY_PHOTOS[code]&&CITY_PHOTOS[code][0]) || ((DESTINATIONS.filter(function(d){return d.code===code;})[0]||{}).img) || ''; }
+  function pkgFlightNo(code,dir){ return 'TS '+(100+hashStr(code+dir)%900); }
+  function pkgMeals(d,total){ return d===1?['own','own','inc'] : (d===total?['inc','own','own'] : ['inc','inc','own']); }
   function pkgMiles(code){ return distKm('TPE',code)*2; }
   function pkgTitle(p){ return tf('pkg.titleTpl',{city:cityFor(p.code), days:p.days}); }
   function renderPackages(){
@@ -1987,10 +2011,32 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
             '<span class="material-symbols-outlined text-white/40">arrow_forward</span></div></div></button>';
     }).join('');
   }
+  // 圖片輪播
+  var pmPhotos=[], pmSlide=0, pmTimer=null;
+  function pmRenderDots(){
+    document.getElementById('pmDots').innerHTML=pmPhotos.map(function(_,i){ return '<span class="size-1.5 rounded-full '+(i===pmSlide?'bg-white':'bg-white/40')+'"></span>'; }).join('');
+  }
+  function pmSet(i){
+    if(!pmPhotos.length) return;
+    pmSlide=(i+pmPhotos.length)%pmPhotos.length;
+    document.getElementById('pmTrack').style.transform='translateX('+(-pmSlide*100)+'%)';
+    pmRenderDots();
+  }
+  function pmBuild(code){
+    pmPhotos=(CITY_PHOTOS[code]||[pkgImg(code)]).filter(Boolean);
+    document.getElementById('pmTrack').innerHTML=pmPhotos.map(function(u){ return '<img src="'+u+'" alt="" class="w-full shrink-0 h-full object-cover"/>'; }).join('');
+    pmSlide=0; pmSet(0);
+    if(pmTimer) clearInterval(pmTimer);
+    pmTimer=setInterval(function(){ pmSet(pmSlide+1); }, 3500);
+  }
+  function mealLine(d,total){
+    var m=pkgMeals(d,total), labels=['pkg.meal.b','pkg.meal.l','pkg.meal.d'];
+    return m.map(function(s,i){ var inc=s==='inc'; return '<span class="'+(inc?'text-emerald-300/90':'text-white/35')+'">'+t(labels[i])+' '+t(inc?'pkg.meal.inc':'pkg.meal.own')+'</span>'; }).join('<span class="text-white/20"> · </span>');
+  }
   function openPkgModal(idx){
     var p=PACKAGES[idx]; if(!p) return; pkgCurrent=p;
     var city=cityFor(p.code), nights=p.days-1;
-    document.getElementById('pmImg').src=pkgImg(p.code);
+    pmBuild(p.code);
     document.getElementById('pmTitle').textContent=pkgTitle(p);
     document.getElementById('pmMeta').textContent=cityFor('TPE')+' → '+city+' · '+tf('pkg.nights',{n:nights});
     document.getElementById('pmIncludes').innerHTML=[tf('pkg.inc.flight',{city:city}),tf('pkg.inc.hotel',{n:nights}),t('pkg.inc.transfer'),t('pkg.inc.tour'),t('pkg.inc.insurance')]
@@ -1998,14 +2044,19 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     var mid=['pkg.d2','pkg.d3','pkg.d4'], days='';
     for(var d=1;d<=p.days;d++){
       var key = d===1?'pkg.d1' : (d===p.days?'pkg.d5' : mid[(d-2)%3]);
-      days+='<li class="flex items-start gap-3"><span class="shrink-0 size-7 rounded-full bg-primary/25 text-primary-hover text-xs font-bold flex items-center justify-center">'+d+'</span><div><p class="text-white/40 text-[11px]">'+tf('pkg.dayN',{n:d})+'</p><p>'+tf(key,{city:city})+'</p></div></li>';
+      var flight = d===1 ? tf('pkg.flightDep',{no:pkgFlightNo(p.code,'OUT'), city:city})
+                 : (d===p.days ? tf('pkg.flightRet',{no:pkgFlightNo(p.code,'RET'), city:city}) : '');
+      days+='<li class="flex items-start gap-3"><span class="shrink-0 size-7 rounded-full bg-primary/25 text-primary-hover text-xs font-bold flex items-center justify-center">'+d+'</span>'+
+        '<div class="flex-1"><p class="text-white/40 text-[11px]">'+tf('pkg.dayN',{n:d})+'</p><p>'+tf(key,{city:city})+'</p>'+
+        (flight?'<p class="text-amber-300/90 text-xs mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">flight</span>'+flight+'</p>':'')+
+        '<p class="text-[11px] mt-1 flex flex-wrap items-center gap-1">'+mealLine(d,p.days)+'</p></div></li>';
     }
     document.getElementById('pmItinerary').innerHTML=days;
     document.getElementById('pmPrice').textContent=money(p.price)+' '+t('pkg.perPerson');
     document.getElementById('pmMiles').textContent=tf('bk.miles',{n:pkgMiles(p.code).toLocaleString('en-US')});
     var m=document.getElementById('pkgModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
   }
-  function closePkgModal(){ var m=document.getElementById('pkgModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; }
+  function closePkgModal(){ if(pmTimer){ clearInterval(pmTimer); pmTimer=null; } var m=document.getElementById('pkgModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; }
   function loadPackages(){ try{ return JSON.parse(localStorage.getItem('tskyler_packages'))||[]; }catch(e){ return []; } }
   function savePackages(a){ try{ localStorage.setItem('tskyler_packages', JSON.stringify(a)); }catch(e){} }
   function bookPackage(){
@@ -2588,6 +2639,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("closePkg").addEventListener("click", closePkgModal);
   document.getElementById("pkgModal").addEventListener("click", function(e){ if(e.target===this) closePkgModal(); });
   document.getElementById("pmBook").addEventListener("click", bookPackage);
+  document.getElementById("pmPrev").addEventListener("click", function(){ pmSet(pmSlide-1); });
+  document.getElementById("pmNext").addEventListener("click", function(){ pmSet(pmSlide+1); });
 
   // 飯店 / 租車
   document.getElementById("hotelBtn").addEventListener("click", renderHotels);
