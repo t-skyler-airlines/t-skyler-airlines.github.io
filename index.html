@@ -206,6 +206,10 @@
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">edit_calendar</span>
 <span class="font-semibold" data-i18n="nav.trips">管理行程</span>
 </a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#checkin">
+<span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">how_to_reg</span>
+<span class="font-semibold" data-i18n="nav.checkin">報到 / 動態</span>
+</a>
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#help">
 <span class="material-symbols-outlined text-white/70 group-hover:text-white transition-colors">support_agent</span>
 <span class="font-semibold" data-i18n="nav.help">協助</span>
@@ -630,6 +634,32 @@
 <div id="accountBody" class="mt-6"></div>
 </div>
 </section>
+
+<!-- ====== 報到 / 航班動態 View ====== -->
+<section id="view-checkin" data-view class="hidden bg-background-dark min-h-screen py-8 sm:py-12">
+<div class="max-w-[760px] mx-auto px-4 sm:px-6 lg:px-8">
+<button class="back-btn flex items-center gap-1 text-white/60 hover:text-white mb-6 text-sm font-medium" data-goto="">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span> <span data-i18n="trips.back">返回首頁</span>
+</button>
+<h3 class="text-white text-2xl sm:text-3xl font-black mb-6 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">how_to_reg</span> <span data-i18n="ci.head">報到與航班動態</span></h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="bg-card-dark border border-white/10 rounded-2xl p-6">
+<h4 class="text-white font-bold mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airplane_ticket</span> <span data-i18n="ci.title">線上報到</span></h4>
+<p class="text-white/50 text-sm mb-4" data-i18n="ci.desc">輸入訂位代碼以取得登機證。</p>
+<input id="ciPnr" type="text" data-i18n-ph="ci.pnrPh" placeholder="訂位代碼（例：XK4D9P）" class="w-full h-12 px-4 mb-3 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-widest"/>
+<button id="ciBtn" class="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">how_to_reg</span> <span data-i18n="ci.btn">報到</span></button>
+<p id="ciMsg" class="text-sm mt-3"></p>
+</div>
+<div class="bg-card-dark border border-white/10 rounded-2xl p-6">
+<h4 class="text-white font-bold mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">flight_takeoff</span> <span data-i18n="fs.title">航班動態</span></h4>
+<p class="text-white/50 text-sm mb-4" data-i18n="fs.desc">輸入航班編號查詢即時動態。</p>
+<input id="fsNo" type="text" data-i18n-ph="fs.ph" placeholder="航班編號（例：TS388）" class="w-full h-12 px-4 mb-3 bg-input-dark border-transparent focus:border-primary focus:ring-0 rounded-lg text-white placeholder-white/40 font-medium uppercase tracking-wider"/>
+<button id="fsBtn" class="w-full h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined">search</span> <span data-i18n="fs.btn">查詢</span></button>
+<div id="fsResult" class="mt-4"></div>
+</div>
+</div>
+</div>
+</section>
 </main>
 <footer class="bg-primary pt-16 pb-8 border-t border-white/5 text-white">
 <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -673,6 +703,7 @@
 <div>
 <h5 class="text-white font-bold mb-4" data-i18n="foot.support">支援服務</h5>
 <ul class="flex flex-col gap-3 text-sm text-white/60">
+<li><a class="hover:text-white transition-colors" href="#checkin" data-i18n="nav.checkin">報到 / 動態</a></li>
 <li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.helpc">幫助中心</a></li>
 <li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.contact">聯絡我們</a></li>
 <li><a class="hover:text-white transition-colors" href="#help" data-i18n="foot.baggage">行李資訊</a></li>
@@ -1328,6 +1359,32 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['account.tripsCount']=['{n} 筆行程','{n} trips','{n} 件の旅程','여정 {n}건'];
   D['alert.needlogin']=['請輸入姓名與電子郵件','Please enter your name and email','氏名とメールを入力してください','이름과 이메일을 입력하세요'];
 
+  // 線上報到 / 航班動態
+  D['nav.checkin']=['報到 / 動態','Check-in / Status','搭乗手続き / 運航','체크인 / 현황'];
+  D['ci.head']=['報到與航班動態','Check-in & Flight Status','搭乗手続きと運航状況','체크인 및 항공편 현황'];
+  D['ci.title']=['線上報到','Online Check-in','オンラインチェックイン','온라인 체크인'];
+  D['ci.desc']=['輸入訂位代碼以取得登機證。','Enter your booking code (PNR) to get your boarding pass.','予約番号(PNR)を入力して搭乗券を取得。','예약번호(PNR)를 입력해 탑승권을 받으세요.'];
+  D['ci.pnrPh']=['訂位代碼（例：XK4D9P）','Booking code (e.g. XK4D9P)','予約番号（例：XK4D9P）','예약번호 (예: XK4D9P)'];
+  D['ci.btn']=['報到','Check In','チェックイン','체크인'];
+  D['ci.notfound']=['查無此訂位代碼。請先在「我的行程」生成機票。','No booking found. Generate a ticket in My Trips first.','予約が見つかりません。先に「マイ旅程」で搭乗券を発行してください。','예약을 찾을 수 없습니다. 먼저 “내 여정”에서 항공권을 생성하세요.'];
+  D['ci.success']=['報到成功！已開啟您的登機證。','Checked in! Your boarding pass is ready.','チェックイン完了！搭乗券を表示しました。','체크인 완료! 탑승권을 열었습니다.'];
+  D['fs.title']=['航班動態','Flight Status','運航状況','항공편 현황'];
+  D['fs.desc']=['輸入航班編號查詢即時動態。','Enter a flight number to check live status.','便名を入力して運航状況を確認。','편명을 입력해 실시간 현황을 확인하세요.'];
+  D['fs.ph']=['航班編號（例：TS388）','Flight number (e.g. TS388)','便名（例：TS388）','편명 (예: TS388)'];
+  D['fs.btn']=['查詢','Check','照会','조회'];
+  D['fs.invalid']=['請輸入有效航班編號（例：TS388）。','Enter a valid flight number (e.g. TS388).','有効な便名を入力してください（例：TS388）。','유효한 편명을 입력하세요 (예: TS388).'];
+  D['fs.sched']=['表定','Scheduled','定刻','정시'];
+  D['fs.est']=['預估','Estimated','予定','예상'];
+  D['fs.gate']=['登機門','Gate','搭乗口','게이트'];
+  D['fs.terminal']=['航廈','Terminal','ターミナル','터미널'];
+  D['fs.dep']=['出發','Departure','出発','출발'];
+  D['fs.arr']=['抵達','Arrival','到着','도착'];
+  D['st.ontime']=['準時','On Time','定刻','정시'];
+  D['st.boarding']=['登機中','Boarding','搭乗中','탑승 중'];
+  D['st.delayed']=['延誤','Delayed','遅延','지연'];
+  D['st.departed']=['已起飛','Departed','出発済','출발함'];
+  D['st.arrived']=['已抵達','Arrived','到着済','도착함'];
+
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
   function regionLabel(zh){ return t('region.'+zh); }
@@ -1567,6 +1624,41 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     document.getElementById('cookieTip').textContent=t('cookie.tip');
   }
 
+  // ====== 線上報到 / 航班動態 ======
+  function doCheckin(){
+    var pnr=(document.getElementById('ciPnr').value||'').trim().toUpperCase();
+    var msg=document.getElementById('ciMsg');
+    var trip=loadTrips().filter(function(tp){ return (tp.pnr||'').toUpperCase()===pnr; })[0];
+    if(!pnr || !trip){ msg.className='text-sm mt-3 text-red-300'; msg.textContent=t('ci.notfound'); return; }
+    msg.className='text-sm mt-3 text-emerald-300'; msg.textContent=t('ci.success');
+    renderPass(trip); showTicket();
+  }
+  function hashStr(s){ var h=2166136261; for(var i=0;i<s.length;i++){ h=(h^s.charCodeAt(i))>>>0; h=(h*16777619)>>>0; } return h>>>0; }
+  function doFlightStatus(){
+    var raw=(document.getElementById('fsNo').value||'').trim().toUpperCase().replace(/\s+/g,'');
+    var m=raw.match(/^([A-Z]{0,3})(\d{1,4})$/);
+    var res=document.getElementById('fsResult');
+    if(!m || !m[2]){ res.innerHTML='<p class="text-red-300 text-sm">'+t('fs.invalid')+'</p>'; return; }
+    var code=m[1]||'TS', flight=code+' '+m[2], h=hashStr(code+m[2]);
+    var stKeys=['st.ontime','st.boarding','st.delayed','st.departed','st.arrived'];
+    var stCol=['#34d399','#60a5fa','#fbbf24','#94a3b8','#94a3b8'];
+    var si=h%5;
+    var schedDep=5*60+(h%(16*60)), dur=80+((h>>3)%620), schedArr=schedDep+dur;
+    var delay = si===2 ? 20+((h>>7)%80) : 0, estDep=schedDep+delay, estArr=schedArr+delay;
+    var gate='ABCD'[h%4]+(1+((h>>5)%28)), term=1+((h>>2)%2);
+    function leg(lbl,est,sched){
+      return '<div><p class="text-white/40 text-[11px]">'+lbl+'</p><p class="text-white font-bold text-lg">'+fmtTime(est)+'</p>'+
+        (delay?'<p class="text-white/40 text-[11px] line-through">'+fmtTime(sched)+'</p>':'<p class="text-white/40 text-[11px]">'+t('fs.sched')+' '+fmtTime(sched)+'</p>')+'</div>';
+    }
+    res.innerHTML='<div class="bg-input-dark rounded-xl p-4">'+
+      '<div class="flex items-center justify-between mb-3"><p class="text-white font-black text-lg">'+flight+'</p>'+
+        '<span class="text-xs font-bold px-3 py-1 rounded-full" style="background:'+stCol[si]+'26;color:'+stCol[si]+'">'+t(stKeys[si])+'</span></div>'+
+      '<div class="grid grid-cols-2 gap-y-4 gap-x-3">'+leg(t('fs.dep'),estDep,schedDep)+leg(t('fs.arr'),estArr,schedArr)+
+        '<div><p class="text-white/40 text-[11px]">'+t('fs.gate')+'</p><p class="text-white font-bold">'+gate+'</p></div>'+
+        '<div><p class="text-white/40 text-[11px]">'+t('fs.terminal')+'</p><p class="text-white font-bold">T'+term+'</p></div>'+
+      '</div></div>';
+  }
+
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
   function setUser(u){ try{ if(u) localStorage.setItem('tskyler_user',JSON.stringify(u)); else localStorage.removeItem('tskyler_user'); }catch(e){} }
@@ -1658,7 +1750,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       t.classList.toggle('text-white/60', !on);
     });
   }
-  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account' };
+  var VIEW_OF={ flights:'view-flights', booking:'view-booking', seats:'view-seats', trips:'view-trips', member:'view-member', help:'view-help', about:'view-about', careers:'view-careers', cookie:'view-cookie', account:'view-account', checkin:'view-checkin' };
   function route(){
     var h=(location.hash||'').replace('#','');
     var view = VIEW_OF[h] || 'view-home';
@@ -2094,6 +2186,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   Array.prototype.forEach.call(document.querySelectorAll('.auth-btn'), function(b){
     b.addEventListener('click', function(){ location.hash='account'; });
   });
+
+  // 報到 / 航班動態
+  document.getElementById("ciBtn").addEventListener("click", doCheckin);
+  document.getElementById("ciPnr").addEventListener("keydown", function(e){ if(e.key==='Enter') doCheckin(); });
+  document.getElementById("fsBtn").addEventListener("click", doFlightStatus);
+  document.getElementById("fsNo").addEventListener("keydown", function(e){ if(e.key==='Enter') doFlightStatus(); });
 
   document.getElementById("flightList").addEventListener("click", function(e){
     var btn=e.target.closest('.select-flight'); if(!btn) return;
