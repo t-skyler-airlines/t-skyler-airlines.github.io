@@ -553,8 +553,9 @@
 </div>
 </div>
 </div>
-<div class="mb-4">
+<div class="mb-4 flex flex-wrap gap-2">
 <button id="dlMemberCard" class="h-10 px-4 bg-card-dark border border-white/10 hover:border-white/30 text-white text-sm font-bold rounded-lg flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">download</span><span data-i18n="vcard.download">下載會員卡</span></button>
+<button id="walletBtn" style="display:none" class="h-10 px-4 bg-black hover:bg-black/80 border border-white/15 text-white text-sm font-bold rounded-lg flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">wallet</span><span class="wallet-label" data-i18n="vcard.wallet">加入 Apple 錢包</span></button>
 </div>
 <div class="bg-card-dark border border-white/10 rounded-xl p-4 mb-8">
 <div class="flex justify-between text-xs text-white/70 mb-1.5"><span id="memberProgressText">—</span><span id="memberNextTier"></span></div>
@@ -1668,6 +1669,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['pkg.flightRet']=['搭乘 {no}：{city} → 台北','Flight {no}: {city} → Taipei','{no}便：{city} → 台北','{no}편: {city} → 타이베이'];
   D['vcard.no']=['卡號','Card No.','会員番号','카드번호'];
   D['vcard.download']=['下載會員卡','Download Card','会員カードを保存','회원 카드 저장'];
+  D['vcard.wallet']=['加入 Apple 錢包','Add to Apple Wallet','Apple Walletに追加','Apple 지갑에 추가'];
+  D['vcard.walletLoading']=['產生中…','Generating…','作成中…','생성 중…'];
+  D['vcard.walletLimit']=['今日會員卡產生已達上限（每天 20 張），請明天再試。','Daily card limit reached (20/day). Please try again tomorrow.','本日の発行上限（20枚）に達しました。明日お試しください。','오늘 발급 한도(20장)에 도달했습니다. 내일 다시 시도하세요.'];
+  D['vcard.walletErr']=['產生失敗，請稍後再試。','Could not create the pass. Please try again later.','作成に失敗しました。後でお試しください。','생성에 실패했습니다. 나중에 다시 시도하세요.'];
   D['fl.codeshare']=['聯營航班','Codeshare','共同運航','코드셰어'];
   D['fl.operatedBy']=['由 {a} 執飛','Operated by {a}','{a} 運航','{a} 운항'];
 
@@ -2360,6 +2365,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       PLATINUM:'linear-gradient(135deg,#cabfff 0%,#8a7ff0 52%,#544a9c 100%)'
     }[tier.code] || 'linear-gradient(135deg,#475569,#1e293b)';
     card.style.background=grad;
+    card.dataset.tier=tier.code;
     document.getElementById('memberTierBadge').textContent=t('tier.'+tier.code);
     document.getElementById('memberMiles').textContent=miles.toLocaleString('en-US');
     var u=getUser();
@@ -2791,6 +2797,54 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       var link=document.createElement("a"); link.download="T-Skyler_Member.png"; link.href=canvas.toDataURL("image/png"); link.click(); btn.disabled=false;
     }).catch(function(){ btn.disabled=false; alert(t('alert.savefail')); });
   });
+
+  // 加入 Apple 錢包（透過 Cloudflare Worker → WalletWallet 產生簽章 .pkpass）
+  // ↓ 部署 wallet-worker 後，把 Worker 網址填進來，按鈕才會出現並可用。
+  var WW_WORKER_URL = '';
+  (function(){
+    var wb=document.getElementById('walletBtn'); if(!wb) return;
+    if(WW_WORKER_URL) wb.style.display='';
+    wb.addEventListener('click', function(){
+      if(!WW_WORKER_URL) return;
+      var btn=this, lbl=btn.querySelector('.wallet-label'), card=document.getElementById('memberCard');
+      var payload={
+        name: document.getElementById('memberName').textContent,
+        memberNo: document.getElementById('memberNo').textContent,
+        tier: (card.dataset.tier||'EXPLORER'),
+        tierName: document.getElementById('memberTierBadge').textContent,
+        miles: document.getElementById('memberMiles').textContent,
+        since: document.getElementById('memberSince').textContent,
+        barcodeValue: TICKET_URL
+      };
+      btn.disabled=true; if(lbl) lbl.textContent=t('vcard.walletLoading');
+      function done(){ btn.disabled=false; if(lbl) lbl.textContent=t('vcard.wallet'); }
+      fetch(WW_WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
+        .then(function(r){
+          if(r.status===429){ var e=new Error('limit'); e.code='limit'; throw e; }
+          if(!r.ok) throw new Error('http '+r.status);
+          var ct=(r.headers.get('Content-Type')||'').toLowerCase();
+          if(ct.indexOf('application/vnd.apple.pkpass')>=0){ return r.blob().then(function(b){ return {blob:b}; }); }
+          return r.json();
+        })
+        .then(function(res){
+          if(res.blob){
+            var url=URL.createObjectURL(res.blob);
+            // iPhone Safari 導向 .pkpass 會跳出「加入 Apple 錢包」；桌機則下載
+            window.location.href=url;
+            setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+          } else if(res.applePassUrl){
+            window.location.href=res.applePassUrl;
+          } else {
+            alert(t('vcard.walletErr'));
+          }
+          done();
+        })
+        .catch(function(e){
+          alert((e&&e.code==='limit') ? t('vcard.walletLimit') : t('vcard.walletErr'));
+          done();
+        });
+    });
+  })();
 
   // 套裝行程
   document.getElementById("pkgList").addEventListener("click", function(e){
