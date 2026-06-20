@@ -512,25 +512,32 @@
 <h3 class="text-white text-2xl sm:text-3xl font-black mb-1" data-i18n="mem.title">Skyler 會員俱樂部</h3>
 <p class="text-white/50 text-sm mb-8" data-i18n="mem.sub">每一次飛行都讓你更靠近下一張頭等艙。</p>
 
-<!-- 會員卡 -->
-<div id="memberCard" class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-8 shadow-2xl">
-<div class="absolute -right-16 -top-16 size-56 bg-white/10 rounded-full blur-2xl"></div>
-<div class="relative z-10">
-<div class="flex items-center justify-between mb-6">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-white">workspace_premium</span>
-<span class="text-white/80 text-sm font-bold tracking-widest">T-SKYLER CLUB</span>
+<!-- 虛擬會員卡（仿機票） -->
+<div id="memberCard" class="rounded-2xl overflow-hidden shadow-2xl mb-4 flex flex-col sm:flex-row">
+<div class="flex-1 p-6 sm:p-7 relative">
+<div class="absolute -right-12 -top-12 size-44 bg-white/10 rounded-full blur-2xl"></div>
+<div class="relative flex items-center justify-between mb-5">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-white">workspace_premium</span><span class="text-white/85 text-sm font-bold tracking-[0.2em]">T-SKYLER CLUB</span></div>
+<span id="memberTierBadge" class="text-[11px] font-black text-white bg-black/25 px-3 py-1 rounded-full">—</span>
 </div>
-<span id="memberTierBadge" class="text-xs font-black text-white/90 bg-black/20 px-3 py-1 rounded-full">—</span>
-</div>
-<p id="memberName" class="text-white text-xl font-bold mb-1" data-i18n="mem.member">尊貴會員</p>
-<p class="text-white/70 text-sm mb-6" data-i18n="mem.miles">累積哩程</p>
-<p class="text-white text-4xl font-black mb-6"><span id="memberMiles">0</span> <span class="text-lg font-bold text-white/70" data-i18n="mem.milesUnit">哩</span></p>
-<div>
-<div class="flex justify-between text-xs text-white/80 mb-1.5"><span id="memberProgressText">—</span><span id="memberNextTier"></span></div>
-<div class="h-2 bg-black/25 rounded-full overflow-hidden"><div id="memberProgressBar" class="h-full bg-white rounded-full transition-all" style="width:0%"></div></div>
+<p class="text-white/60 text-[11px] tracking-widest font-semibold relative" data-i18n="mem.member">尊貴會員</p>
+<p id="memberName" class="text-white text-2xl font-black mb-5 relative">—</p>
+<div class="flex gap-8 relative">
+<div><p class="text-white/55 text-[11px]" data-i18n="vcard.no">卡號</p><p id="memberNo" class="text-white font-bold tracking-wider">—</p></div>
+<div><p class="text-white/55 text-[11px]" data-i18n="mem.miles">累積哩程</p><p class="text-white font-bold"><span id="memberMiles">0</span> <span class="text-xs text-white/70" data-i18n="mem.milesUnit">哩</span></p></div>
 </div>
 </div>
+<div class="relative sm:w-[150px] p-4 flex sm:flex-col items-center justify-center gap-2 bg-black/20">
+<div class="bg-white rounded-md p-1.5"><div id="memberQR" class="flex items-center justify-center"></div></div>
+<span id="memberTierStub" class="text-white/80 text-[10px] font-bold tracking-wider">—</span>
+</div>
+</div>
+<div class="mb-4">
+<button id="dlMemberCard" class="h-10 px-4 bg-card-dark border border-white/10 hover:border-white/30 text-white text-sm font-bold rounded-lg flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">download</span><span data-i18n="vcard.download">下載會員卡</span></button>
+</div>
+<div class="bg-card-dark border border-white/10 rounded-xl p-4 mb-8">
+<div class="flex justify-between text-xs text-white/70 mb-1.5"><span id="memberProgressText">—</span><span id="memberNextTier"></span></div>
+<div class="h-2 bg-black/25 rounded-full overflow-hidden"><div id="memberProgressBar" class="h-full bg-primary rounded-full transition-all" style="width:0%"></div></div>
 </div>
 
 <h4 class="text-white font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">military_tech</span> <span data-i18n="mem.tiers">會員等級與權益</span></h4>
@@ -1584,6 +1591,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['pkg.book']=['預訂套票','Book Package','パッケージを予約','패키지 예약'];
   D['pkg.booked']=['套票預訂成功！已累積 {n} 哩。','Package booked! You earned {n} miles.','パッケージ予約完了！{n}マイル獲得。','패키지 예약 완료! {n} 마일 적립.'];
   D['pkg.perPerson']=['／人起','/person','／人〜','/인부터'];
+  D['vcard.no']=['卡號','Card No.','会員番号','카드번호'];
+  D['vcard.download']=['下載會員卡','Download Card','会員カードを保存','회원 카드 저장'];
 
   function t(k){ var a=(typeof D!=='undefined'&&D)?D[k]:null; return a ? (a[LANG_IDX]!=null?a[LANG_IDX]:a[0]) : k; }
   function tf(k,vars){ var s=t(k); for(var n in vars) s=s.split('{'+n+'}').join(vars[n]); return s; }
@@ -2129,10 +2138,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     for(i=0;i<TIERS.length;i++){ if(miles>=TIERS[i].min) tier=TIERS[i]; }
     for(i=0;i<TIERS.length;i++){ if(TIERS[i].min>miles){ next=TIERS[i]; break; } }
     var card=document.getElementById('memberCard');
-    card.style.background='linear-gradient(135deg,'+tier.color+' 0%,#001B38 90%)';
+    card.style.background='linear-gradient(120deg,'+tier.color+' 0%,#001B38 92%)';
     document.getElementById('memberTierBadge').textContent=t('tier.'+tier.code);
+    document.getElementById('memberTierStub').textContent=t('tier.'+tier.code);
     document.getElementById('memberMiles').textContent=miles.toLocaleString('en-US');
-    document.getElementById('memberName').textContent=(trips[0]&&trips[0].name)||t('mem.member');
+    var u=getUser();
+    document.getElementById('memberName').textContent=(u&&u.name)||(trips[0]&&trips[0].name)||t('mem.member');
+    var seed=hashStr((u&&(u.email||u.name))||'GUEST')%1000000000, dg=('000000000'+seed).slice(-9);
+    document.getElementById('memberNo').textContent='TS '+dg.slice(0,3)+' '+dg.slice(3,6)+' '+dg.slice(6,9);
+    makeQR(document.getElementById('memberQR'));
     var bar=document.getElementById('memberProgressBar'), pt=document.getElementById('memberProgressText'), nt=document.getElementById('memberNextTier');
     if(next){
       var pct=Math.max(0,Math.min(100, Math.round((miles-tier.min)/(next.min-tier.min)*100)));
@@ -2541,6 +2555,14 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("dealList").addEventListener("click", function(e){
     var b=e.target.closest('.deal-book'); if(!b) return;
     bookDestination(b.getAttribute('data-dest'));
+  });
+
+  // 下載虛擬會員卡
+  document.getElementById("dlMemberCard").addEventListener("click", function(){
+    var node=document.getElementById("memberCard"), btn=this; btn.disabled=true;
+    html2canvas(node,{scale:2,backgroundColor:null,useCORS:true}).then(function(canvas){
+      var link=document.createElement("a"); link.download="T-Skyler_Member.png"; link.href=canvas.toDataURL("image/png"); link.click(); btn.disabled=false;
+    }).catch(function(){ btn.disabled=false; alert(t('alert.savefail')); });
   });
 
   // 套裝行程
