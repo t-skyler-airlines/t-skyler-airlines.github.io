@@ -17,6 +17,8 @@ const ALLOWED_ORIGINS = [
   'https://t-skyler-airlines.github.io',
   'http://localhost:8765',   // 本機預覽（可自行移除）
   'http://127.0.0.1:8765',
+  'http://localhost:8770',   // 本機預覽備用埠（可自行移除）
+  'http://127.0.0.1:8770',
 ];
 
 const DAILY_LIMIT = 20;        // 每天最多產生幾張會員卡
@@ -43,33 +45,11 @@ export default {
     // ---- 讀取前端送來的會員資料並清洗 ----
     let body = {};
     try { body = await request.json(); } catch (_) {}
-    const name     = sanitize(body.name, 40)      || 'T-Skyler Member';
-    const memberNo = sanitize(body.memberNo, 24)  || 'TS 000 000 000';
-    const tierCode = sanitize(body.tier, 16).toUpperCase() || 'EXPLORER';
-    const tierName = sanitize(body.tierName, 24)  || titleCase(tierCode);
-    const miles    = sanitize(String(body.miles == null ? '0' : body.miles), 16) || '0';
-    const since    = sanitize(String(body.since == null ? '' : body.since), 8);
-    const barcode  = sanitize(body.barcodeValue, 256) || memberNo;
+    const kind = sanitize(body.kind, 16).toLowerCase() || 'member';
 
-    const PRESET = { EXPLORER: 'dark', SILVER: 'dark', GOLD: 'orange', PLATINUM: 'purple' };
-    const colorPreset = PRESET[tierCode] || 'dark';
-
-    const payload = {
-      organizationName: 'T-Skyler Airlines',
-      logoText: 'T-SKYLER CLUB',
-      description: 'T-Skyler Club Membership Card',
-      colorPreset,
-      barcodeValue: barcode,
-      barcodeFormat: 'QR',
-      headerFields:    [{ label: 'MILES', value: miles }],
-      primaryFields:   [{ label: 'MEMBER', value: name }],
-      secondaryFields: [{ label: 'TIER', value: tierName }, { label: 'SINCE', value: since }],
-      auxiliaryFields: [{ label: 'CARD NO.', value: memberNo }],
-      backFields: [
-        { label: 'About', value: 'Tschool Aviation Research Club — virtual membership card.' },
-        { label: 'Website', value: 'https://t-skyler-airlines.github.io' },
-      ],
-    };
+    const payload = kind === 'boarding'
+      ? buildBoardingPayload(body)
+      : buildMemberPayload(body);
 
     // ---- 呼叫 WalletWallet ----
     let ww;
@@ -114,6 +94,70 @@ export default {
     return json({ applePassUrl, googlePayUrl, serialNumber: data.serialNumber || null }, 200, cors);
   },
 };
+
+// ---------- pass payload builders ----------
+function buildMemberPayload(body) {
+  const name     = sanitize(body.name, 40)      || 'T-Skyler Member';
+  const memberNo = sanitize(body.memberNo, 24)  || 'TS 000 000 000';
+  const tierCode = sanitize(body.tier, 16).toUpperCase() || 'EXPLORER';
+  const tierName = sanitize(body.tierName, 24)  || titleCase(tierCode);
+  const miles    = sanitize(String(body.miles == null ? '0' : body.miles), 16) || '0';
+  const since    = sanitize(String(body.since == null ? '' : body.since), 8);
+  const barcode  = sanitize(body.barcodeValue, 256) || memberNo;
+  const PRESET = { EXPLORER: 'dark', SILVER: 'dark', GOLD: 'orange', PLATINUM: 'purple' };
+  return {
+    organizationName: 'T-Skyler Airlines',
+    logoText: 'T-SKYLER CLUB',
+    description: 'T-Skyler Club Membership Card',
+    colorPreset: PRESET[tierCode] || 'dark',
+    barcodeValue: barcode,
+    barcodeFormat: 'QR',
+    headerFields:    [{ label: 'MILES', value: miles }],
+    primaryFields:   [{ label: 'MEMBER', value: name }],
+    secondaryFields: [{ label: 'TIER', value: tierName }, { label: 'SINCE', value: since }],
+    auxiliaryFields: [{ label: 'CARD NO.', value: memberNo }],
+    backFields: [
+      { label: 'About', value: 'Tschool Aviation Research Club — virtual membership card.' },
+      { label: 'Website', value: 'https://t-skyler-airlines.github.io' },
+    ],
+  };
+}
+function buildBoardingPayload(body) {
+  const from     = sanitize(body.from, 6)       || 'TPE';
+  const to       = sanitize(body.to, 6)         || 'NRT';
+  const fromCity = sanitize(body.fromCity, 30)  || from;
+  const toCity   = sanitize(body.toCity, 30)    || to;
+  const flightNo = sanitize(body.flightNo, 12)  || 'TS 388';
+  const passenger= sanitize(body.passenger, 40) || 'T-Skyler Passenger';
+  const seat     = sanitize(body.seat, 12)      || '—';
+  const gate     = sanitize(body.gate, 8)       || '—';
+  const boarding = sanitize(body.boarding, 8)   || '—';
+  const date     = sanitize(body.date, 16)      || '';
+  const terminal = sanitize(body.terminal, 4)   || '—';
+  const group    = sanitize(body.group, 12)     || '';
+  const aircraft = sanitize(body.aircraft, 40)  || '';
+  const pnr      = sanitize(body.pnr, 12)       || '';
+  const barcode  = sanitize(body.barcodeValue, 256) || pnr || flightNo;
+  return {
+    organizationName: 'T-Skyler Airlines',
+    logoText: 'T-SKYLER',
+    description: 'T-Skyler Boarding Pass',
+    colorPreset: 'blue',
+    barcodeValue: barcode,
+    barcodeFormat: 'QR',
+    headerFields:    [{ label: 'FLIGHT', value: flightNo }],
+    primaryFields:   [{ label: from, value: from }, { label: to, value: to }],
+    secondaryFields: [{ label: 'PASSENGER', value: passenger }, { label: 'SEAT', value: seat }],
+    auxiliaryFields: [{ label: 'GATE', value: gate }, { label: 'BOARDING', value: boarding }, { label: 'DATE', value: date }],
+    backFields: [
+      { label: 'Route', value: fromCity + ' (' + from + ')  →  ' + toCity + ' (' + to + ')' },
+      { label: 'Terminal', value: terminal },
+      { label: 'Group', value: group },
+      { label: 'Aircraft', value: aircraft },
+      { label: 'Booking Ref', value: pnr },
+    ],
+  };
+}
 
 // ---------- helpers ----------
 function corsHeaders(origin) {
