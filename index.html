@@ -526,9 +526,12 @@
 <p class="text-white/50 text-sm mb-8" data-i18n="mem.sub">每一次飛行都讓你更靠近下一張頭等艙。</p>
 
 <!-- 虛擬會員卡（信用卡尺寸質感） -->
-<div id="memberCard" class="relative mx-auto sm:mx-0 w-full max-w-[440px] aspect-[1.585/1] rounded-2xl overflow-hidden shadow-2xl text-white select-none">
+<div id="memberCard" class="relative mx-auto sm:mx-0 w-full max-w-[440px] aspect-[1.585/1] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/15 text-white select-none">
 <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(120deg,rgba(255,255,255,.24),transparent 42%)"></div>
 <div class="absolute -right-10 -top-16 size-48 bg-white/15 rounded-full blur-2xl pointer-events-none"></div>
+<!-- 護紋：航線曲線紋理 -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-25" viewBox="0 0 440 277" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#ffffff" stroke-width="0.7" stroke-opacity="0.55"><path d="M-20 205 C 120 120 300 270 470 120"/><path d="M-20 220 C 120 135 300 285 470 135"/><path d="M-20 235 C 120 150 300 300 470 150"/><path d="M-20 250 C 120 165 300 315 470 165"/><path d="M-20 265 C 120 180 300 330 470 180"/></g></svg>
+<span class="material-symbols-outlined absolute right-4 top-9 pointer-events-none select-none" style="font-size:118px;color:rgba(255,255,255,0.07);transform:rotate(-18deg)">flight</span>
 <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(to top,rgba(0,0,0,.42),transparent 56%)"></div>
 <div class="relative h-full p-5 sm:p-6 flex flex-col">
 <div class="flex items-start justify-between">
@@ -937,71 +940,55 @@
 <span class="material-symbols-outlined">close</span>
 </button>
 
-<!-- 可被截圖的登機證 -->
-<div id="boardingPass" class="bg-white rounded-2xl overflow-hidden shadow-2xl font-display flex flex-col md:flex-row">
-<!-- 主票根 -->
-<div class="flex-1 p-6 sm:p-8 relative">
-<div class="flex items-center justify-between mb-6">
+<!-- 可被截圖的登機證（Apple 錢包風格） -->
+<div id="boardingPass" class="mx-auto w-full max-w-[400px] rounded-[22px] overflow-hidden shadow-2xl font-display" style="background:#d9e6f3;color:#173a72">
+<div class="p-6 sm:p-7">
+<!-- 標頭：logo + 日期 -->
+<div class="flex items-start justify-between mb-7">
 <div class="flex items-center gap-2">
-<img src="logo.png" alt="Logo" class="size-9 object-contain"/>
-<div>
-<p class="text-primary font-black text-lg leading-none">T-SKYLER</p>
-<p class="text-slate-400 text-[10px] tracking-[0.2em] font-semibold">AIRLINES · <span data-i18n="bp.subtitle">登機證</span></p>
-<p id="bpOperator" class="text-amber-500 text-[9px] font-semibold mt-0.5"></p>
-</div>
-</div>
-<span id="bpClass" class="text-[11px] font-bold text-white bg-primary px-3 py-1 rounded-full">ECONOMY</span>
-</div>
-
-<div class="flex items-center justify-between mb-6">
-<div class="text-left">
-<p id="bpFromCode" class="text-4xl sm:text-5xl font-black text-slate-900 leading-none">TPE</p>
-<p id="bpFromCity" class="text-slate-500 text-sm mt-1 font-medium">台北</p>
-</div>
-<div class="flex-1 flex flex-col items-center px-2">
-<span class="material-symbols-outlined text-primary text-3xl">flight</span>
-<div class="w-full border-t-2 border-dashed border-slate-300 my-1"></div>
-<p id="bpDuration" class="text-slate-400 text-xs font-semibold">— 飛行時間 —</p>
+<img src="logo.png" alt="Logo" class="size-8 object-contain"/>
+<span class="font-black text-2xl tracking-tight" style="color:#173a72">T-SKYLER</span>
 </div>
 <div class="text-right">
-<p id="bpToCode" class="text-4xl sm:text-5xl font-black text-slate-900 leading-none">NRT</p>
-<p id="bpToCity" class="text-slate-500 text-sm mt-1 font-medium">東京</p>
+<p class="text-[10px] tracking-[0.22em] font-bold" style="color:#5b7bab">DATE</p>
+<p id="bpDate" class="text-xl font-black leading-none mt-0.5" style="color:#173a72">04 JUL</p>
 </div>
 </div>
-
-<div class="grid grid-cols-3 sm:grid-cols-4 gap-y-4 gap-x-2 border-t border-slate-200 pt-5">
-<div><p class="bp-label" data-i18n="bp.passenger">乘客</p><p id="bpName" class="bp-val">MASON ZENG</p></div>
-<div><p class="bp-label" data-i18n="bp.flight">航班</p><p id="bpFlight" class="bp-val">TS 388</p></div>
-<div><p class="bp-label" data-i18n="bp.date">日期</p><p id="bpDate" class="bp-val">—</p></div>
-<div><p class="bp-label" data-i18n="bp.boarding">登機時間</p><p id="bpBoard" class="bp-val">—</p></div>
-<div><p class="bp-label" data-i18n="bp.dep">起飛</p><p id="bpDepTime" class="bp-val">—</p></div>
-<div><p class="bp-label" data-i18n="bp.arr">抵達</p><p id="bpArrTime" class="bp-val">—</p></div>
-<div><p class="bp-label" data-i18n="bp.gate">登機門</p><p id="bpGate" class="bp-val">A12</p></div>
-<div><p class="bp-label" data-i18n="bp.seat">座位</p><p id="bpSeat" class="bp-val">14A</p></div>
+<!-- 航線 -->
+<div class="flex items-end justify-between">
+<div class="text-left min-w-0 pr-1">
+<p id="bpFromCity" class="text-[13px] font-semibold truncate" style="color:#5b7bab">東京（羽田）</p>
+<p id="bpFromCode" class="text-5xl font-black leading-none tracking-tight" style="color:#173a72">HND</p>
+</div>
+<div class="shrink-0 px-1 pb-2"><span class="material-symbols-outlined text-3xl" style="color:#173a72">flight</span></div>
+<div class="text-right min-w-0 pl-1">
+<p id="bpToCity" class="text-[13px] font-semibold truncate" style="color:#5b7bab">台北（松山）</p>
+<p id="bpToCode" class="text-5xl font-black leading-none tracking-tight" style="color:#173a72">TSA</p>
 </div>
 </div>
-
-<!-- 撕票線 -->
-<div class="relative bg-primary md:w-[230px] p-6 sm:p-8 text-white flex flex-col justify-between">
-<div class="hidden md:block absolute -left-3 top-1/2 -translate-y-1/2"></div>
-<div>
-<p class="text-white/60 text-[10px] tracking-widest font-semibold mb-1">BOARDING PASS</p>
-<div class="flex items-baseline gap-2">
-<p id="bpFromCode2" class="text-2xl font-black">TPE</p>
-<span class="material-symbols-outlined text-base">arrow_forward</span>
-<p id="bpToCode2" class="text-2xl font-black">NRT</p>
+<!-- FLIGHT / GATE / BOARDING / SEAT / GROUP -->
+<div class="grid grid-cols-5 gap-1.5 mt-7">
+<div><p class="bp2-label">FLIGHT</p><p id="bpFlight" class="bp2-val">TS388</p></div>
+<div><p class="bp2-label">GATE</p><p id="bpGate" class="bp2-val">702</p></div>
+<div><p class="bp2-label">BOARDING</p><p id="bpBoard" class="bp2-val">09:10</p></div>
+<div><p class="bp2-label">SEAT</p><p id="bpSeat" class="bp2-val">(Y)29C</p></div>
+<div><p class="bp2-label">GROUP</p><p id="bpGroup" class="bp2-val">GROUP5</p></div>
 </div>
+<!-- PASSENGER / TERMINAL / 航空代碼 -->
+<div class="grid grid-cols-4 gap-1.5 mt-5">
+<div class="col-span-2 min-w-0"><p class="bp2-label">PASSENGER</p><p id="bpName" class="bp2-val truncate">HO/CHIWEI MR</p></div>
+<div><p class="bp2-label">TERMINAL</p><p id="bpTerminal" class="bp2-val">2</p></div>
+<div class="text-right"><p class="bp2-label">&nbsp;</p><p id="bpAirlineCode" class="bp2-val">TS</p></div>
 </div>
-<div class="space-y-2 my-4 text-sm">
-<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.flight">航班</span><span id="bpFlight2" class="font-bold">TS 388</span></div>
-<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.seat">座位</span><span id="bpSeat2" class="font-bold">14A</span></div>
-<div class="flex justify-between"><span class="text-white/60" data-i18n="bp.price">票價</span><span id="bpPrice" class="font-bold">$—</span></div>
-</div>
-<!-- 條碼 -->
-<a href="https://reurl.cc/M2pZ5K" target="_blank" rel="noopener" class="block bg-white rounded-md p-2 mt-2" title="掃描或點擊查看">
+<!-- 聯盟／營運 -->
+<p id="bpOperator" class="text-center text-[11px] tracking-[0.16em] font-bold mt-7" style="color:#5b7bab">T-SKYLER GLOBAL MEMBER</p>
+<!-- QR -->
+<div class="flex flex-col items-center mt-3">
+<a href="https://reurl.cc/M2pZ5K" target="_blank" rel="noopener" class="block bg-white rounded-xl p-3 shadow-sm" title="掃描或點擊查看">
 <div id="bpBarcode" class="flex items-center justify-center"></div>
-<p id="bpPnr" class="text-slate-800 text-center text-[10px] tracking-[0.3em] font-bold mt-1">XK4D9P</p>
 </a>
+<p id="bpPnr" class="text-center text-[12px] tracking-[0.28em] font-bold mt-2.5" style="color:#173a72">SEC:053</p>
+</div>
 </div>
 </div>
 
@@ -1009,6 +996,9 @@
 <div class="flex flex-col sm:flex-row gap-3 mt-5">
 <button id="saveTicket" class="flex-1 h-12 bg-primary hover:bg-primary-hover text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all">
 <span class="material-symbols-outlined">download</span> <span data-i18n="bp.save">儲存成圖檔</span>
+</button>
+<button id="bpWalletBtn" style="display:none" class="flex-1 h-12 bg-black hover:bg-black/80 text-white font-bold rounded-lg border border-white/15 flex items-center justify-center gap-2 transition-all">
+<span class="material-symbols-outlined">wallet</span> <span class="wallet-label" data-i18n="vcard.wallet">加入 Apple 錢包</span>
 </button>
 <button id="regenTicket" class="flex-1 h-12 bg-white/10 hover:bg-white/20 text-white font-bold rounded-lg border border-white/20 flex items-center justify-center gap-2 transition-all">
 <span class="material-symbols-outlined">refresh</span> <span data-i18n="bp.regen">重新生成</span>
@@ -1020,6 +1010,8 @@
 <style>
 .bp-label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:2px}
 .bp-val{font-size:15px;color:#0f172a;font-weight:700;line-height:1.1}
+.bp2-label{font-size:8.5px;color:#5b7bab;text-transform:uppercase;letter-spacing:0.04em;font-weight:800;margin-bottom:2px;white-space:nowrap}
+.bp2-val{font-size:15px;color:#173a72;font-weight:800;line-height:1.05;letter-spacing:-0.01em}
 .exit-tab{font-size:8px;font-weight:800;color:#34d399;border:1px solid #34d399;border-radius:3px;padding:3px 2px;letter-spacing:.05em;line-height:1}
 .facility{font-size:9px;font-weight:700;color:#cbd5e1;background:rgba(255,255,255,.06);border-radius:6px;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:3px}
 .view-in{animation:viewIn .28s ease both}
@@ -2643,20 +2635,34 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return q;
   }
   // 把登機證資料畫到 modal
+  var CLASS_LETTER={FIRST:'F',BUSINESS:'J',PREMIUM:'W',ECONOMY:'Y'};
+  // 由登機證資料算出登機證的衍生欄位（艙等代碼、登機群組、航廈、營運代碼、安檢序號）
+  function passDerived(p){
+    var cls=CLASS_LETTER[p.cabinCode]||'Y';
+    var leadSeat=(p.seats&&p.seats.length? p.seats[0] : p.seat);
+    var grp={FIRST:'GROUP1',BUSINESS:'GROUP2',PREMIUM:'GROUP3'}[p.cabinCode] || ('GROUP'+(4+(hashStr(p.pnr||'')%2)));
+    var term=1+(hashStr((p.fromCode||'')+(p.no||''))%2);
+    var alCode=p.partner ? (String(p.partner.no).replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase()||'TS') : 'TS';
+    var sec=('00'+(hashStr(p.pnr||'')%1000)).slice(-3);
+    return {seat:'('+cls+')'+leadSeat, group:grp, terminal:String(term), airline:alCode, sec:sec};
+  }
   function renderPass(p){
     currentPass=p;
     function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    var d=passDerived(p);
     set('bpName',p.name);
     set('bpFromCode',p.fromCode); set('bpToCode',p.toCode);
-    set('bpFromCode2',p.fromCode); set('bpToCode2',p.toCode);
     set('bpFromCity',p.fromCity); set('bpToCity',p.toCity);
-    set('bpFlight',p.no); set('bpFlight2',p.no);
-    set('bpDate',p.date); set('bpBoard',fmtTime(p.boardMin));
-    set('bpDepTime',fmtTime(p.depMin)); set('bpArrTime',fmtTime(p.arrMin));
-    set('bpDuration',fmtDur(p.durMin));
-    set('bpOperator', p.partner ? (t('fl.codeshare')+' · '+tf('fl.operatedBy',{a:p.partner.name})+'（'+p.partner.no+'）') : '');
-    set('bpGate',p.gate); set('bpSeat',p.seat); set('bpSeat2',p.seat);
-    set('bpClass',p.cabinCode); set('bpPrice',money(p.price)); set('bpPnr',p.pnr);
+    set('bpFlight',p.no);
+    set('bpDate',p.date);
+    set('bpBoard',fmtTime(p.boardMin));
+    set('bpGate',p.gate);
+    set('bpSeat',d.seat);
+    set('bpGroup',d.group);
+    set('bpTerminal',d.terminal);
+    set('bpAirlineCode',d.airline);
+    set('bpPnr','SEC:'+d.sec);
+    set('bpOperator', p.partner ? tf('fl.operatedBy',{a:p.partner.name}).toUpperCase() : 'T-SKYLER GLOBAL MEMBER');
     makeQR(document.getElementById('bpBarcode'));
   }
   function showTicket(){
@@ -2801,13 +2807,46 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   // 加入 Apple 錢包（透過 Cloudflare Worker → WalletWallet 產生簽章 .pkpass）
   // ↓ 部署 wallet-worker 後，把 Worker 網址填進來，按鈕才會出現並可用。
   var WW_WORKER_URL = 'https://tskyler-wallet.masonzneg702550.workers.dev';
+  // 共用：把資料送到 Worker 產生 pass，成功則導向 .pkpass（iPhone 跳「加入錢包」，桌機下載）
+  function walletAdd(payload, btn){
+    if(!WW_WORKER_URL) return;
+    var lbl=btn.querySelector('.wallet-label');
+    btn.disabled=true; if(lbl) lbl.textContent=t('vcard.walletLoading');
+    function done(){ btn.disabled=false; if(lbl) lbl.textContent=t('vcard.wallet'); }
+    function openPass(bytesOrBlob){
+      var blob=(bytesOrBlob instanceof Blob)? bytesOrBlob : new Blob([bytesOrBlob], {type:'application/vnd.apple.pkpass'});
+      var url=URL.createObjectURL(blob);
+      window.location.href=url;
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+    }
+    fetch(WW_WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
+      .then(function(r){
+        if(r.status===429){ var e=new Error('limit'); e.code='limit'; throw e; }
+        if(!r.ok) throw new Error('http '+r.status);
+        var ct=(r.headers.get('Content-Type')||'').toLowerCase();
+        if(ct.indexOf('application/vnd.apple.pkpass')>=0){ return r.blob().then(function(b){ return {blob:b}; }); }
+        return r.json();
+      })
+      .then(function(res){
+        if(res.blob){ openPass(res.blob); }
+        else if(res.applePass){ openPass(Uint8Array.from(atob(res.applePass), function(c){ return c.charCodeAt(0); })); }
+        else if(res.applePassUrl||res.shareUrl){ window.location.href=res.applePassUrl||res.shareUrl; }
+        else { alert(t('vcard.walletErr')); }
+        done();
+      })
+      .catch(function(e){
+        alert((e&&e.code==='limit') ? t('vcard.walletLimit') : t('vcard.walletErr'));
+        done();
+      });
+  }
+  // 會員卡 → 錢包
   (function(){
     var wb=document.getElementById('walletBtn'); if(!wb) return;
     if(WW_WORKER_URL) wb.style.display='';
     wb.addEventListener('click', function(){
-      if(!WW_WORKER_URL) return;
-      var btn=this, lbl=btn.querySelector('.wallet-label'), card=document.getElementById('memberCard');
-      var payload={
+      var card=document.getElementById('memberCard');
+      walletAdd({
+        kind:'member',
         name: document.getElementById('memberName').textContent,
         memberNo: document.getElementById('memberNo').textContent,
         tier: (card.dataset.tier||'EXPLORER'),
@@ -2815,34 +2854,24 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
         miles: document.getElementById('memberMiles').textContent,
         since: document.getElementById('memberSince').textContent,
         barcodeValue: TICKET_URL
-      };
-      btn.disabled=true; if(lbl) lbl.textContent=t('vcard.walletLoading');
-      function done(){ btn.disabled=false; if(lbl) lbl.textContent=t('vcard.wallet'); }
-      fetch(WW_WORKER_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)})
-        .then(function(r){
-          if(r.status===429){ var e=new Error('limit'); e.code='limit'; throw e; }
-          if(!r.ok) throw new Error('http '+r.status);
-          var ct=(r.headers.get('Content-Type')||'').toLowerCase();
-          if(ct.indexOf('application/vnd.apple.pkpass')>=0){ return r.blob().then(function(b){ return {blob:b}; }); }
-          return r.json();
-        })
-        .then(function(res){
-          if(res.blob){
-            var url=URL.createObjectURL(res.blob);
-            // iPhone Safari 導向 .pkpass 會跳出「加入 Apple 錢包」；桌機則下載
-            window.location.href=url;
-            setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
-          } else if(res.applePassUrl){
-            window.location.href=res.applePassUrl;
-          } else {
-            alert(t('vcard.walletErr'));
-          }
-          done();
-        })
-        .catch(function(e){
-          alert((e&&e.code==='limit') ? t('vcard.walletLimit') : t('vcard.walletErr'));
-          done();
-        });
+      }, this);
+    });
+  })();
+  // 登機證 → 錢包
+  (function(){
+    var wb=document.getElementById('bpWalletBtn'); if(!wb) return;
+    if(WW_WORKER_URL) wb.style.display='';
+    wb.addEventListener('click', function(){
+      var p=currentPass; if(!p) return;
+      var d=passDerived(p);
+      walletAdd({
+        kind:'boarding',
+        passenger: p.name, from: p.fromCode, to: p.toCode,
+        fromCity: p.fromCity, toCity: p.toCity,
+        flightNo: p.no, seat: d.seat, gate: p.gate, boarding: fmtTime(p.boardMin),
+        date: p.date, terminal: d.terminal, group: d.group, airline: d.airline,
+        aircraft: p.aircraft, pnr: p.pnr, barcodeValue: TICKET_URL
+      }, this);
     });
   })();
 
