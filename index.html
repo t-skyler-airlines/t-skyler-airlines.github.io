@@ -697,9 +697,9 @@
 <!-- 核心成員 -->
 <h4 class="text-white text-xl sm:text-2xl font-black mt-10 mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">groups</span><span data-i18n="ts.members">核心成員</span></h4>
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden">
-<img src="tsarc/member-mason.jpg" alt="曾緯淳" class="w-full aspect-[3/4] object-cover" loading="lazy"/>
-<div class="p-4">
+<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden flex sm:block">
+<img src="tsarc/member-mason.jpg" alt="曾緯淳" class="w-28 self-stretch shrink-0 object-cover sm:w-full sm:aspect-[3/4]" loading="lazy"/>
+<div class="p-3.5 sm:p-4 min-w-0 flex-1">
 <p class="text-white font-black">曾緯淳 <span class="text-white/40 text-xs font-semibold">Mason Zeng</span></p>
 <p class="text-accent text-[11px] font-bold tracking-wider mt-0.5" data-i18n="ts.m.role">創社成員</p>
 <p class="text-white/55 text-xs mt-2 leading-relaxed" data-i18n="ts.m1.intro">國中遙控飛機社社長出身，現為無人機飛行教官，這個網站也出自他手。</p>
@@ -710,9 +710,9 @@
 </div>
 </div>
 </div>
-<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden">
-<img src="tsarc/member-johnson.jpg" alt="黃俊陞" class="w-full aspect-[3/4] object-cover" loading="lazy"/>
-<div class="p-4">
+<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden flex sm:block">
+<img src="tsarc/member-johnson.jpg" alt="黃俊陞" class="w-28 self-stretch shrink-0 object-cover sm:w-full sm:aspect-[3/4]" loading="lazy"/>
+<div class="p-3.5 sm:p-4 min-w-0 flex-1">
 <p class="text-white font-black">黃俊陞 <span class="text-white/40 text-xs font-semibold">Johnson Huang</span></p>
 <p class="text-accent text-[11px] font-bold tracking-wider mt-0.5" data-i18n="ts.m.role">創社成員</p>
 <p class="text-white/55 text-xs mt-2 leading-relaxed" data-i18n="ts.m2.intro">社課裡的航空專業知識由他把關，野外調查練出的觀察力，拿來辨識機型剛剛好。</p>
@@ -723,9 +723,9 @@
 </div>
 </div>
 </div>
-<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden">
-<img src="tsarc/member-lintsuyo.jpg" alt="林子佑" class="w-full aspect-[3/4] object-cover" loading="lazy"/>
-<div class="p-4">
+<div class="bg-card-dark border border-white/10 rounded-2xl overflow-hidden flex sm:block">
+<img src="tsarc/member-lintsuyo.jpg" alt="林子佑" class="w-28 self-stretch shrink-0 object-cover sm:w-full sm:aspect-[3/4]" loading="lazy"/>
+<div class="p-3.5 sm:p-4 min-w-0 flex-1">
 <p class="text-white font-black">林子佑 <span class="text-white/40 text-xs font-semibold">Lintsuyo</span></p>
 <p class="text-accent text-[11px] font-bold tracking-wider mt-0.5" data-i18n="ts.m.role">創社成員</p>
 <p class="text-white/55 text-xs mt-2 leading-relaxed" data-i18n="ts.m3.intro">社內的鏡頭擔當，取景與追焦由他示範，聽塔臺對話是他的日常。</p>
@@ -817,7 +817,7 @@
 <li data-i18n="ts.mi1">Google Gemini 全台高中社團祭「AI 創新領航校園」獎。</li>
 <li data-i18n="ts.mi2">品牌化為 T-Skyler Airlines：本網站與 B777-9 安全須知卡，都是社員的作品。</li>
 </ul>
-<img src="tsarc/gemini-award.jpg" alt="Google Gemini 全台高中社團祭獲獎" class="w-full max-w-[420px] rounded-lg" loading="lazy"/>
+<div class="grid grid-cols-2 gap-2 max-w-[560px]"><img src="tsarc/gemini-award.jpg" alt="Google Gemini 全台高中社團祭獲獎" class="w-full h-64 sm:h-80 object-cover object-top rounded-lg" loading="lazy"/><img src="tsarc/merch-safetycard.jpg" alt="B777-9 安全須知卡" class="w-full h-64 sm:h-80 object-cover object-top rounded-lg" loading="lazy"/></div>
 </div>
 
 <!-- 築夢起飛（社長手記） -->
@@ -1165,18 +1165,21 @@
 
 <!-- ====== 手機底部導覽列 (App 風格) ====== -->
 <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-primary/95 backdrop-blur-md border-t border-white/10" style="padding-bottom:env(safe-area-inset-bottom)">
-<div class="grid grid-cols-4 h-16">
+<div class="grid grid-cols-5 h-16">
 <button data-tab="home" data-goto="" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">home</span><span class="text-[10px] font-medium" data-i18n="tab.home">首頁</span>
 </button>
-<button data-tab="flights" data-goto="flights" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<button data-tab="flights" data-goto="checkin" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">flight</span><span class="text-[10px] font-medium" data-i18n="tab.flights">航班</span>
 </button>
 <button data-tab="member" data-goto="member" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
 <span class="material-symbols-outlined">stars</span><span class="text-[10px] font-medium" data-i18n="tab.member">會員</span>
 </button>
 <button data-tab="account" data-goto="trips" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
-<span class="material-symbols-outlined">confirmation_number</span><span class="text-[10px] font-medium" data-i18n="tab.mine">我的</span>
+<span class="material-symbols-outlined">confirmation_number</span><span class="text-[10px] font-medium" data-i18n="tab.mine">行程</span>
+</button>
+<button data-tab="tsarc" data-goto="tsarc" class="nav-tab flex flex-col items-center justify-center gap-0.5 text-white/60">
+<span class="material-symbols-outlined">groups</span><span class="text-[10px] font-medium">TSARC</span>
 </button>
 </div>
 </nav>
@@ -1346,6 +1349,10 @@
 @keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 /* 讓日期選擇器的原生圖示在深色底可見 */
 input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.6;cursor:pointer}
+/* 語言選單：徹底關閉原生下拉箭頭（部分瀏覽器以 background-image 畫箭頭，
+   與自訂 expand_more 疊成兩個） */
+.lang-sel{-webkit-appearance:none !important;-moz-appearance:none !important;appearance:none !important;background-image:none !important}
+.lang-sel::-ms-expand{display:none}
 </style>
 
 <script>
@@ -1526,7 +1533,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     'tab.home':['首頁','Home','ホーム','홈'],
     'tab.flights':['航班','Flights','フライト','항공편'],
     'tab.member':['會員','Member','会員','멤버'],
-    'tab.mine':['我的','My','マイ','마이'],
+    'tab.mine':['行程','Trips','旅程','여정'],
     'hero.title':['探索世界<br class="hidden sm:block"/> 與 T-Skyler 同行','Explore the World<br class="hidden sm:block"/> with T-Skyler','世界を巡る<br class="hidden sm:block"/> T-Skylerと共に','세계를 누비다<br class="hidden sm:block"/> T-Skyler와 함께'],
     'hero.sub':['每一哩路都是頂級服務。在三萬英呎高空體驗舒適與奢華。','Premium service every mile. Comfort and luxury at 30,000 feet.','すべての旅に最高のサービスを。3万フィートで快適と贅沢を。','모든 여정에 최고의 서비스를. 3만 피트 상공의 편안함과 럭셔리.'],
     'search.flight':['航班','Flights','フライト','항공편'],
@@ -2966,7 +2973,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     window.scrollTo(0,0);
   }
   function highlightTab(view){
-    var tab = view==='view-flights' ? 'flights' : (view==='view-trips' ? 'account' : (view==='view-member' ? 'member' : 'home'));
+    var tab = view==='view-checkin' ? 'flights' : (view==='view-trips' ? 'account' : (view==='view-member' ? 'member' : (view==='view-tsarc' ? 'tsarc' : 'home')));
     Array.prototype.forEach.call(document.querySelectorAll('.nav-tab'), function(t){
       var on = t.getAttribute('data-tab')===tab;
       t.classList.toggle('text-white', on);
