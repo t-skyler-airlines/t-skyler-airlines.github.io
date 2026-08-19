@@ -588,10 +588,10 @@
 
 <!-- 機隊彈出視窗 -->
 <div id="fleetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
-<div class="relative w-full max-w-[900px] my-8 bg-card-dark border border-white/10 rounded-2xl shadow-2xl">
+<div class="relative w-full max-w-[1200px] my-8 bg-card-dark border border-white/10 rounded-2xl shadow-2xl">
 <button id="closeFleet" class="absolute right-3 top-3 z-10 size-10 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center"><span class="material-symbols-outlined">close</span></button>
 <div class="p-5 sm:p-8">
-<img id="fmImg" src="" alt="" class="w-full max-w-[720px] mx-auto object-contain drop-shadow-2xl" style="max-height:220px"/>
+<img id="fmImg" src="" alt="" class="w-full max-w-[900px] mx-auto object-contain drop-shadow-2xl" style="max-height:260px"/>
 <h4 id="fmName" class="text-white text-2xl sm:text-3xl font-black mt-4 text-center"></h4>
 <p id="fmReg" class="text-white/40 text-xs text-center mt-1 tracking-widest"></p>
 <div id="fmSpecs" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mt-5"></div>
@@ -601,6 +601,7 @@
 <h5 class="text-white font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_normal</span> <span data-i18n="fleet.seatmap">座位佈局</span></h5>
 <span class="text-white/35 text-xs hidden sm:inline" data-i18n="fleet.scrollHint">左右捲動查看完整機艙</span>
 </div>
+<div id="fmCabinsInfo" class="flex flex-wrap gap-x-6 gap-y-1.5 text-xs mb-3"></div>
 <div id="fmSeatmapWrap" class="overflow-x-auto pb-2">
 <div id="fmSeatmap" class="hs-body"></div>
 </div>
@@ -1059,19 +1060,24 @@
 .fleet-row .fleet-meta{transition:opacity .4s}
 .fleet-card-img{transition:transform .35s ease}
 .fleet-card:active .fleet-card-img{transform:scale(1.07)}
-/* 橫式座位圖（機鼻朝左） */
-.hs-body{position:relative;display:inline-flex;align-items:center;gap:10px;padding:26px 20px 26px 12px;border:2px solid rgba(255,255,255,.14);background:linear-gradient(to bottom,rgba(255,255,255,.045),rgba(255,255,255,.02));border-radius:999px 120px 120px 999px;min-width:max-content}
-.hs-nose{width:56px;align-self:stretch;border-right:1.5px dashed rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.25)}
-.hs-tail{width:40px;align-self:stretch;border-left:1.5px dashed rgba(255,255,255,.14)}
-.hs-cabin{display:flex;flex-direction:column;align-items:flex-start}
-.hs-cabin-label{font-size:9px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;white-space:nowrap}
-.hs-grid{display:flex;gap:3px}
-.hs-col{display:flex;flex-direction:column;gap:3px;align-items:center}
-.hs-seat{width:11px;height:11px;border-radius:3px;flex:none}
-.hs-aisle{height:9px;flex:none}
-.hs-rownum{font-size:7.5px;color:rgba(255,255,255,.3);height:10px;line-height:10px}
-.hs-galley{width:14px;align-self:stretch;border-radius:4px;background:repeating-linear-gradient(45deg,rgba(255,255,255,.10),rgba(255,255,255,.10) 3px,transparent 3px,transparent 7px);border:1px solid rgba(255,255,255,.12)}
-.hs-exit{position:absolute;font-size:7px;font-weight:800;color:#34d399;border:1px solid #34d399;border-radius:3px;padding:1px 3px;letter-spacing:.08em;background:#001B38}
+/* 橫式座位圖（機鼻朝左，寬版） */
+.hs-body{position:relative;display:flex;align-items:stretch;gap:12px;padding:34px 30px 34px 16px;border:2px solid rgba(255,255,255,.16);background:linear-gradient(to bottom,rgba(255,255,255,.05),rgba(255,255,255,.02));border-radius:999px 150px 150px 999px;width:max-content;min-width:max-content;margin:0 auto}
+.hs-nose{width:70px;border-right:1.5px dashed rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3)}
+.hs-tail{width:50px;border-left:1.5px dashed rgba(255,255,255,.14)}
+.hs-cabin{display:flex;flex-direction:column;justify-content:center}
+.hs-cabin-label{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;white-space:nowrap}
+.hs-cabinrow{display:flex;align-items:center;gap:8px}
+.hs-grid{display:flex;gap:4px}
+.hs-col{display:flex;flex-direction:column;gap:4px;align-items:center}
+.hs-letters{display:flex;flex-direction:column;gap:4px;align-items:center;margin-right:2px}
+.hs-letter{width:12px;height:15px;font-size:9px;line-height:15px;color:rgba(255,255,255,.5);font-weight:800;text-align:center}
+.hs-seat{width:15px;height:15px;border-radius:4px;flex:none}
+.hs-prem{box-shadow:inset 0 0 0 1.5px #34d399}
+.hs-aisle{height:16px;width:100%;flex:none;display:flex;align-items:center;justify-content:center;font-size:8.5px;color:rgba(255,255,255,.38);font-weight:700}
+.hs-galley{width:24px;border-radius:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:space-around;color:rgba(255,255,255,.5);padding:6px 0}
+.hs-exitgap{position:relative;width:20px;align-self:stretch}
+.hs-chev{position:absolute;left:50%;transform:translateX(-50%);color:#f87171;font-size:18px !important;line-height:1}
+.hs-chev.top{top:-28px}.hs-chev.bot{bottom:-28px}
 .exit-tab{font-size:8px;font-weight:800;color:#34d399;border:1px solid #34d399;border-radius:3px;padding:3px 2px;letter-spacing:.05em;line-height:1}
 .facility{font-size:9px;font-weight:700;color:#cbd5e1;background:rgba(255,255,255,.06);border-radius:6px;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:3px}
 .view-in{animation:viewIn .28s ease both}
@@ -1624,32 +1630,35 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['fleet.engine']=['發動機','Engines','エンジン','엔진'];
   D['fleet.count']=['在役 {n} 架','{n} in service','{n}機運航中','{n}대 운항 중'];
   D['fleet.flagship']=['旗艦機種','Flagship','フラッグシップ','플래그십'];
+  D['fleet.pitch']=['座位間距','Seat pitch','シートピッチ','좌석 간격'];
+  D['fleet.premSeat']=['加價座位（第一排／緊急出口排）','Extra-legroom seat (front & exit rows)','足元広め（最前列・非常口列）','여유 좌석(첫 줄·비상구 열)'];
+  D['fleet.exit']=['緊急出口','Emergency exit','非常口','비상구'];
   D['fleet.tapHint']=['點擊查看座位佈局與介紹','Tap for seat map & details','タップでシートマップと詳細','탭하여 좌석 배치와 상세 보기'];
   D['fleet.intro.B777-9']=[
-    '波音 777-9 是 T-Skyler 的旗艦機種，配備 GE9X 發動機與可摺疊翼尖，是全球最大的雙發客機。四艙等配置 426 席，服務東京、倫敦、紐約等黃金航線，頭等艙套房與全新商務艙皆為機隊之最。',
-    'The Boeing 777-9 is T-Skyler\'s flagship — the world\'s largest twin-engine airliner, powered by GE9X engines with folding wingtips. Its four-class, 426-seat cabin serves flagship routes to Tokyo, London and New York, featuring our finest First Class suites.',
-    'ボーイング777-9はT-Skylerのフラッグシップ。GE9Xエンジンと折りたたみ式ウイングチップを備えた世界最大の双発機です。4クラス426席で東京・ロンドン・ニューヨーク線に就航し、ファーストクラススイートを備えています。',
-    '보잉 777-9는 T-Skyler의 플래그십 기종으로, GE9X 엔진과 접이식 윙팁을 갖춘 세계 최대 쌍발 여객기입니다. 4클래스 426석으로 도쿄·런던·뉴욕 등 주력 노선에 투입되며 퍼스트클래스 스위트를 갖추고 있습니다.'];
+    '波音 777-9 是 T-Skyler 的旗艦機種，配備 GE9X 發動機與可摺疊翼尖，是全球最大的雙發客機。四艙等配置 432 席，服務東京、倫敦、紐約等黃金航線，頭等艙套房與全新商務艙皆為機隊之最。',
+    'The Boeing 777-9 is T-Skyler\'s flagship — the world\'s largest twin-engine airliner, powered by GE9X engines with folding wingtips. Its four-class, 432-seat cabin serves flagship routes to Tokyo, London and New York, featuring our finest First Class suites.',
+    'ボーイング777-9はT-Skylerのフラッグシップ。GE9Xエンジンと折りたたみ式ウイングチップを備えた世界最大の双発機です。4クラス432席で東京・ロンドン・ニューヨーク線に就航し、ファーストクラススイートを備えています。',
+    '보잉 777-9는 T-Skyler의 플래그십 기종으로, GE9X 엔진과 접이식 윙팁을 갖춘 세계 최대 쌍발 여객기입니다. 4클래스 432석으로 도쿄·런던·뉴욕 등 주력 노선에 투입되며 퍼스트클래스 스위트를 갖추고 있습니다.'];
   D['fleet.intro.A350-1000']=[
-    '空中巴士 A350-1000 擁有全機隊最遠的 16,100 公里航程，機身以逾 70% 先進複合材料打造，安靜且省油。四艙等 410 席，主力執飛歐洲與北美的超長程不落地航線。',
-    'With a 16,100 km range — the longest in our fleet — the Airbus A350-1000 is built with over 70% advanced materials for a quieter, more efficient flight. Its four-class, 410-seat cabin flies our ultra-long-haul nonstops to Europe and North America.',
-    'エアバスA350-1000は機隊最長の16,100kmの航続距離を誇り、機体の70%以上に先進複合材を使用。4クラス410席で欧州・北米への超長距離直行便を担います。',
-    '에어버스 A350-1000은 기단 최장 16,100km 항속거리를 자랑하며, 기체의 70% 이상이 첨단 복합소재로 제작되어 조용하고 효율적입니다. 4클래스 410석으로 유럽·북미 초장거리 직항을 운항합니다.'];
+    '空中巴士 A350-1000 擁有全機隊最遠的 16,100 公里航程，機身以逾 70% 先進複合材料打造，安靜且省油。四艙等 416 席，主力執飛歐洲與北美的超長程不落地航線。',
+    'With a 16,100 km range — the longest in our fleet — the Airbus A350-1000 is built with over 70% advanced materials for a quieter, more efficient flight. Its four-class, 416-seat cabin flies our ultra-long-haul nonstops to Europe and North America.',
+    'エアバスA350-1000は機隊最長の16,100kmの航続距離を誇り、機体の70%以上に先進複合材を使用。4クラス416席で欧州・北米への超長距離直行便を担います。',
+    '에어버스 A350-1000은 기단 최장 16,100km 항속거리를 자랑하며, 기체의 70% 이상이 첨단 복합소재로 제작되어 조용하고 효율적입니다. 4클래스 416석으로 유럽·북미 초장거리 직항을 운항합니다.'];
   D['fleet.intro.B787-10']=[
-    '波音 787-10 夢幻客機是中長程航線的效率之王，較同級機型省油 25%。機艙氣壓相當於 1,800 公尺、濕度更高，並配備電子調光窗，長途飛行更舒適。三艙等 336 席。',
-    'The Boeing 787-10 Dreamliner is our mid-to-long-haul efficiency champion, burning 25% less fuel than the aircraft it replaces. A lower cabin altitude, higher humidity and electrochromic windows make every journey fresher. Three classes, 336 seats.',
-    'ボーイング787-10ドリームライナーは中長距離路線の効率王。従来機比25%の燃費改善に加え、低い機内高度・高湿度・電子調光窓で快適な旅を提供します。3クラス336席。',
-    '보잉 787-10 드림라이너는 중장거리 노선의 효율 챔피언으로 동급 대비 연료를 25% 절감합니다. 낮은 기내 고도와 높은 습도, 전자 조광 창으로 더 쾌적한 여행을 제공합니다. 3클래스 336석.'];
+    '波音 787-10 夢幻客機是中長程航線的效率之王，較同級機型省油 25%。機艙氣壓相當於 1,800 公尺、濕度更高，並配備電子調光窗，長途飛行更舒適。三艙等 377 席。',
+    'The Boeing 787-10 Dreamliner is our mid-to-long-haul efficiency champion, burning 25% less fuel than the aircraft it replaces. A lower cabin altitude, higher humidity and electrochromic windows make every journey fresher. Three classes, 377 seats.',
+    'ボーイング787-10ドリームライナーは中長距離路線の効率王。従来機比25%の燃費改善に加え、低い機内高度・高湿度・電子調光窓で快適な旅を提供します。3クラス377席。',
+    '보잉 787-10 드림라이너는 중장거리 노선의 효율 챔피언으로 동급 대비 연료를 25% 절감합니다. 낮은 기내 고도와 높은 습도, 전자 조광 창으로 더 쾌적한 여행을 제공합니다. 3클래스 377석.'];
   D['fleet.intro.A330-900neo']=[
-    '空中巴士 A330-900neo 搭載勞斯萊斯 Trent 7000 發動機與新世代 Airspace 客艙，氛圍燈光與加大置物空間讓區域航線也有長程的舒適。三艙等 287 席，是東北亞與東南亞航線的主力。',
-    'The Airbus A330-900neo pairs Rolls-Royce Trent 7000 engines with the new Airspace cabin — ambient lighting and bigger bins bring long-haul comfort to regional flying. Three classes, 287 seats, the backbone of our Northeast and Southeast Asia network.',
-    'エアバスA330-900neoはロールスロイスTrent 7000エンジンと新世代Airspaceキャビンを搭載。アンビエント照明と大型収納で地域路線にも長距離の快適さを。3クラス287席、東北・東南アジア路線の主力です。',
-    '에어버스 A330-900neo는 롤스로이스 Trent 7000 엔진과 신세대 Airspace 캐빈을 갖춰 지역 노선에도 장거리급 편안함을 제공합니다. 3클래스 287석으로 동북·동남아 노선의 주력입니다.'];
+    '空中巴士 A330-900neo 搭載勞斯萊斯 Trent 7000 發動機與新世代 Airspace 客艙，氛圍燈光與加大置物空間讓區域航線也有長程的舒適。三艙等 276 席，是東北亞與東南亞航線的主力。',
+    'The Airbus A330-900neo pairs Rolls-Royce Trent 7000 engines with the new Airspace cabin — ambient lighting and bigger bins bring long-haul comfort to regional flying. Three classes, 276 seats, the backbone of our Northeast and Southeast Asia network.',
+    'エアバスA330-900neoはロールスロイスTrent 7000エンジンと新世代Airspaceキャビンを搭載。アンビエント照明と大型収納で地域路線にも長距離の快適さを。3クラス276席、東北・東南アジア路線の主力です。',
+    '에어버스 A330-900neo는 롤스로이스 Trent 7000 엔진과 신세대 Airspace 캐빈을 갖춰 지역 노선에도 장거리급 편안함을 제공합니다. 3클래스 276석으로 동북·동남아 노선의 주력입니다.'];
   D['fleet.intro.A321']=[
-    '空中巴士 A321neo 是窄體機隊的主角，LEAP-1A 發動機讓每座位油耗降低 20%。兩艙等 220 席，靈活執飛港澳、日韓與東南亞高頻航線，班班準點。',
-    'The Airbus A321neo leads our narrow-body fleet, its LEAP-1A engines cutting fuel burn per seat by 20%. With 220 seats in two classes, it flies high-frequency routes across Hong Kong, Japan, Korea and Southeast Asia.',
-    'エアバスA321neoはナローボディの主役。LEAP-1Aエンジンで座席あたり燃費を20%削減。2クラス220席で香港・日韓・東南アジアの高頻度路線を運航します。',
-    '에어버스 A321neo는 협동체 기단의 주역으로 LEAP-1A 엔진이 좌석당 연료 소모를 20% 줄입니다. 2클래스 220석으로 홍콩·일본·한국·동남아 고빈도 노선을 운항합니다.'];
+    '空中巴士 A321neo 是窄體機隊的主角，LEAP-1A 發動機讓每座位油耗降低 20%。兩艙等 196 席，靈活執飛港澳、日韓與東南亞高頻航線，班班準點。',
+    'The Airbus A321neo leads our narrow-body fleet, its LEAP-1A engines cutting fuel burn per seat by 20%. With 196 seats in two classes, it flies high-frequency routes across Hong Kong, Japan, Korea and Southeast Asia.',
+    'エアバスA321neoはナローボディの主役。LEAP-1Aエンジンで座席あたり燃費を20%削減。2クラス196席で香港・日韓・東南アジアの高頻度路線を運航します。',
+    '에어버스 A321neo는 협동체 기단의 주역으로 LEAP-1A 엔진이 좌석당 연료 소모를 20% 줄입니다. 2클래스 196석으로 홍콩·일본·한국·동남아 고빈도 노선을 운항합니다.'];
   D['fs.refresh']=['重新整理','Refresh','更新','새로고침'];
   D['tbl.time']=['時間','Time','時刻','시각'];
   D['tbl.airline']=['航空公司','Airline','航空会社','항공사'];
@@ -1854,15 +1863,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   }
 
   // 機隊（range=續航 km，seats=載客量，cabins=該機型提供的艙等）
+  // seats = 依 SEATMAP 座位格局加總（與選位系統一致）
   var FLEET={
-    "A320neo":    {name:"Airbus A320neo",   range:6300,  seats:180, cabins:["ECONOMY","BUSINESS"]},
-    "A321":       {name:"Airbus A321neo",   range:7400,  seats:220, cabins:["ECONOMY","BUSINESS"]},
-    "A330-900neo":{name:"Airbus A330-900neo",range:13300,seats:287, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "A350-900":   {name:"Airbus A350-900",  range:15000, seats:325, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "A350-1000":  {name:"Airbus A350-1000", range:16100, seats:410, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
-    "B777-9":     {name:"Boeing 777-9",     range:13500, seats:426, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
-    "B787-9":     {name:"Boeing 787-9",     range:14140, seats:296, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
-    "B787-10":    {name:"Boeing 787-10",    range:11750, seats:336, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
+    "A320neo":    {name:"Airbus A320neo",   range:6300,  seats:144, cabins:["ECONOMY","BUSINESS"]},
+    "A321":       {name:"Airbus A321neo",   range:7400,  seats:196, cabins:["ECONOMY","BUSINESS"]},
+    "A330-900neo":{name:"Airbus A330-900neo",range:13300,seats:276, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-900":   {name:"Airbus A350-900",  range:15000, seats:364, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "A350-1000":  {name:"Airbus A350-1000", range:16100, seats:416, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B777-9":     {name:"Boeing 777-9",     range:13500, seats:432, cabins:["ECONOMY","PREMIUM","BUSINESS","FIRST"]},
+    "B787-9":     {name:"Boeing 787-9",     range:14140, seats:337, cabins:["ECONOMY","PREMIUM","BUSINESS"]},
+    "B787-10":    {name:"Boeing 787-10",    range:11750, seats:377, cabins:["ECONOMY","PREMIUM","BUSINESS"]}
   };
 
   // 聯營（代碼共享）夥伴航空（虛構，非真實航空公司）
@@ -2330,19 +2340,28 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
 
   // ====== 機隊陣容 ======
   var FLEET_PAGE=[
-    {key:'B777-9',      img:'fleet/B777-9.png',      icao:'B779', count:4,  len:'76.7 m', span:'71.8 m', cruise:'M 0.84', eng:'GE9X ×2',           flagship:true},
-    {key:'A350-1000',   img:'fleet/A350-1000.png',   icao:'A35K', count:6,  len:'73.8 m', span:'64.7 m', cruise:'M 0.85', eng:'Trent XWB-97 ×2'},
-    {key:'B787-10',     img:'fleet/B787-10.png',     icao:'B78X', count:8,  len:'68.3 m', span:'60.1 m', cruise:'M 0.85', eng:'GEnx-1B ×2'},
-    {key:'A330-900neo', img:'fleet/A330-900neo.png', icao:'A339', count:10, len:'63.7 m', span:'64.0 m', cruise:'M 0.82', eng:'Trent 7000 ×2'},
-    {key:'A321',        img:'fleet/A321.png',        icao:'A21N', count:12, len:'44.5 m', span:'35.8 m', cruise:'M 0.78', eng:'LEAP-1A ×2'}
+    {key:'B777-9',      img:'fleet/B777-9.png',      icao:'B779', count:4,  len:'76.7 m', span:'71.8 m', cruise:'M 0.84', eng:'GE9X ×2',           flagship:true, pitch:{FIRST:'82″',BUSINESS:'78″',PREMIUM:'38″',ECONOMY:'31–32″'}},
+    {key:'A350-1000',   img:'fleet/A350-1000.png',   icao:'A35K', count:6,  len:'73.8 m', span:'64.7 m', cruise:'M 0.85', eng:'Trent XWB-97 ×2', pitch:{FIRST:'82″',BUSINESS:'78″',PREMIUM:'38″',ECONOMY:'31–32″'}},
+    {key:'B787-10',     img:'fleet/B787-10.png',     icao:'B78X', count:8,  len:'68.3 m', span:'60.1 m', cruise:'M 0.85', eng:'GEnx-1B ×2', pitch:{BUSINESS:'76″',PREMIUM:'38″',ECONOMY:'31–32″'}},
+    {key:'A330-900neo', img:'fleet/A330-900neo.png', icao:'A339', count:10, len:'63.7 m', span:'64.0 m', cruise:'M 0.82', eng:'Trent 7000 ×2', pitch:{BUSINESS:'76″',PREMIUM:'38″',ECONOMY:'31–32″'}},
+    {key:'A321',        img:'fleet/A321.png',        icao:'A21N', count:12, len:'44.5 m', span:'35.8 m', cruise:'M 0.78', eng:'LEAP-1A ×2', pitch:{BUSINESS:'39″',ECONOMY:'30–31″'}}
   ];
+  // 依訂票系統的 SEATMAP 格局計算座位數（保證與選位頁一致）
+  function cabinSeatCount(key, code){
+    var cfg=SEATMAP[key][code], pat=SEAT_PATTERNS[cfg.p];
+    return cfg.rows * pat.reduce(function(a,g){ return a+g.length; },0);
+  }
+  function fleetSeatTotal(key){
+    return FLEET_CABIN_ORDER.filter(function(c){ return SEATMAP[key][c]; })
+      .reduce(function(s,c){ return s+cabinSeatCount(key,c); },0);
+  }
   var FLEET_CABIN_COLORS={FIRST:'#d4af37', BUSINESS:'#8a7ff0', PREMIUM:'#2dd4bf', ECONOMY:'#64748b'};
   var FLEET_CABIN_ORDER=['FIRST','BUSINESS','PREMIUM','ECONOMY'];
   var fleetCurrent=null;
 
   function fleetMetaLine(f){
     var fl=FLEET[f.key];
-    return tf('fleet.count',{n:f.count})+' · '+fl.seats+' '+t('fleet.seats')+' · '+fl.range.toLocaleString('en-US')+' km';
+    return tf('fleet.count',{n:f.count})+' · '+fleetSeatTotal(f.key)+' '+t('fleet.seats')+' · '+fl.range.toLocaleString('en-US')+' km';
   }
   function renderFleet(){
     var rows=document.getElementById('fleetRows'), cards=document.getElementById('fleetCards');
@@ -2375,34 +2394,52 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).join('');
   }
 
-  // 橫式座位圖（機鼻朝左，仿 seatmaps 風格）
+  // 橫式座位圖（機鼻朝左，仿航空公司官網 seatmap）
+  function hsExitGap(){
+    return '<div class="hs-exitgap">'+
+      '<span class="hs-chev top material-symbols-outlined">keyboard_double_arrow_up</span>'+
+      '<span class="hs-chev bot material-symbols-outlined">keyboard_double_arrow_down</span>'+
+    '</div>';
+  }
+  function hsGalley(){
+    return '<div class="hs-galley"><span class="material-symbols-outlined text-[14px]">restaurant</span><span class="material-symbols-outlined text-[14px]">wc</span></div>';
+  }
   function hsCabinBlock(key, code, cfg){
     var pat=SEAT_PATTERNS[cfg.p], col=FLEET_CABIN_COLORS[code];
-    function colHtml(r, showNum){
-      var h='<div class="hs-col"><span class="hs-rownum">'+(showNum? r : '')+'</span>';
+    // 與訂票選位一致的加價座位：經濟艙第一排與緊急出口排（中段兩排）
+    var mid=cfg.start+Math.floor(cfg.rows/2);
+    var premSet={};
+    if(code==='ECONOMY'){ premSet[cfg.start]=1; if(cfg.rows>14){ premSet[mid]=1; premSet[mid+1]=1; } }
+    function colHtml(r){
+      var h='<div class="hs-col">', firstAisle=true;
       pat.forEach(function(g, gi){
-        g.forEach(function(){ h+='<span class="hs-seat" style="background:'+col+'"></span>'; });
-        if(gi<pat.length-1) h+='<span class="hs-aisle"></span>';
+        g.forEach(function(){ h+='<span class="hs-seat'+(premSet[r]?' hs-prem':'')+'" style="background:'+col+'"></span>'; });
+        if(gi<pat.length-1){ h+='<span class="hs-aisle">'+(firstAisle? r : '')+'</span>'; firstAisle=false; }
       });
       return h+'</div>';
     }
-    var half=(code==='ECONOMY' && cfg.rows>14)? cfg.start+Math.floor(cfg.rows/2) : null;
-    var html='<div class="hs-cabin"><span class="hs-cabin-label" style="color:'+col+'">'+t('cabin.'+code)+'</span><div class="hs-grid">';
+    // 座位字母欄（各艙等第一排左側，如官網 seatmap）
+    var letters='<div class="hs-letters">'+pat.map(function(g){
+      return g.map(function(L){ return '<span class="hs-letter">'+L+'</span>'; }).join('');
+    }).join('<span class="hs-aisle" style="width:12px"></span>')+'</div>';
+    var half=(code==='ECONOMY' && cfg.rows>14)? mid : null;
+    var html='<div class="hs-cabin"><span class="hs-cabin-label" style="color:'+col+'">'+t('cabin.'+code)+' · '+cabinSeatCount(key,code)+'</span>'+
+      '<div class="hs-cabinrow">'+letters+'<div class="hs-grid">';
     for(var r=cfg.start; r<cfg.start+cfg.rows; r++){
-      if(half && r===half){ html+='</div><div class="relative self-stretch mx-1 w-3"><span class="hs-exit" style="top:-2px;left:50%;transform:translateX(-50%)">EXIT</span><span class="hs-exit" style="bottom:-2px;left:50%;transform:translateX(-50%)">EXIT</span></div><div class="hs-grid">'; }
-      html+=colHtml(r, (r===cfg.start || r===cfg.start+cfg.rows-1 || r%5===0));
+      if(half && r===half){ html+='</div>'+hsExitGap()+'<div class="hs-grid">'; }
+      html+=colHtml(r);
     }
-    return html+'</div></div>';
+    return html+'</div></div></div>';
   }
   function buildHSeatmap(key){
     var sm=SEATMAP[key]; if(!sm) return '';
-    var html='<div class="hs-nose"><span class="material-symbols-outlined text-[20px]" style="transform:rotate(-90deg)">flight</span></div>';
+    var html='<div class="hs-nose"><span class="material-symbols-outlined text-[22px]" style="transform:rotate(-90deg)">flight</span></div>'+hsExitGap();
     var cabins=FLEET_CABIN_ORDER.filter(function(c){ return sm[c]; });
     cabins.forEach(function(code, i){
-      if(i>0) html+='<div class="relative self-stretch"><span class="hs-exit" style="top:-14px;left:50%;transform:translateX(-50%)">EXIT</span><div class="hs-galley h-full"></div><span class="hs-exit" style="bottom:-14px;left:50%;transform:translateX(-50%)">EXIT</span></div>';
+      if(i>0) html+=hsExitGap()+hsGalley();
       html+=hsCabinBlock(key, code, sm[code]);
     });
-    html+='<div class="hs-tail"></div>';
+    html+=hsExitGap()+hsGalley()+'<div class="hs-tail"></div>';
     return html;
   }
   function openFleetModal(key){
@@ -2415,7 +2452,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     document.getElementById('fmName').textContent=fl.name;
     document.getElementById('fmReg').textContent='ICAO '+f.icao+' · '+tf('fleet.count',{n:f.count});
     var chips=[
-      [t('fleet.seats'), fl.seats],
+      [t('fleet.seats'), fleetSeatTotal(key)],
       [t('fleet.range'), fl.range.toLocaleString('en-US')+' km'],
       [t('fleet.length'), f.len],
       [t('fleet.wingspan'), f.span],
@@ -2426,12 +2463,21 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       return '<div class="bg-input-dark rounded-lg px-3 py-2.5 text-center"><p class="text-white/40 text-[10px]">'+c[0]+'</p><p class="text-white font-bold text-sm mt-0.5 whitespace-nowrap">'+c[1]+'</p></div>';
     }).join('');
     document.getElementById('fmIntro').textContent=t('fleet.intro.'+key);
-    document.getElementById('fmSeatmap').innerHTML=buildHSeatmap(key);
-    document.getElementById('fmLegend').innerHTML=FLEET_CABIN_ORDER.filter(function(c){ return SEATMAP[key][c]; }).map(function(c){
-      var cfg=SEATMAP[key][c], pat=SEAT_PATTERNS[cfg.p];
-      var perRow=pat.reduce(function(a,g){return a+g.length;},0);
-      return '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="hs-seat inline-block" style="background:'+FLEET_CABIN_COLORS[c]+'"></span>'+t('cabin.'+c)+' · '+(cfg.rows*perRow)+'</span>';
+    var cabins=FLEET_CABIN_ORDER.filter(function(c){ return SEATMAP[key][c]; });
+    // 艙等資訊列（座位數＋座位間距，仿航空公司官網）
+    document.getElementById('fmCabinsInfo').innerHTML=cabins.map(function(c){
+      var pitch=(f.pitch&&f.pitch[c])? ' · '+t('fleet.pitch')+' '+f.pitch[c] : '';
+      return '<span class="whitespace-nowrap"><b style="color:'+FLEET_CABIN_COLORS[c]+'">'+t('cabin.'+c)+'</b><span class="text-white/60"> · '+t('fleet.seats')+' '+cabinSeatCount(key,c)+pitch+'</span></span>';
     }).join('');
+    document.getElementById('fmSeatmap').innerHTML=buildHSeatmap(key);
+    document.getElementById('fmLegend').innerHTML=
+      cabins.map(function(c){
+        return '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="hs-seat inline-block" style="background:'+FLEET_CABIN_COLORS[c]+'"></span>'+t('cabin.'+c)+'</span>';
+      }).join('')+
+      '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="hs-seat hs-prem inline-block" style="background:'+FLEET_CABIN_COLORS.ECONOMY+'"></span>'+t('fleet.premSeat')+'</span>'+
+      '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="material-symbols-outlined text-[16px]" style="color:#f87171">keyboard_double_arrow_up</span>'+t('fleet.exit')+'</span>'+
+      '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="material-symbols-outlined text-[15px] text-white/50">restaurant</span>'+t('facility.galley')+'</span>'+
+      '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="material-symbols-outlined text-[15px] text-white/50">wc</span>'+t('facility.lav')+'</span>';
     var m=document.getElementById('fleetModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
   }
   function closeFleetModal(){ var m=document.getElementById('fleetModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; fleetCurrent=null; }
