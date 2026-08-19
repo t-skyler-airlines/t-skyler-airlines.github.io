@@ -241,7 +241,7 @@
 </div>
 </aside>
 <div class="flex min-h-screen flex-col lg:pl-64 transition-all duration-300 pb-16 lg:pb-0">
-<header class="sticky top-0 z-40 w-full bg-primary shadow-lg border-b border-white/10 lg:hidden">
+<header class="sticky top-0 z-40 w-full bg-primary shadow-lg border-b border-white/10 lg:hidden" style="padding-top:env(safe-area-inset-top)">
 <div class="px-4 sm:px-6">
 <div class="flex items-center justify-between h-16 sm:h-20">
 <a href="#" class="flex items-center gap-2" title="回首頁">
@@ -259,13 +259,61 @@
 <button class="auth-btn flex items-center justify-center h-9 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-bold transition-all border border-white/10">
 <span class="material-symbols-outlined text-[18px]">account_circle</span>
 </button>
-<button class="flex items-center justify-center size-9 rounded-lg text-white hover:bg-white/10">
+<button id="menuBtn" class="flex items-center justify-center size-9 rounded-lg text-white hover:bg-white/10" aria-label="選單">
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
 </div>
 </div>
 </header>
+<!-- 手機版側欄抽屜（同桌機側欄列表） -->
+<div id="mobileDrawer" class="lg:hidden fixed inset-0 z-50 hidden">
+<div id="drawerBackdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+<aside id="drawerPanel" class="absolute top-0 right-0 h-full w-72 max-w-[85vw] bg-primary border-l border-white/10 shadow-2xl translate-x-full transition-transform duration-300 flex flex-col" style="padding-top:env(safe-area-inset-top)">
+<div class="h-16 flex items-center justify-between px-4 border-b border-white/10">
+<div class="flex items-center gap-2">
+<img src="logo.png" alt="Logo" class="size-9 object-contain"/>
+<img src="name.png" alt="T-Skyler" class="h-5"/>
+</div>
+<button id="drawerClose" class="flex items-center justify-center size-9 rounded-lg text-white/80 hover:bg-white/10" aria-label="關閉"><span class="material-symbols-outlined">close</span></button>
+</div>
+<nav class="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
+<span class="material-symbols-outlined text-white/70">flight_takeoff</span>
+<span class="font-semibold" data-i18n="nav.book">預訂</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#trips">
+<span class="material-symbols-outlined text-white/70">edit_calendar</span>
+<span class="font-semibold" data-i18n="nav.trips">管理行程</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#checkin">
+<span class="material-symbols-outlined text-white/70">flight_takeoff</span>
+<span class="font-semibold" data-i18n="nav.checkin">航班動態</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#packages">
+<span class="material-symbols-outlined text-white/70">luggage</span>
+<span class="font-semibold" data-i18n="nav.packages">套裝行程</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#fleet">
+<span class="material-symbols-outlined text-white/70">connecting_airports</span>
+<span class="font-semibold" data-i18n="nav.fleet">機隊陣容</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#member">
+<span class="material-symbols-outlined text-white/70">stars</span>
+<span class="font-semibold" data-i18n="nav.member">會員計畫</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#help">
+<span class="material-symbols-outlined text-white/70">support_agent</span>
+<span class="font-semibold" data-i18n="nav.help">協助</span>
+</a>
+</nav>
+<div class="px-4 py-4 border-t border-white/10" style="padding-bottom:calc(16px + env(safe-area-inset-bottom))">
+<button class="auth-btn w-full h-11 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/10 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">account_circle</span><span class="signin-label" data-i18n="nav.signin">登入</span>
+</button>
+</div>
+</aside>
+</div>
 <main class="flex-grow flex flex-col">
 <div id="view-home" data-view>
 <section class="relative min-h-[600px] lg:min-h-[700px] flex flex-col items-center justify-start pt-20 pb-32 overflow-hidden group/hero">
@@ -1054,10 +1102,11 @@
 .bp2-val{font-size:15px;color:#173a72;font-weight:800;line-height:1.05;letter-spacing:-0.01em}
 /* ====== 機隊陣容 ====== */
 .fleet-row{position:relative;cursor:pointer;padding:16px 0 8px}
-/* 手機：文字在上、飛機在下，從右緣冒出，輕觸滑入 */
-.fleet-row .fleet-plane{display:block;height:120px;width:auto;max-width:none;margin:10px 0 4px auto;transform:translateX(50%);transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 14px 22px rgba(0,0,0,.45));will-change:transform}
+/* 手機：文字在上、飛機在下。滑出前露出到垂直尾翼之前（--fleetPeek），
+   輕觸滑入後整架（含尾翼）置中（--fleetCenter），大小不超過螢幕（JS 逐列計算） */
+.fleet-row .fleet-plane{display:block;height:120px;width:auto;max-width:none;margin:10px 0 4px auto;transform:translateX(var(--fleetPeek,16%));transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 14px 22px rgba(0,0,0,.45));will-change:transform}
 @media (max-width:767px){
-  .fleet-row.fleet-in .fleet-plane{transform:translateX(0)}
+  .fleet-row.fleet-in .fleet-plane{transform:translateX(var(--fleetCenter,0%))}
 }
 /* 桌機：飛機與文字並排、從右緣冒出；滑入以介紹文字右邊界為限（--fleetIn 由 JS 逐列計算） */
 @media (min-width:768px){
@@ -2398,10 +2447,19 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function fitFleetRows(){
     var rows=document.querySelectorAll('#fleetRows .fleet-row');
     if(!window.matchMedia('(min-width:768px)').matches){
+      // 手機：飛機寬度不超過螢幕；滑出前只藏垂直尾翼（右端約 16%），
+      // 滑入後整架置中
       Array.prototype.forEach.call(rows, function(row){
         var img=row.querySelector('.fleet-plane');
-        if(img) img.style.height='';
+        if(!img) return;
+        if(!img.naturalWidth){ img.addEventListener('load', fitFleetRows, {once:true}); return; }
         row.style.height='';
+        var ratio=img.naturalWidth/img.naturalHeight;
+        var vw=row.getBoundingClientRect().width;
+        var W=Math.min(vw-12, 150*ratio);   // 整架不超過螢幕邊界
+        img.style.height=(W/ratio)+'px';
+        row.style.setProperty('--fleetPeek', '16%');
+        row.style.setProperty('--fleetCenter', (-((vw-W)/2)/W*100)+'%');
       });
       return;
     }
@@ -2526,23 +2584,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       var natW=body.scrollWidth, natH=body.offsetHeight, availW=wrap.clientWidth;
       if(!natW||!availW) return;
       var hint=document.getElementById('fmScrollHint');
+      if(hint) hint.style.display='none';
+      wrap.style.overflow='hidden';
       var scale=(availW-4)/natW;
-      if(scale>=1){
-        // 原尺寸放得下：置中、無捲軸
-        wrap.style.overflow='hidden';
-        if(hint) hint.style.display='none';
-      } else if(scale>=0.5){
-        // 等比縮小至容器寬（機鼻到機尾完整可見）；
+      if(scale<1){
+        // 等比縮小至容器寬（機鼻到機尾完整可見，手機也不需捲動）；
         // transform 不改變版面尺寸，須固定外層高度並隱藏兩軸捲軸
         body.style.transform='scale('+scale+')';
         body.style.margin='0';
         wrap.style.height=Math.ceil(natH*scale+2)+'px';
-        wrap.style.overflow='hidden';
-        if(hint) hint.style.display='none';
-      } else {
-        // 縮太小會看不清（窄螢幕）：不縮放，維持橫向捲動
-        wrap.style.overflowX='auto'; wrap.style.overflowY='hidden';
-        if(hint) hint.style.display='';
       }
     }, 0);
   }
@@ -3224,6 +3274,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   });
   document.getElementById("closeFleet").addEventListener("click", closeFleetModal);
   document.getElementById("fleetModal").addEventListener("click", function(e){ if(e.target===this) closeFleetModal(); });
+
+  // 手機版側欄抽屜
+  (function(){
+    var d=document.getElementById('mobileDrawer'), p=document.getElementById('drawerPanel'), b=document.getElementById('drawerBackdrop');
+    var btn=document.getElementById('menuBtn'); if(!d||!btn) return;
+    function openDrawer(){ d.classList.remove('hidden'); document.body.style.overflow='hidden'; setTimeout(function(){ b.classList.add('opacity-100'); p.classList.remove('translate-x-full'); }, 10); }
+    function closeDrawer(){ b.classList.remove('opacity-100'); p.classList.add('translate-x-full'); document.body.style.overflow=''; setTimeout(function(){ d.classList.add('hidden'); }, 320); }
+    btn.addEventListener('click', openDrawer);
+    b.addEventListener('click', closeDrawer);
+    document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+    d.addEventListener('click', function(e){ if(e.target.closest('a')) closeDrawer(); });
+  })();
   document.getElementById("pmBook").addEventListener("click", bookPackage);
   document.getElementById("pmPrev").addEventListener("click", function(){ pmSet(pmSlide-1); });
   document.getElementById("pmNext").addEventListener("click", function(){ pmSet(pmSlide+1); });
