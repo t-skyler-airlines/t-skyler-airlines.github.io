@@ -599,7 +599,7 @@
 <div class="mt-6">
 <div class="flex items-center justify-between mb-2">
 <h5 class="text-white font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover">airline_seat_recline_normal</span> <span data-i18n="fleet.seatmap">座位佈局</span></h5>
-<span class="text-white/35 text-xs hidden sm:inline" data-i18n="fleet.scrollHint">左右捲動查看完整機艙</span>
+<span id="fmScrollHint" class="text-white/35 text-xs hidden sm:inline" data-i18n="fleet.scrollHint">左右捲動查看完整機艙</span>
 </div>
 <div id="fmCabinsInfo" class="flex flex-wrap gap-x-6 gap-y-1.5 text-xs mb-3"></div>
 <div id="fmSeatmapWrap" class="overflow-x-auto pb-2">
@@ -1054,9 +1054,9 @@
 .bp2-label{font-size:8.5px;color:#5b7bab;text-transform:uppercase;letter-spacing:0.04em;font-weight:800;margin-bottom:2px;white-space:nowrap}
 .bp2-val{font-size:15px;color:#173a72;font-weight:800;line-height:1.05;letter-spacing:-0.01em}
 /* ====== 機隊陣容 ====== */
-.fleet-row{position:relative;height:172px;cursor:pointer}
-.fleet-row .fleet-plane{position:absolute;right:0;top:50%;height:150px;width:auto;max-width:none;transform:translate(58%,-50%);transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 18px 28px rgba(0,0,0,.45));will-change:transform}
-.fleet-row:hover .fleet-plane{transform:translate(4%,-50%)}
+.fleet-row{position:relative;height:240px;cursor:pointer}
+.fleet-row .fleet-plane{position:absolute;right:0;top:50%;height:215px;width:auto;max-width:none;transform:translate(55%,-50%);transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 18px 28px rgba(0,0,0,.45));will-change:transform}
+.fleet-row:hover .fleet-plane{transform:translate(3%,-50%)}
 .fleet-row .fleet-meta{transition:opacity .4s}
 .fleet-card-img{transition:transform .35s ease}
 .fleet-card:active .fleet-card-img{transform:scale(1.07)}
@@ -2479,8 +2479,33 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
       '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="material-symbols-outlined text-[15px] text-white/50">restaurant</span>'+t('facility.galley')+'</span>'+
       '<span class="flex items-center gap-1.5 text-xs text-white/60"><span class="material-symbols-outlined text-[15px] text-white/50">wc</span>'+t('facility.lav')+'</span>';
     var m=document.getElementById('fleetModal'); m.classList.remove('hidden'); m.classList.add('flex'); document.body.style.overflow='hidden';
+    fitFleetSeatmap();  // 需在 modal 顯示後量測寬度
   }
   function closeFleetModal(){ var m=document.getElementById('fleetModal'); m.classList.add('hidden'); m.classList.remove('flex'); document.body.style.overflow=''; fleetCurrent=null; }
+  // 廣體機座位圖等比例縮小至容器寬度（不減座位、不改設計，桌機不需捲動；
+  // 縮太小會看不清，最小 0.5 倍，低於此（手機）仍可橫向捲動）
+  function fitFleetSeatmap(){
+    var wrap=document.getElementById('fmSeatmapWrap'), body=document.getElementById('fmSeatmap');
+    if(!wrap||!body) return;
+    body.style.transform=''; body.style.transformOrigin='left top'; wrap.style.height='';
+    setTimeout(function(){
+      var natW=body.scrollWidth, natH=body.offsetHeight, availW=wrap.clientWidth;
+      if(!natW||!availW) return;
+      var scale=Math.min(1, availW/natW);
+      if(scale<0.5) scale=0.5;
+      if(scale<1){
+        body.style.transform='scale('+scale+')';
+        wrap.style.height=Math.ceil(natH*scale)+'px';
+      }
+      var fits = natW*scale <= availW+1;
+      wrap.style.overflowX = fits ? 'hidden' : 'auto';
+      var hint=document.getElementById('fmScrollHint'); if(hint) hint.style.display = fits ? 'none' : '';
+    }, 0);
+  }
+  window.addEventListener('resize', function(){
+    var m=document.getElementById('fleetModal');
+    if(m && !m.classList.contains('hidden')) fitFleetSeatmap();
+  });
 
   // ====== 會員登入 / 個人中心 ======
   function getUser(){ try{ return JSON.parse(localStorage.getItem('tskyler_user')); }catch(e){ return null; } }
