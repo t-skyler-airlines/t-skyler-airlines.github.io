@@ -194,12 +194,12 @@
 </script>
 <aside class="hidden lg:flex fixed top-0 left-0 z-50 h-screen w-64 flex-col bg-primary border-r border-white/10 shadow-2xl">
 <div class="h-20 flex items-center px-6 border-b border-white/10">
-<div class="flex items-center gap-3">
+<a href="#" class="flex items-center gap-3" title="回首頁">
 <div class="size-12">
 <img src="logo.png" alt="Logo" class="w-full h-full object-contain"/>
 </div>
 <h1 class="text-white text-xl font-bold tracking-tight"><img src="name.png" alt="T-Skyler" class="h-6 inline-block"/></h1>
-</div>
+</a>
 </div>
 <nav class="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
 <a class="flex items-center gap-3 px-4 py-3 text-white/90 hover:text-white hover:bg-white/10 rounded-lg transition-colors group" href="#">
@@ -244,12 +244,12 @@
 <header class="sticky top-0 z-40 w-full bg-primary shadow-lg border-b border-white/10 lg:hidden">
 <div class="px-4 sm:px-6">
 <div class="flex items-center justify-between h-16 sm:h-20">
-<div class="flex items-center gap-2">
+<a href="#" class="flex items-center gap-2" title="回首頁">
 <div class="size-12">
 <img src="logo.png" alt="Logo" class="w-full h-full object-contain"/>
 </div>
 <h1 class="text-white text-xl font-bold tracking-tight"><img src="name.png" alt="T-Skyler" class="h-6 inline-block"/></h1>
-</div>
+</a>
 <div class="flex items-center gap-3">
 <div class="relative">
 <label class="sr-only" for="langSelM">Language</label>
@@ -2393,16 +2393,30 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     }).join('');
     setTimeout(fitFleetRows, 0);
   }
-  // 計算每列滑入停止點：飛機機鼻停在介紹文字右邊界（+24px 間距）；僅桌機並排版需要
+  // 桌機並排版：依「文字右邊界 → 螢幕右緣」的可用寬度調整飛機大小，
+  // 讓滑入時機鼻最多到文字右邊界、機尾也完整可見；並計算滑入停止點 --fleetIn
   function fitFleetRows(){
-    if(!window.matchMedia('(min-width:768px)').matches) return;
-    Array.prototype.forEach.call(document.querySelectorAll('#fleetRows .fleet-row'), function(row){
+    var rows=document.querySelectorAll('#fleetRows .fleet-row');
+    if(!window.matchMedia('(min-width:768px)').matches){
+      Array.prototype.forEach.call(rows, function(row){
+        var img=row.querySelector('.fleet-plane');
+        if(img) img.style.height='';
+        row.style.height='';
+      });
+      return;
+    }
+    Array.prototype.forEach.call(rows, function(row){
       var img=row.querySelector('.fleet-plane'), inner=row.querySelector('.fleet-meta-inner');
       if(!img||!inner) return;
-      var W=img.getBoundingClientRect().width;
-      if(!W){ img.addEventListener('load', fitFleetRows, {once:true}); return; }
+      if(!img.naturalWidth){ img.addEventListener('load', fitFleetRows, {once:true}); return; }
+      var ratio=img.naturalWidth/img.naturalHeight;
       var rowRight=row.getBoundingClientRect().right;
       var textRight=inner.getBoundingClientRect().right;
+      var avail=rowRight-(textRight+24);            // 文字右邊界到右緣
+      var H=Math.max(170, Math.min(320, avail/ratio)); // 飛機高度隨螢幕調整
+      img.style.height=H+'px';
+      row.style.height=Math.max(240, Math.round(H+26))+'px';
+      var W=H*ratio;
       var pct=((textRight+24)-(rowRight-W))/W*100;
       pct=Math.max(0, Math.min(52, pct));
       row.style.setProperty('--fleetIn', pct+'%');
@@ -2506,19 +2520,30 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   function fitFleetSeatmap(){
     var wrap=document.getElementById('fmSeatmapWrap'), body=document.getElementById('fmSeatmap');
     if(!wrap||!body) return;
-    body.style.transform=''; body.style.transformOrigin='left top'; wrap.style.height='';
+    body.style.transform=''; body.style.transformOrigin='left top'; body.style.margin='';
+    wrap.style.height=''; wrap.style.overflow=''; wrap.style.overflowX=''; wrap.style.overflowY='';
     setTimeout(function(){
       var natW=body.scrollWidth, natH=body.offsetHeight, availW=wrap.clientWidth;
       if(!natW||!availW) return;
-      var scale=Math.min(1, availW/natW);
-      if(scale<0.5) scale=0.5;
-      if(scale<1){
+      var hint=document.getElementById('fmScrollHint');
+      var scale=(availW-4)/natW;
+      if(scale>=1){
+        // 原尺寸放得下：置中、無捲軸
+        wrap.style.overflow='hidden';
+        if(hint) hint.style.display='none';
+      } else if(scale>=0.5){
+        // 等比縮小至容器寬（機鼻到機尾完整可見）；
+        // transform 不改變版面尺寸，須固定外層高度並隱藏兩軸捲軸
         body.style.transform='scale('+scale+')';
-        wrap.style.height=Math.ceil(natH*scale)+'px';
+        body.style.margin='0';
+        wrap.style.height=Math.ceil(natH*scale+2)+'px';
+        wrap.style.overflow='hidden';
+        if(hint) hint.style.display='none';
+      } else {
+        // 縮太小會看不清（窄螢幕）：不縮放，維持橫向捲動
+        wrap.style.overflowX='auto'; wrap.style.overflowY='hidden';
+        if(hint) hint.style.display='';
       }
-      var fits = natW*scale <= availW+1;
-      wrap.style.overflowX = fits ? 'hidden' : 'auto';
-      var hint=document.getElementById('fmScrollHint'); if(hint) hint.style.display = fits ? 'none' : '';
     }, 0);
   }
   window.addEventListener('resize', function(){
