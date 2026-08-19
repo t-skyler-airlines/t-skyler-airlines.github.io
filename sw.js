@@ -1,5 +1,5 @@
 // T-Skyler 航空 — Service Worker（離線快取）
-const CACHE = 'tskyler-v4';
+const CACHE = 'tskyler-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -41,8 +41,11 @@ self.addEventListener('fetch', (e) => {
     // 頁面：network-first（線上一定拿最新版，離線才用快取）
     e.respondWith(
       fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => { try { c.put(req, copy); } catch (_) {} });
+        // 只快取成功回應，避免部署空窗期的 404 被永久快取
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => { try { c.put(req, copy); } catch (_) {} });
+        }
         return res;
       }).catch(() => caches.match(req).then((r) => r || caches.match('./index.html')))
     );
@@ -53,8 +56,10 @@ self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(req).then((cached) => {
       const network = fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => { try { c.put(req, copy); } catch (_) {} });
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => { try { c.put(req, copy); } catch (_) {} });
+        }
         return res;
       }).catch(() => cached);
       return cached || network;
