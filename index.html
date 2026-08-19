@@ -579,11 +579,10 @@
 <h3 class="text-white text-2xl sm:text-3xl font-black mb-1 flex items-center gap-2"><span class="material-symbols-outlined text-primary-hover text-3xl">connecting_airports</span> <span data-i18n="fleet.title">機隊陣容</span></h3>
 <p class="text-white/50 text-sm" data-i18n="fleet.sub">五種機型，飛往世界。點擊機型查看座位佈局與詳細介紹。</p>
 <p class="hidden md:block text-white/35 text-xs mt-2" data-i18n="fleet.hint">將滑鼠移到飛機上，飛機會滑進畫面；點擊可查看完整介紹。</p>
+<p class="md:hidden text-white/35 text-xs mt-2" data-i18n="fleet.hintM">輕觸飛機滑入畫面，再點一次查看完整介紹。</p>
 </div>
-<!-- 桌機版：飛機從右側冒出，一列一列排開 -->
-<div id="fleetRows" class="hidden md:block mt-6"></div>
-<!-- 手機版：完整飛機並列 -->
-<div id="fleetCards" class="md:hidden mt-6 px-4 space-y-8"></div>
+<!-- 飛機從右側冒出，一列一列排開（桌機 hover 滑入／手機輕觸滑入） -->
+<div id="fleetRows" class="mt-6"></div>
 </section>
 
 <!-- 機隊彈出視窗 -->
@@ -1054,12 +1053,21 @@
 .bp2-label{font-size:8.5px;color:#5b7bab;text-transform:uppercase;letter-spacing:0.04em;font-weight:800;margin-bottom:2px;white-space:nowrap}
 .bp2-val{font-size:15px;color:#173a72;font-weight:800;line-height:1.05;letter-spacing:-0.01em}
 /* ====== 機隊陣容 ====== */
-.fleet-row{position:relative;height:240px;cursor:pointer}
-.fleet-row .fleet-plane{position:absolute;right:0;top:50%;height:215px;width:auto;max-width:none;transform:translate(55%,-50%);transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 18px 28px rgba(0,0,0,.45));will-change:transform}
-.fleet-row:hover .fleet-plane{transform:translate(3%,-50%)}
-.fleet-row .fleet-meta{transition:opacity .4s}
-.fleet-card-img{transition:transform .35s ease}
-.fleet-card:active .fleet-card-img{transform:scale(1.07)}
+.fleet-row{position:relative;cursor:pointer;padding:16px 0 8px}
+/* 手機：文字在上、飛機在下，從右緣冒出，輕觸滑入 */
+.fleet-row .fleet-plane{display:block;height:120px;width:auto;max-width:none;margin:10px 0 4px auto;transform:translateX(50%);transition:transform .6s cubic-bezier(.22,.8,.28,1);filter:drop-shadow(0 14px 22px rgba(0,0,0,.45));will-change:transform}
+@media (max-width:767px){
+  .fleet-row.fleet-in .fleet-plane{transform:translateX(0)}
+}
+/* 桌機：飛機與文字並排、從右緣冒出；滑入以介紹文字右邊界為限（--fleetIn 由 JS 逐列計算） */
+@media (min-width:768px){
+  .fleet-row{height:240px;padding:0}
+  .fleet-row .fleet-plane{position:absolute;right:0;top:50%;height:215px;margin:0;transform:translate(55%,-50%);filter:drop-shadow(0 18px 28px rgba(0,0,0,.45))}
+  .fleet-row.fleet-in .fleet-plane{transform:translate(var(--fleetIn,3%),-50%)}
+}
+@media (min-width:768px) and (hover:hover){
+  .fleet-row:hover .fleet-plane{transform:translate(var(--fleetIn,3%),-50%)}
+}
 /* 橫式座位圖（機鼻朝左，寬版） */
 .hs-body{position:relative;display:flex;align-items:stretch;gap:12px;padding:34px 30px 34px 16px;border:2px solid rgba(255,255,255,.16);background:linear-gradient(to bottom,rgba(255,255,255,.05),rgba(255,255,255,.02));border-radius:999px 150px 150px 999px;width:max-content;min-width:max-content;margin:0 auto}
 .hs-nose{width:70px;border-right:1.5px dashed rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3)}
@@ -1620,6 +1628,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   D['fleet.title']=['機隊陣容','Our Fleet','機材紹介','기단 소개'];
   D['fleet.sub']=['五種機型，飛往世界。點擊機型查看座位佈局與詳細介紹。','Five aircraft types connecting Taiwan to the world. Click any aircraft for seat maps and details.','5機種で世界へ。機種をクリックするとシートマップと詳細をご覧いただけます。','5개 기종으로 세계를 연결합니다. 기종을 클릭하면 좌석 배치와 상세 정보를 볼 수 있습니다.'];
   D['fleet.hint']=['將滑鼠移到飛機上，飛機會滑進畫面；點擊可查看完整介紹。','Hover over an aircraft to slide it into view; click for full details.','機体にカーソルを合わせるとスライドイン。クリックで詳細表示。','기체에 마우스를 올리면 화면으로 들어오고, 클릭하면 상세 정보가 열립니다.'];
+  D['fleet.hintM']=['輕觸飛機滑入畫面，再點一次查看完整介紹。','Tap an aircraft to slide it in; tap again for full details.','機体をタップでスライドイン、もう一度タップで詳細表示。','기체를 탭하면 들어오고, 한 번 더 탭하면 상세 정보가 열립니다.'];
   D['fleet.seatmap']=['座位佈局','Seat Map','シートマップ','좌석 배치도'];
   D['fleet.scrollHint']=['左右捲動查看完整機艙','Scroll horizontally to view the full cabin','左右にスクロールして機内全体を表示','좌우로 스크롤해 전체 기내 보기'];
   D['fleet.seats']=['座位數','Seats','座席数','좌석 수'];
@@ -2364,35 +2373,45 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
     return tf('fleet.count',{n:f.count})+' · '+fleetSeatTotal(f.key)+' '+t('fleet.seats')+' · '+fl.range.toLocaleString('en-US')+' km';
   }
   function renderFleet(){
-    var rows=document.getElementById('fleetRows'), cards=document.getElementById('fleetCards');
+    var rows=document.getElementById('fleetRows');
     if(!rows) return;
     rows.innerHTML=FLEET_PAGE.map(function(f){
       var fl=FLEET[f.key];
       return '<div class="fleet-row border-b border-white/5 last:border-0" data-fleet="'+f.key+'">'+
         '<div class="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center relative z-[1] pointer-events-none">'+
-          '<div class="flex items-center gap-2">'+
-            '<p class="text-white text-xl lg:text-2xl font-black">'+fl.name+'</p>'+
-            (f.flagship?'<span class="text-[10px] font-black text-accent border border-accent/50 rounded-full px-2 py-0.5">'+t('fleet.flagship')+'</span>':'')+
+          '<div class="fleet-meta-inner w-fit">'+
+            '<div class="flex items-center gap-2">'+
+              '<p class="text-white text-lg sm:text-xl lg:text-2xl font-black">'+fl.name+'</p>'+
+              (f.flagship?'<span class="text-[10px] font-black text-accent border border-accent/50 rounded-full px-2 py-0.5 whitespace-nowrap">'+t('fleet.flagship')+'</span>':'')+
+            '</div>'+
+            '<p class="text-white/45 text-xs sm:text-sm mt-1">'+fleetMetaLine(f)+'</p>'+
+            '<p class="text-primary-hover/80 text-xs mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">touch_app</span>'+t('fleet.tapHint')+'</p>'+
           '</div>'+
-          '<p class="text-white/45 text-sm mt-1">'+fleetMetaLine(f)+'</p>'+
-          '<p class="text-primary-hover/80 text-xs mt-2 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">touch_app</span>'+t('fleet.tapHint')+'</p>'+
         '</div>'+
         '<img class="fleet-plane" src="'+f.img+'" alt="'+fl.name+'" draggable="false"/>'+
       '</div>';
     }).join('');
-    if(cards) cards.innerHTML=FLEET_PAGE.map(function(f){
-      var fl=FLEET[f.key];
-      return '<div class="fleet-card" data-fleet="'+f.key+'">'+
-        '<img class="fleet-card-img w-full object-contain" src="'+f.img+'" alt="'+fl.name+'" draggable="false"/>'+
-        '<div class="mt-2 flex items-center justify-between gap-2">'+
-          '<div><p class="text-white font-black">'+fl.name+
-            (f.flagship?' <span class="text-[9px] font-black text-accent border border-accent/50 rounded-full px-1.5 py-0.5 align-middle">'+t('fleet.flagship')+'</span>':'')+
-          '</p><p class="text-white/45 text-xs mt-0.5">'+fleetMetaLine(f)+'</p></div>'+
-          '<span class="material-symbols-outlined text-white/30">chevron_right</span>'+
-        '</div>'+
-      '</div>';
-    }).join('');
+    setTimeout(fitFleetRows, 0);
   }
+  // 計算每列滑入停止點：飛機機鼻停在介紹文字右邊界（+24px 間距）；僅桌機並排版需要
+  function fitFleetRows(){
+    if(!window.matchMedia('(min-width:768px)').matches) return;
+    Array.prototype.forEach.call(document.querySelectorAll('#fleetRows .fleet-row'), function(row){
+      var img=row.querySelector('.fleet-plane'), inner=row.querySelector('.fleet-meta-inner');
+      if(!img||!inner) return;
+      var W=img.getBoundingClientRect().width;
+      if(!W){ img.addEventListener('load', fitFleetRows, {once:true}); return; }
+      var rowRight=row.getBoundingClientRect().right;
+      var textRight=inner.getBoundingClientRect().right;
+      var pct=((textRight+24)-(rowRight-W))/W*100;
+      pct=Math.max(0, Math.min(52, pct));
+      row.style.setProperty('--fleetIn', pct+'%');
+    });
+  }
+  window.addEventListener('resize', function(){
+    var v=document.getElementById('view-fleet');
+    if(v && !v.classList.contains('hidden')) fitFleetRows();
+  });
 
   // 橫式座位圖（機鼻朝左，仿航空公司官網 seatmap）
   function hsExitGap(){
@@ -3167,12 +3186,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.
   document.getElementById("closePkg").addEventListener("click", closePkgModal);
   document.getElementById("pkgModal").addEventListener("click", function(e){ if(e.target===this) closePkgModal(); });
 
-  // 機隊陣容
-  ['fleetRows','fleetCards'].forEach(function(id){
-    var el=document.getElementById(id); if(!el) return;
-    el.addEventListener('click', function(e){
-      var r=e.target.closest('[data-fleet]'); if(r) openFleetModal(r.getAttribute('data-fleet'));
-    });
+  // 機隊陣容：桌機點擊直接開介紹；觸控裝置第一下滑入、第二下開介紹
+  document.getElementById('fleetRows').addEventListener('click', function(e){
+    var r=e.target.closest('[data-fleet]'); if(!r) return;
+    var touchMode=window.matchMedia('(hover: none)').matches;
+    if(touchMode && !r.classList.contains('fleet-in')){
+      Array.prototype.forEach.call(document.querySelectorAll('.fleet-row.fleet-in'), function(x){ x.classList.remove('fleet-in'); });
+      r.classList.add('fleet-in');
+      return;
+    }
+    openFleetModal(r.getAttribute('data-fleet'));
   });
   document.getElementById("closeFleet").addEventListener("click", closeFleetModal);
   document.getElementById("fleetModal").addEventListener("click", function(e){ if(e.target===this) closeFleetModal(); });
